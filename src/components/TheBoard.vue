@@ -5,10 +5,6 @@ import BoardRow from './BoardRow.vue';
 <template>
     <div class="table">
         <BoardRow />
-        <BoardRow />
-        <BoardRow />
-        <BoardRow />
-        <BoardRow />
     </div>
 </template>
 
@@ -16,6 +12,6 @@ import BoardRow from './BoardRow.vue';
     .table {
         padding: 3em;
         width: 1024px;
-        border: 5px solid green;
+        /* border: 5px solid green; */
     }
 </style>

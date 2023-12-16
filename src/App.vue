@@ -19,14 +19,14 @@ import TheBoard from './components/TheBoard.vue'
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 5px solid black;
+    /* border: 5px solid black; */
   }
 
   .body {
     display: flex;
     justify-content: center;
     padding: 5em;
-    border: 5px dotted dodgerblue
+    /* border: 5px dotted dodgerblue */
   }
 }
 </style>
