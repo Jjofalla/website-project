@@ -10,7 +10,11 @@ import BoardRow from './BoardRow.vue';
 
 <style scoped>
     .table {
-        padding: 3em;
+        margin-top: 5%;
+        height: 50%;
+        border: 5px solid black;
+        justify-content: space-evenly;
+        padding: 2em;
         width: 1024px;
         /* border: 5px solid green; */
     }

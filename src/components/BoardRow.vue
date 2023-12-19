@@ -2,59 +2,74 @@
 /**
  * 
  */
-
+import Tile from './NewBoardTile.vue';
 import { ref } from 'vue';
-import Tile from './BoardTile.vue';
-const number_of_tiles = 4;
-const target_idx = ref(0);
-const chars = ref(['', '', '', ''])
+
+const numberOfTiles = 4;
+const chars = ref(['', '', '', '']);
+const targetIdx = ref(0);
 const handled = ref(new Set());
 
-function handleKeyDown(event) {
+function onKeyDown(event, tileId) {
+    event.preventDefault();
     if (handled.value.has(event.key)) {
         return;
     }
     handled.value.add(event.key);
 
-    if (target_idx.value < number_of_tiles && /^[a-zA-Z]$/.test(event.key)) {
-        chars.value[target_idx.value] = event.key;
-        target_idx.value++;
-
-    } else if (event.key === 'Delete' || event.key === 'Backspace') {
-        if (target_idx.value > 0) {
-            target_idx.value--;
-            chars.value[target_idx.value] = '';
+    if (/^[a-zA-Z]$/.test(event.key)) {
+        if (targetIdx.value < numberOfTiles - 1) {
+            targetIdx.value++;
         }
+        chars.value[tileId] = event.key;
+        
+    } else if (event.key === 'Backspace' || event.key === 'Delete') {
+        if (chars.value[tileId] == '' && targetIdx.value > 0) {
+            --targetIdx.value;
+        }
+        chars.value[tileId] = '';
 
     } else if (event.key === 'Enter') {
-        ;
-    }
+        handleSubmit()
 
+    } else if (event.key === 'Tab' || event.key === 'ArrowRight') {
+        targetIdx.value++;
+
+    } else if (event.key === 'ArrowLeft') {
+        targetIdx.value--;
+    }
 }
 
-function handleKeyUp(event) {
+function onFocus(tileId) {
+    targetIdx.value = tileId;
+}
+
+function onKeyUp(event) {
     handled.value.delete(event.key);
 }
 
-// function add_char(event) {
-//     if (target_idx.value < number_of_tiles && /^[a-zA-Z]$/.test(event.key)) {
-//         chars.value[target_idx.value++] = event.key;
-//     }
-// };
-
-// function remove_char() {
-//     if (target_idx.value > 0) {
-//         chars.value[--target_idx.value] = '';
-//     }
-// };
-
-const is_highlight = (key) => key === target_idx.value;
+function handleSubmit() {
+    if (chars.value.some(x => x === '')) {
+        console.log('Invalid')
+    } else {
+        console.log(chars.value.join(''))
+    }
+}
 
 </script>
 
 <template>
-    <div class="row" tabindex="0" @keydown="handleKeyDown($event)" @keyup="handleKeyUp($event)">
-        <Tile v-for="tile in number_of_tiles" :key="tile" :highlight="is_highlight(tile - 1)" :char="chars[tile - 1]"/>
+    <div class="row">
+        <Tile
+            v-for="tile in numberOfTiles"
+            :key="tile"
+            :tileId="tile-1"
+            :char="chars[tile-1]" 
+            :focused="targetIdx === tile-1"
+            @on-key-down="onKeyDown"
+            @on-focus="onFocus"
+            @on-key-up="onKeyUp"
+        />
     </div>
 </template>
 
