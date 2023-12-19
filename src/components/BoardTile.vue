@@ -40,20 +40,28 @@ watchEffect(() => {
 
 <style scoped>
     .tile {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 50px;
-      width: 50px;
-      border: 2px solid black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50px;
+        width: 50px;
+        border: none;
     }
 
     .text {
-      border: none;
-      overflow: hidden;
-      text-align: center;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 200%;
+        height: 100%;
+        width: 100%;
+        border: 1px solid black;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 200%;
     }
-    
+
+    .text::selection {
+        color: black;
+    }
+
+
 </style>

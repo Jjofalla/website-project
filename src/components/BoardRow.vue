@@ -2,7 +2,7 @@
 /**
  * 
  */
-import Tile from './NewBoardTile.vue';
+import BoardTile from './BoardTile.vue';
 import { ref } from 'vue';
 
 const numberOfTiles = 4;
@@ -10,32 +10,46 @@ const chars = ref(['', '', '', '']);
 const targetIdx = ref(0);
 const handled = ref(new Set());
 
+const emit = defineEmits(['on-enter']);
+
 function onKeyDown(event, tileId) {
     event.preventDefault();
+
     if (handled.value.has(event.key)) {
         return;
     }
     handled.value.add(event.key);
 
+    // check for input of alphabet character
     if (/^[a-zA-Z]$/.test(event.key)) {
-        if (targetIdx.value < numberOfTiles - 1) {
-            targetIdx.value++;
-        }
         chars.value[tileId] = event.key;
-        
+        shiftRight();
+    
     } else if (event.key === 'Backspace' || event.key === 'Delete') {
-        if (chars.value[tileId] == '' && targetIdx.value > 0) {
-            --targetIdx.value;
+        if (chars.value[tileId] === '') {
+            shiftLeft();
         }
         chars.value[tileId] = '';
 
     } else if (event.key === 'Enter') {
-        handleSubmit()
-
+        handleEnter(chars.value);
+    
     } else if (event.key === 'Tab' || event.key === 'ArrowRight') {
-        targetIdx.value++;
+        shiftRight();
 
     } else if (event.key === 'ArrowLeft') {
+        shiftLeft();
+    }
+}
+
+function shiftRight() {
+    if (targetIdx.value < numberOfTiles - 1) {
+        targetIdx.value++;
+    }
+}
+
+function shiftLeft() {
+    if (targetIdx.value > 0) {
         targetIdx.value--;
     }
 }
@@ -48,19 +62,20 @@ function onKeyUp(event) {
     handled.value.delete(event.key);
 }
 
-function handleSubmit() {
-    if (chars.value.some(x => x === '')) {
+function handleEnter(chars) {
+    if (chars.some(x => x === '')) {
         console.log('Invalid')
     } else {
-        console.log(chars.value.join(''))
+        emit('on-enter', chars.join(''))
     }
 }
+
 
 </script>
 
 <template>
     <div class="row">
-        <Tile
+        <BoardTile
             v-for="tile in numberOfTiles"
             :key="tile"
             :tileId="tile-1"
@@ -75,10 +90,13 @@ function handleSubmit() {
 
 <style scoped>
     .row {
+        user-select: none;
+        width: 45%;
         display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
         align-items: center;
-        justify-content: space-evenly;
-        /* border: 2px solid red; */
+        justify-content: center;
     }
     
 </style>
