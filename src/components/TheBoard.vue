@@ -1,36 +1,41 @@
 <script setup>
 import { ref } from 'vue';
 import BoardRow from './BoardRow.vue';
-import BoardGuess from './BoardGuess.vue';
 
 const numberOfRows = ref(1);
-const numberOfTiles = 4;
-const word = ref('')
-const target = "pole";
+const numberOfTiles = 5;
+const target = "finds";
+const gameFinished = ref(false);
 
-function handleEnter(guess) {
-    word.value = guess;
+function addNewRow() {
+    numberOfRows.value++;
 }
 
-function notifyUser() {
-    console.log("wow, your not as sumb as your look")
+function disableRows() {
+    gameFinished.value = true;
 }
+
+function determineActiveRow(row) {
+    if (gameFinished.value) {
+        return false;
+    }
+    return row === numberOfRows.value;
+}
+
 
 </script>
 
 <template>
     <div class="table">
-        <div class="row" v-for="row in numberOfRows" :key="row">
-            <BoardRow
-                @on-enter="handleEnter"
-            />
-            <BoardGuess
-                :guess="word"
-                :target="target"
-                :numberOfTiles="numberOfTiles"
-                @reveal-output="notifyUser"
-            />
-        </div>
+        <BoardRow 
+            v-for="row in numberOfRows" 
+            :key="row"
+            :numberOfTiles="numberOfTiles"
+            :target="target"
+            :isActive="determineActiveRow(row)"
+            @add-new-row="addNewRow"
+            @reveal-output="disableRows"
+        />
     </div>
 </template>
 
@@ -38,13 +43,12 @@ function notifyUser() {
     .table {
         display: flex;
         flex-direction: column;
+        align-items: center;
+        gap: 12px;
         border-radius: 5px;
-        border: 3px solid black;
-    }
-    .row {
-        display: flex;
         padding: 2em;
+        padding-bottom: 50px;
         width: 1024px;
-        /* border: 5px solid green; */
     }
+
 </style>

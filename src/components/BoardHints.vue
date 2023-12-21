@@ -1,9 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
 
-const hints = ref([0, 0])
-const blanks = ref(4);
-
 const props = defineProps({
     guess: {
         type: String,
@@ -19,7 +16,10 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['reveal-output'])
+const emit = defineEmits(['reveal-output', 'add-new-row'])
+
+const hints = ref([0, 0])
+const blanks = ref(props.numberOfTiles);
 
 watch(() => props.guess, newGuess => {
     let res = calculateHints(newGuess);
@@ -27,9 +27,12 @@ watch(() => props.guess, newGuess => {
     hints.value = res;
     blanks.value = getBlankHints();
 
+    // user guessed correct word
     if (hints.value[0] === props.numberOfTiles) {
         emit('reveal-output');
-    } 
+    } else {
+        emit('add-new-row');
+    }
 });
 
 function calculateHints(newGuess) {
@@ -54,13 +57,13 @@ function countOccurrences(ch, str) {
 }
 
 function getBlankHints() {
-    return 4 - (hints.value[0] + hints.value[1]);
+    return props.numberOfTiles - (hints.value[0] + hints.value[1]);
 }
 
 </script>
 
 <template>
-    <div class="row">
+    <div class="hints">
         <div 
             class="hint correct"
             v-for="i in hints[0]" 
@@ -80,9 +83,8 @@ function getBlankHints() {
 </template>
 
 <style scoped>
-    .row {
+    .hints {
         overflow: hidden;
-        width: 45%;
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
@@ -94,8 +96,8 @@ function getBlankHints() {
         box-sizing: border-box;
         border-radius: 2px;
         border: 1px solid black;
-        height: 50px;
-        width: 50px;
+        height: 60px;
+        width: 60px;
     }
 
     .correct {

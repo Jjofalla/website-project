@@ -1,102 +1,51 @@
 <script setup>
-/**
- * 
- */
-import BoardTile from './BoardTile.vue';
 import { ref } from 'vue';
+import BoardTiles from './BoardTiles.vue';
+import BoardHints from './BoardHints.vue';
 
-const numberOfTiles = 4;
-const chars = ref(['', '', '', '']);
-const targetIdx = ref(0);
-const handled = ref(new Set());
-
-const emit = defineEmits(['on-enter']);
-
-function onKeyDown(event, tileId) {
-    event.preventDefault();
-
-    if (handled.value.has(event.key)) {
-        return;
+defineProps({
+    numberOfTiles: {
+        type: Number,
+    },
+    target: {
+        type: String,
+    },
+    isActive: {
+        type: Boolean,
     }
-    handled.value.add(event.key);
+});
 
-    // check for input of alphabet character
-    if (/^[a-zA-Z]$/.test(event.key)) {
-        chars.value[tileId] = event.key;
-        shiftRight();
-    
-    } else if (event.key === 'Backspace' || event.key === 'Delete') {
-        if (chars.value[tileId] === '') {
-            shiftLeft();
-        }
-        chars.value[tileId] = '';
+const guess = ref('')
 
-    } else if (event.key === 'Enter') {
-        handleEnter(chars.value);
-    
-    } else if (event.key === 'Tab' || event.key === 'ArrowRight') {
-        shiftRight();
-
-    } else if (event.key === 'ArrowLeft') {
-        shiftLeft();
-    }
+function handleEnter(word) {
+    guess.value = word;
 }
-
-function shiftRight() {
-    if (targetIdx.value < numberOfTiles - 1) {
-        targetIdx.value++;
-    }
-}
-
-function shiftLeft() {
-    if (targetIdx.value > 0) {
-        targetIdx.value--;
-    }
-}
-
-function onFocus(tileId) {
-    targetIdx.value = tileId;
-}
-
-function onKeyUp(event) {
-    handled.value.delete(event.key);
-}
-
-function handleEnter(chars) {
-    if (chars.some(x => x === '')) {
-        console.log('Invalid')
-    } else {
-        emit('on-enter', chars.join(''))
-    }
-}
-
 
 </script>
 
 <template>
     <div class="row">
-        <BoardTile
-            v-for="tile in numberOfTiles"
-            :key="tile"
-            :tileId="tile-1"
-            :char="chars[tile-1]" 
-            :focused="targetIdx === tile-1"
-            @on-key-down="onKeyDown"
-            @on-focus="onFocus"
-            @on-key-up="onKeyUp"
+        <BoardTiles
+            :isActive="isActive"
+            :numberOfTiles="numberOfTiles"
+            @on-enter="handleEnter"
+        />
+        <BoardHints 
+            :guess="guess"
+            :target="target"
+            :numberOfTiles="numberOfTiles"
+            @reveal-output="$emit('reveal-output')"
+            @add-new-row="$emit('add-new-row')"
         />
     </div>
 </template>
 
 <style scoped>
     .row {
-        user-select: none;
-        width: 45%;
         display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
+        flex-direction: row;
         align-items: center;
-        justify-content: center;
+        justify-content: space-evenly;
+        width: 100%;
     }
-    
 </style>

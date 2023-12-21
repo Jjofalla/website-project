@@ -1,6 +1,7 @@
 <script setup>
 import TheHeading from './components/TheHeading.vue'
 import TheBoard from './components/TheBoard.vue'
+
 </script>
 
 <template>
@@ -19,14 +20,14 @@ import TheBoard from './components/TheBoard.vue'
     display: flex;
     align-items: center;
     justify-content: center;
-    /* border: 5px solid black; */
+    border-bottom: 1px solid black;
+    height: 100px;
   }
 
   .body {
     display: flex;
     justify-content: center;
-    padding: 5em;
-    /* border: 5px dotted dodgerblue */
+    padding: 10px;
   }
 }
 </style>
