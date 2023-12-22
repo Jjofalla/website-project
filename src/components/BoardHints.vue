@@ -1,37 +1,31 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { getGameState } from '@/store/GameState';
+
+const gameState = getGameState();
+const target = gameState.target;
+const numberOfTiles = gameState.numberOfTiles;
 
 const props = defineProps({
-    guess: {
+    currentGuess: {
         type: String,
-        default: '',
-    },
-    target: {
-        type: String,
-        required: true
-    },
-    numberOfTiles: {
-        type: Number,
-        required: true
     }
 });
 
-const emit = defineEmits(['reveal-output', 'add-new-row'])
+const hints = ref(calculateHints(props.currentGuess));
+const blanks = ref(getBlankHints());
 
-const hints = ref([0, 0])
-const blanks = ref(props.numberOfTiles);
-
-watch(() => props.guess, newGuess => {
-    let res = calculateHints(newGuess);
+watch(() => props.currentGuess, newGuess => {
     // update hint tiles
-    hints.value = res;
+    hints.value = calculateHints(newGuess);
     blanks.value = getBlankHints();
-
+    gameState.rows.push(newGuess);
+    
     // user guessed correct word
-    if (hints.value[0] === props.numberOfTiles) {
-        emit('reveal-output');
+    if (hints.value[0] === numberOfTiles) {
+        gameState.gameFinished = true;
     } else {
-        emit('add-new-row');
+        gameState.numberOfRows++;
     }
 });
 
@@ -40,10 +34,10 @@ function calculateHints(newGuess) {
     const uniqueChars = new Set(newGuess);
 
     for (const ch of uniqueChars) {
-        near += Math.min(countOccurrences(ch, newGuess), countOccurrences(ch, props.target));
+        near += Math.min(countOccurrences(ch, newGuess), countOccurrences(ch, target));
 
         for (let i = 0; i < newGuess.length; i++) {
-            if (ch === newGuess[i] && ch === props.target[i]) {
+            if (ch === newGuess[i] && ch === target[i]) {
                 near -= 1;
                 correct += 1;
             }
@@ -57,7 +51,7 @@ function countOccurrences(ch, str) {
 }
 
 function getBlankHints() {
-    return props.numberOfTiles - (hints.value[0] + hints.value[1]);
+    return numberOfTiles - (hints.value[0] + hints.value[1]);
 }
 
 </script>

@@ -4,20 +4,27 @@
  */
 import BoardTile from './BoardTile.vue';
 import { ref } from 'vue';
+import { getGameState } from '@/store/GameState';
+const numberOfTiles = getGameState().numberOfTiles;
 
 const emit = defineEmits(['on-enter', 'on-click']);
+
 const props = defineProps({
-    isActive: {
-        type: Boolean
+    currentGuess: {
+        type: String,
     },
-    numberOfTiles: {
-        type: Number,
+    isActive: {
+        type: Boolean,
     }
 });
 
-const chars = ref(Array.from({length: props.numberOfTiles}, () => ''));
+const chars = ref(createCharArray(props.currentGuess));
 const targetIdx = ref(0);
 const handled = ref(new Set());
+
+function createCharArray(guess) {
+    return guess ? Array.from(guess) : Array.from({length: numberOfTiles}, () => '');
+}
 
 function onKeyDown(key, tileId) {
     if (handled.value.has(key)) {
@@ -48,7 +55,7 @@ function onKeyDown(key, tileId) {
 }
 
 function shiftRight() {
-    if (targetIdx.value < props.numberOfTiles - 1) {
+    if (targetIdx.value < numberOfTiles - 1) {
         targetIdx.value++;
     }
 }

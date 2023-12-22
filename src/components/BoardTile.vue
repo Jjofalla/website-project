@@ -19,7 +19,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['on-key-down', 'on-focus', 'on-key-up'])
-
 const tileRef = ref(null);
 
 watchEffect(() => {

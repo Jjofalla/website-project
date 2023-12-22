@@ -1,41 +1,28 @@
 <script setup>
-import { ref } from 'vue';
+import { getGameState } from '@/store/GameState';
 import BoardRow from './BoardRow.vue';
+const gameState = getGameState();
 
-const numberOfRows = ref(1);
-const numberOfTiles = 5;
-const target = "finds";
-const gameFinished = ref(false);
-
-function addNewRow() {
-    numberOfRows.value++;
-}
-
-function disableRows() {
-    gameFinished.value = true;
+const getRow = (row) => {
+    return row < gameState.numberOfRows ? gameState.rows[row] : '';
 }
 
 function determineActiveRow(row) {
-    if (gameFinished.value) {
-        return false;
-    }
-    return row === numberOfRows.value;
+    return !gameState.gameFinished && row === gameState.numberOfRows;
 }
-
 
 </script>
 
 <template>
-    <div class="table">
-        <BoardRow 
-            v-for="row in numberOfRows" 
-            :key="row"
-            :numberOfTiles="numberOfTiles"
-            :target="target"
-            :isActive="determineActiveRow(row)"
-            @add-new-row="addNewRow"
-            @reveal-output="disableRows"
-        />
+    <div class="body">
+        <div class="table">
+            <BoardRow 
+                v-for="row in gameState.numberOfRows + 1" 
+                :key="row"
+                :currentGuess="getRow(row - 1)"
+                :isActive="determineActiveRow(row - 1)"
+            />
+        </div>
     </div>
 </template>
 
@@ -49,6 +36,12 @@ function determineActiveRow(row) {
         padding: 2em;
         padding-bottom: 50px;
         width: 1024px;
+    }
+
+    .body {
+        display: flex;
+        justify-content: center;
+        padding: 10px;
     }
 
 </style>

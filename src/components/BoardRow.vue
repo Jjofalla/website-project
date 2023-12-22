@@ -3,11 +3,8 @@ import { ref } from 'vue';
 import BoardTiles from './BoardTiles.vue';
 import BoardHints from './BoardHints.vue';
 
-defineProps({
-    numberOfTiles: {
-        type: Number,
-    },
-    target: {
+const props = defineProps({
+    currentGuess: {
         type: String,
     },
     isActive: {
@@ -15,7 +12,7 @@ defineProps({
     }
 });
 
-const guess = ref('')
+const guess = ref(props.currentGuess);
 
 function handleEnter(word) {
     guess.value = word;
@@ -26,16 +23,12 @@ function handleEnter(word) {
 <template>
     <div class="row">
         <BoardTiles
+            :currentGuess="guess"
             :isActive="isActive"
-            :numberOfTiles="numberOfTiles"
             @on-enter="handleEnter"
         />
         <BoardHints 
-            :guess="guess"
-            :target="target"
-            :numberOfTiles="numberOfTiles"
-            @reveal-output="$emit('reveal-output')"
-            @add-new-row="$emit('add-new-row')"
+            :currentGuess="guess"
         />
     </div>
 </template>
