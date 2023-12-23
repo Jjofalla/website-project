@@ -20,13 +20,14 @@ watch(() => props.currentGuess, newGuess => {
     hints.value = calculateHints(newGuess);
     blanks.value = getBlankHints();
     gameState.rows.push(newGuess);
-    
+
     // user guessed correct word
     if (hints.value[0] === numberOfTiles) {
         gameState.gameFinished = true;
-    } else {
-        gameState.numberOfRows++;
-    }
+    } 
+    // update store
+    gameState.updateRows();
+
 });
 
 function calculateHints(newGuess) {

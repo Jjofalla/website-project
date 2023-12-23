@@ -1,26 +1,30 @@
 <script setup>
 import { getGameState } from '@/store/GameState';
 import BoardRow from './BoardRow.vue';
+import TheKeyboard from './TheKeyboard.vue';
 const gameState = getGameState();
 
-const getRow = (row) => {
-    return row < gameState.numberOfRows ? gameState.rows[row] : '';
+function getRow(row) {
+    // zero-indexed to access array 
+    return row < gameState.rowsToRender ? gameState.rows[row] : '';
 }
 
 function determineActiveRow(row) {
-    return !gameState.gameFinished && row === gameState.numberOfRows;
+    // last row is active for user input
+    return !gameState.gameFinished && row === gameState.rowsToRender;
 }
 
 </script>
 
 <template>
     <div class="body">
+        <TheKeyboard />
         <div class="table">
             <BoardRow 
-                v-for="row in gameState.numberOfRows + 1" 
+                v-for="row in gameState.rowsToRender" 
                 :key="row"
                 :currentGuess="getRow(row - 1)"
-                :isActive="determineActiveRow(row - 1)"
+                :isActive="determineActiveRow(row)"
             />
         </div>
     </div>
@@ -30,6 +34,7 @@ function determineActiveRow(row) {
     .table {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         align-items: center;
         gap: 12px;
         border-radius: 5px;
@@ -40,8 +45,10 @@ function determineActiveRow(row) {
 
     .body {
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        padding: 10px;
+        align-items: center;
+        padding: 25px;
     }
 
 </style>

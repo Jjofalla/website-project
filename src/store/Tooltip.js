@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 export const getTooltip = defineStore('crossout', () => {
     const chars = ref(new Set());
+
     function crossOutChar(char) {
         if (chars.value.has(char)) {
             chars.value.delete(char);

@@ -6,7 +6,7 @@ import { getGameState } from '@/store/GameState';
 <template>
     <div class="heading">
         <h1 class="title">Wordle</h1>
-        <button class="btn" @click="getGameState().changeGameState()">Reset</button>
+        <button class="btn" @click="getGameState().resetState()">Reset</button>
     </div>
 </template>
 
