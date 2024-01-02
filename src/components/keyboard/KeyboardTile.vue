@@ -1,6 +1,5 @@
 <script setup>
-import { getTooltip } from '@/store/Tooltip';
-const tooltip = getTooltip();
+import { getGameState } from '@/store/GameState';
 
 defineProps({
     char: {
@@ -11,17 +10,17 @@ defineProps({
 </script>
 
 <template>
-    <button class="tile" :class="{'grey': tooltip.crossedOut(char)}">{{ char.toUpperCase() }}</button>
+    <button class="tile" :class="{'grey': getGameState().isDiscarded(char)}" tabindex="-1">{{ char.toUpperCase() }}</button>
 </template>
 
 <style scoped>
     .tile {
         background-color: white;
         border: 1px solid black;
-        border-radius: 2px;
+        border-radius: 5px;
         font-size: 20px;
-        aspect-ratio: 1/1;
-        width: 50px;
+        aspect-ratio: 1/1.3;
+        width: 48px;
     }
     
     .grey {

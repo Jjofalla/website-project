@@ -16,6 +16,6 @@ import KeyboardRow from './KeyboardRow.vue';
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 2px;
+        gap: 5px;
     }
 </style>

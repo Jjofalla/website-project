@@ -38,7 +38,7 @@ function handleEnter(word) {
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: space-evenly;
-        width: 100%;
+        justify-content: center;
+        gap: 50px;
     }
 </style>

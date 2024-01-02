@@ -3,6 +3,7 @@ import { ref, watch } from 'vue';
 import { getGameState } from '@/store/GameState';
 
 const gameState = getGameState();
+const gameData = gameState.gameData;
 const target = gameState.target;
 const numberOfTiles = gameState.numberOfTiles;
 
@@ -19,11 +20,18 @@ watch(() => props.currentGuess, newGuess => {
     // update hint tiles
     hints.value = calculateHints(newGuess);
     blanks.value = getBlankHints();
-    gameState.rows.push(newGuess);
+    gameData.rows.push(newGuess);
+
+    // user gets it completely wrong (idiot)
+    if (blanks.value === numberOfTiles) {
+        Array.from(newGuess).forEach(ch => {
+            gameData.discardChars.add(ch);
+        });
+    }
 
     // user guessed correct word
-    if (hints.value[0] === numberOfTiles) {
-        gameState.gameFinished = true;
+    if (hints.value[0] === numberOfTiles || gameState.rowsToRender >= gameState.maxGuesses) {
+        gameData.finished = true;
     } 
     // update store
     gameState.updateRows();
@@ -91,8 +99,8 @@ function getBlankHints() {
         box-sizing: border-box;
         border-radius: 2px;
         border: 1px solid black;
-        height: 60px;
-        width: 60px;
+        height: 45px;
+        width: 45px;
     }
 
     .correct {

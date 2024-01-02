@@ -1,6 +1,6 @@
 <script setup>
-import TheHeading from './components/TheHeading.vue'
-import TheBoard from './components/TheBoard.vue'
+import TheHeading from './components/header/TheHeading.vue'
+import TheBoard from './components/board/TheBoard.vue'
 </script>
 
 <template>

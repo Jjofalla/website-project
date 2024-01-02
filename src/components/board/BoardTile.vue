@@ -1,8 +1,8 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
-import { useStore } from '../store';
+import { getGameState } from '@/store/GameState';
 
-const store = useStore();
+const gameState = getGameState();
 const props = defineProps({
     tileId: {
         type: Number
@@ -22,23 +22,34 @@ const emit = defineEmits(['on-key-down', 'on-focus', 'on-key-up'])
 const tileRef = ref(null);
 
 watchEffect(() => {
-    if (props.focused && tileRef.value) {
+    focusOnInput();
+});
+ 
+function focusOnInput() {
+    if (props.isActive && props.focused && tileRef.value) {
         tileRef.value.focus();
     }
-});
+}
 
-const handleEvent = (event, eventType='') => {
+const handleEvent = (event, eventType) => {
     if (props.isActive) {
+        if (eventType === 'focus') {
+            emit('on-focus', props.tileId);
+            return;
+        }
         event.preventDefault();
         if (eventType === 'keydown') {
-            emit('on-key-down', event.key, props.tileId)
+            emit('on-key-down', event.key, props.tileId);
         } else if (eventType === 'keyup') {
             emit('on-key-up', event.key);
         } 
-    } else if (!eventType) {
-        store.crossOutChar(props.char);
+        
+    } else if (eventType === 'focus') {
+        event.preventDefault();
+        if (!gameState.gameData.finished) {
+            gameState.toggleDiscard(props.char);
+        }
     }
-    
 }
 
 </script>
@@ -48,14 +59,15 @@ const handleEvent = (event, eventType='') => {
         <input 
             ref="tileRef"
             class="text"
-            :class="{'grey': store.crossedOut(char), 'inactive': !isActive}"
+            :class="{'grey': gameState.isDiscarded(char), 'inactive': !isActive}"
             maxlength="1"
+            :tabindex="isActive ? null : -1"
             readonly
             :value="char.toUpperCase()"
             @keydown="handleEvent($event, 'keydown')"
             @keyup="handleEvent($event, 'keyup')"
-            @focus="$emit('on-focus', tileId)"
-            @click="handleEvent($event)"
+            @mousedown="handleEvent($event, 'focus')"
+            @blur="focusOnInput"
         >
     </div>
 </template>
@@ -74,8 +86,8 @@ const handleEvent = (event, eventType='') => {
         height: 100%;
         width: 100%;
         border: 1px solid black;
-        border-radius: 2px;
         box-sizing: border-box;
+        cursor: default;
         overflow: hidden;
         text-align: center;
         font-family: Tahoma, Verdana, sans-serif;
@@ -84,7 +96,20 @@ const handleEvent = (event, eventType='') => {
 
     .text:focus {
         border-radius: 2px;
-        outline: 1px solid black;
+        outline: 1.4px solid black;
+        animation-name: flash;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    @keyframes flash {
+        50% {border-color: transparent;}
+        0%, 100% {border-color: black;}
+    }
+
+    .text:hover {
+        cursor: pointer;
     }
 
     .text::selection {
@@ -101,7 +126,8 @@ const handleEvent = (event, eventType='') => {
     }
 
     .inactive {
-        opacity: 50%;
+        cursor: default;
+        opacity: 70%;
     }
 
 
