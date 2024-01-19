@@ -8,14 +8,14 @@ const om = getOverlayManager();
     <div id="heading-wrapper" @mousedown.prevent>
         <div id="heading">
             <button class="button" @click="om.toggleOverlay('stats')">
-                <font-awesome-icon icon="fa-solid fa-chart-simple" size="3x"/>
+                <font-awesome-icon icon="fa-solid fa-chart-simple" size="2x"/>
             </button>
             <h1 class="title">HARDLE</h1>
             <Transition>
                 <TheOverlay v-show="om.overlayEnabled"/>
             </Transition>
             <button class="button" @click="om.toggleOverlay('tutorial')">
-                <font-awesome-icon icon="fa-solid fa-question" size="3x"/>
+                <font-awesome-icon icon="fa-solid fa-question" size="2x"/>
             </button>
         </div>
     </div>
@@ -24,25 +24,25 @@ const om = getOverlayManager();
 <style scoped>
 
 #heading-wrapper {
+    position: absolute;
     display: flex;
     justify-content: center;
-    width: 100%;
-    min-height: 100px;
-    height: 10vh;
-    border: 1px solid;
-    border-image-slice: 1;
-    border-image-source: linear-gradient(to right, white, darkslategray, white);
-    border-left: 0;
-    border-right: 0;
-    border-top: 0;
+    top: 0;
+    height: 9%;
+    width: 100%;    
 }
 
 #heading {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    width: 90vh;
-    min-width: 600px;
+    width: 35%;
+    border: 1px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to right, white, darkslategray, white);
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
 }
 
 .v-enter-active {
@@ -76,7 +76,7 @@ const om = getOverlayManager();
 
 .title {
     font-family: 'Trebuchet MS', sans-serif;
-    font-size: 48px;
+    font-size: 2.7rem;
     font-weight: bolder;
     text-align: center;
     letter-spacing: 7px;

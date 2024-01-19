@@ -34,12 +34,12 @@ const om = getOverlayManager();
     .overlay {
         position: fixed;
         margin: auto;
-        width: 600px;
-        max-width: 600px;
+        width: 37.5rem;
+        max-width: 37.5rem;
         cursor: default;
         background-color: white;
         border: none;
-        border-radius: 10px;
+        border-radius: 0.7rem;
         animation: scaleUp 0.4s ease-in-out;
     }
 

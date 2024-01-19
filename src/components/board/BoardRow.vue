@@ -46,7 +46,7 @@ function onAlert(msg) {
 }
 
 if (props.rowNumber <= 6) {
-    emit('animate-table', 'height', 70 + (80 * props.rowNumber) + 'px');
+    emit('animate-table', 'height', 4 + (5.2 * props.rowNumber) + 'rem');
 } 
 
 if (props.rowNumber === 7) {
@@ -64,7 +64,7 @@ if (props.rowNumber === 7) {
                     v-show="!getGameState().gameData.finished && showClearButton" 
                     @click="handleClick(rowNumber - 1)" 
                     class="button">
-                        <font-awesome-icon icon="fa-solid fa-eraser" size="2x"/>
+                        <font-awesome-icon icon="fa-solid fa-eraser" size="xl"/>
                 </button>
             </Transition>
         </div>
@@ -89,28 +89,26 @@ if (props.rowNumber === 7) {
 
     .button-row {
         display: flex;
-        margin-left: -25px;
+        margin-left: -1.5rem;
         align-items: center;
     }
 
     .placeholder {
         height: inherit;
-        width: 55px;
+        width: 3.43rem;
     }
 
     .row {
         display: flex;
         height: max-content;
         max-width: fit-content;
-        gap: 40px;
+        gap: 2.5rem;
         align-items: center;
         justify-content: space-evenly;
-        padding: 5px 30px 5px 0px;
+        padding: 0.3rem 2rem 0.3rem 0;
     }
 
     .button {
-        width: min-content;
-        height: min-content;
         border: none;
         background-color: white;
         color: var(--text-light);  
@@ -125,7 +123,7 @@ if (props.rowNumber === 7) {
     .show-button-enter-from,
     .show-button-leave-to {
         opacity: 0;
-        transform: translateX(5px);
+        transform: translateX(0.25rem);
     }
 
     .show-button-enter-active,

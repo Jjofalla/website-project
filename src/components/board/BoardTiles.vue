@@ -130,10 +130,10 @@ function isValidWord(word) {
 <style scoped>
     .tiles {
         display: flex;
-        height: 73px;
+        height: 4.5rem;
         align-items: center;
         justify-content: center;
         user-select: none;
-        gap: 8px;
+        gap: 0.5rem;
     }
 </style>

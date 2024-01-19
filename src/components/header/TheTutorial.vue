@@ -63,29 +63,28 @@
 @import url('../../assets/main.css');
     #tutorial {
         font-family: 'Lucida Grande', sans-serif;
-        font-size: 18px;
         margin: 2.5rem 2.5rem 3rem 2rem;
     }
 
     .intro {
         display: block;
-        height: 105px;
+        height: 6.5rem;
         padding-bottom: 1.5em;
     }
 
     .intro h1 {
-        font-size: 36px;
+        font-size: 2.1rem;
         font-family: 'Trebuchet MS', sans-serif;
         font-weight: lighter;
-        letter-spacing: 2px;
+        letter-spacing: 0.125rem;
     }
 
     .intro p {
         position: relative;
-        top: -15px;
+        top: -1rem;
         align-content: center;
         text-align: left;
-        font-size: 18px;
+        font-size: 1.1rem;
     }
 
     .examples {
@@ -94,51 +93,50 @@
 
     span {
         position: relative;
-        gap: 15px;
-        height: 50px;
+        gap: 1rem;
+        height: 3.15rem;
         display: flex;
         flex-direction: row;
         align-items: center;
-        font-size: 17px;
+        font-size: 1.1rem;
     }
 
     .row {
         display: flex;
         height: max-content;
         max-width: fit-content;
-        padding: 1rem 0.5rem 0 0.5rem;
-        gap: 25px;
+        padding: 1rem 0.5rem 0rem 0.5rem;
+        gap: 1.5rem;
         align-items: center;
         justify-content: space-evenly;
     }
 
     .tiles {
         display: flex;
-        height: 73px;
+        height: 4.5rem;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 0.5rem;
     }
 
     .tile {
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 5px;
+        border-radius: 0.3rem;
         aspect-ratio: 1/1;
-        width: 55px;
+        width: 3.43rem;
         font-family: 'Trebuchet MS', sans-serif;
-        font-size: 30px;
+        font-size: 1.9rem;
         font-weight: bolder;
         color: var(--text-dark);
-        box-shadow: 0px 4px 4px rgb(200,200,200);
+        box-shadow: 0rem 0.25rem 0.25rem rgb(200,200,200);
     }
 
     .hints {
-        overflow: hidden;
         display: flex;
         min-width: fit-content;
-        gap: 5px;
+        gap: 0.4rem;
         align-items: center;
         justify-content: center;
     }
@@ -147,12 +145,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100px;
+        height: 6.25rem;
     }
 
     .controls span {
-        font-size: 18px;
-        gap: 10px;
+        font-size: 1.1rem;
+        gap: 0.7rem;
     }
 
     .icon {
@@ -164,9 +162,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 2px;
+        border-radius: 0.2rem;
         aspect-ratio: 1/1;
-        height: 30px;
+        height: 2rem;
     }
 
     .correct {
@@ -185,10 +183,10 @@
     }
     
     .rotate {
-        height: 70px;
-        border-radius: 5px;
+        height: 4.375rem;
+        border-radius: 0.4rem;
         text-align: center;
-        font-size: 38px;
+        font-size: 2.1rem;
         font-family: 'Trebuchet MS', sans-serif;
         font-weight: bolder;
         animation-name: rotate-color;
@@ -201,22 +199,22 @@
         0%, 20%, 100% {
             background-color: white;
             color: var(--text-dark);
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0rem 0.25rem 0.25rem rgba(0, 0, 0, 0.1);
         }
         25%, 45% {
             background-color: var(--tile-lightgrey);
             color: white;
-            box-shadow: 0px 4px 4px var(--tile-lightgrey-shadow);
+            box-shadow: 0rem 0.25rem 0.25rem var(--tile-lightgrey-shadow);
         }
         50%, 70% {
             background-color: var(--tile-orange);
             color: white;
-            box-shadow: 0px 4px 4px var(--tile-orange-shadow);
+            box-shadow: 0rem 0.25rem 0.25rem var(--tile-orange-shadow);
         }
         75%, 95% {
             background-color: var(--tile-green);
             color: white;
-            box-shadow: 0px 4px 4px var(--tile-green-shadow);
+            box-shadow: 0rem 0.25rem 0.25rem var(--tile-green-shadow);
         }
     }
     .pointer {

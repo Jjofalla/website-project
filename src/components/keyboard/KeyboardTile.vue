@@ -20,12 +20,12 @@ defineProps({
 <style scoped>
     .tile {
         border: none;
-        border-radius: 8px;
-        font-size: 25px;
+        border-radius: 0.3rem;
+        font-size: 1.5rem;
         font-weight: bolder;
         font-family: 'Trebuchet MS', sans-serif;
         aspect-ratio: 1/1.15;
-        width: 55px;
+        width: 3.5rem;
         transition: 0.2s ease;
     }
 

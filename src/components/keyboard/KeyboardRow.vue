@@ -21,7 +21,7 @@ defineProps({
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        gap: 5px;
+        gap: 0.4rem;
     }
 
 </style>

@@ -12,15 +12,18 @@
   --doc-font: 'Lucida Grande', sans-serif;
 }
 
+html {
+  font-size: 12px;
+}
+
 body {
-  min-height: 100vh;
-  margin: 0 auto;
   font-family: var(--game-font);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (min-width: 1024px) {
-  body {
-    margin: 0;
-  }
+#app {
+  width: 1400px;
+  max-width: 1400px;
 }
-

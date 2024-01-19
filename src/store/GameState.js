@@ -103,7 +103,7 @@ export const getGameState = defineStore('gameState', () => {
         return {
             'background-color': tileColours[idx],
             'color': idx === 0 ? 'rgb(110, 110, 110)' : 'white',
-            'box-shadow': '0px 4px 4px ' + (idx === 0 ? 'rgb(200,200,200)' : tileColours[idx] + '90'),
+            'box-shadow': '0rem 0.25rem 0.25rem ' + (idx === 0 ? 'rgb(200,200,200)' : tileColours[idx] + '90'),
         }
     }
 

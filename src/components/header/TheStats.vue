@@ -6,7 +6,7 @@ const stats = userStats.stats;
 const pixelSpan = () => {
     const vals = Object.values(stats.guessDistribution);
     const mode = Math.max(...vals);
-    return vals.map((x) => 20 + (x ? (x / mode) * 400 : 0));
+    return vals.map((x) => 1.5 + (x ? (x / mode) * 25 : 0));
 }
 
 function toString(value) {
@@ -33,7 +33,7 @@ function toString(value) {
         <div class="bars">
             <div class="bar" v-for="(n, idx) in pixelSpan()" :key="idx">
                 <div class="label"> {{ idx + 1 }}</div>
-                <div class="tally" :style="{width: n + 'px', backgroundColor: n === 420 ? 'rgb(110,110,110' : 'rgb(180,180,180)'}">
+                <div class="tally" :style="{width: n + 'rem', backgroundColor: n === 25 ? 'rgb(110,110,110' : 'rgb(180,180,180)'}">
                     <h1 class="number">{{ Object.values(stats.guessDistribution)[idx] }}</h1>
                 </div>
 
@@ -44,16 +44,16 @@ function toString(value) {
 
 <style scoped>
     .stats {
-        font-size: 18px;
+        font-size: 1.1rem;
         margin: 2.5rem 1.5rem 3rem 2rem;
         font-family: 'Trebuchet MS', sans-serif;
     }
 
     .title {
         display: block;
-        font-size: 36px;
+        font-size: 2.1rem;
         font-weight: lighter;
-        letter-spacing: 2px;
+        letter-spacing: 0.125rem;
         padding-left: 0.2em;
     }
 
@@ -70,27 +70,27 @@ function toString(value) {
         align-items: center;
         text-align: right;
         margin: 1.2rem 1rem 1.5rem 0rem;
-        letter-spacing: 5px;
+        letter-spacing: 0.4rem;
         color: var(--text-light);
-        text-indent: 7.5px;
+        text-indent: 0.5rem;
     }
 
     .stat h1 {
         color: var(--text-dark);
         margin: 0.5rem auto;
-        font-size: 48px;
+        font-size: 3rem;
         text-indent: 0px;
     }
 
     .guess {
         margin-left: 0.4rem;
-        padding-top: 20px;
-        letter-spacing: 3px;
+        padding-top: 1.4rem;
+        letter-spacing: 0.2rem;
         color: rgb(150,150,150);
     }
 
     .bars {
-        padding-top: 15px;
+        padding-top: 1rem;
         height: max-content;
         display: flex;
         flex-direction: column;
@@ -102,7 +102,7 @@ function toString(value) {
         align-items: center;
         font-family: 'Courier New', Courier, monospace;
         height: min-content;
-        padding: 2px 0;
+        padding: 0.125rem 0;
     }
 
     .tally {
@@ -114,14 +114,14 @@ function toString(value) {
 
     .number {
         color: white;
-        margin-top: 3px;
-        margin-bottom: 2px;
-        padding-right: 5px;
-        font-size: 16px;
+        margin-top: 0.2rem;
+        margin-bottom: 0.125rem;
+        padding-right: 0.4rem;
+        font-size: 1rem;
     }
 
     .label {
-        width: 25px;
+        width: 1.5rem;
         font-weight: bolder;
         padding-right: 0.5rem;
         text-align: right;

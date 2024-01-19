@@ -69,7 +69,7 @@ function countOccurrences(ch, str) {
 
 function handleStyle(key) {
     if (props.currentGuess === '     ') {
-        return {backgroundColor: 'white', border: '1px solid lightgrey'}
+        return {backgroundColor: 'white', border: '0.1rem solid lightgrey'}
     }
     for (let i = 0; i < hints.value.length; i++) {
         if (key <= hints.value[i]) {
@@ -101,16 +101,16 @@ function handleStyle(key) {
         overflow: hidden;
         display: flex;
         min-width: fit-content;
-        gap: 5px;
+        gap: 0.3rem;
         align-items: center;
         justify-content: center;
     }
 
     .hint {
-        border-radius: 5px;
+        border-radius: 0.3rem;
         aspect-ratio: 1/1;
-        width: 42px;
-        min-width: 42px;
+        width: 2.5rem;
+        min-width: 2.5rem;
         transition: 0.4s ease;
     }
 

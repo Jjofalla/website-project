@@ -15,7 +15,7 @@ const om = getOverlayManager();
 const showAlert = ref(false);
 const message = ref("");
 const alertTimer = ref();
-const tableStyle = ref({'width': '715px', 'height': '80px'})
+const tableStyle = ref({'width': '44.6rem', 'height': '5rem'})
 
 function getRow(row) {
     // zero-indexed to access array 
@@ -77,7 +77,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         </Transition>
 
         <div class="table" :style="tableStyle">
-            <div class="rows fst" :style="{'margin-right': gameState.rowsToRender > 6 ? '10px' : 'auto'}">
+            <div class="rows fst" :style="{'margin-right': gameState.rowsToRender > 6 ? '0.7rem' : 'auto'}">
                 <TransitionGroup name="add-row">
                     <BoardRow 
                         v-for="row in Math.min(6, gameState.rowsToRender)" 
@@ -117,7 +117,8 @@ if (getStatsStore().stats.totalPlayed <= 0) {
 <style scoped>
     #board {
         position: absolute;
-        height: 90vh;
+        top: 10%;
+        height: 90%;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -127,8 +128,8 @@ if (getStatsStore().stats.totalPlayed <= 0) {
     .table {
         display: flex;
         flex-direction: row;
-        transition: width 2s ease, height 0.4s ease;
-        min-width: 715px;
+        transition: width 5s ease, height 0.4s ease;
+        min-width: 45rem;
         margin: 0 auto;
     }
 
@@ -138,7 +139,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         align-self: flex-start;
         height: min-content;
         width: min-content;
-        padding: 2em 0em 1.5em 0em;
+        padding: 1rem 0rem 1.5rem 0rem;
     }
 
     .fst {
@@ -147,7 +148,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
     }
 
     .snd {
-        margin-left: 10px;
+        margin-left: 0.8rem;
         margin-right: auto;
     }
 
@@ -156,18 +157,18 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         justify-content: center;
         height: max-content;
         top: -1%;
-        padding: 10px 20px 10px 20px;
+        padding: 0.8rem 1.2rem 0.8rem 1.2rem;
         background-color: darkslategray;
         border: 1px solid;
-        border-radius: 10px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+        border-radius: 0.3rem;
+        box-shadow: 0px 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
         z-index: 1;
     }
 
     .alert h1 {
         color: white;
         letter-spacing: 1px;
-        font-size: 20px;
+        font-size: 1.2rem;
         font-family: 'Trebuchet MS', sans-serif;
     }
 
@@ -199,15 +200,15 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         }
         
         20%, 80% {
-            transform: translate(2px, 0);
+            transform: translate(0.125rem, 0);
         }
 
         30%, 50%, 70% {
-            transform: translate(-4px, 0);
+            transform: translate(-0.25rem, 0);
         }
 
         40%, 60% {
-            transform: translate(4px, 0);
+            transform: translate(0.25rem, 0);
         }
     }
 
@@ -220,7 +221,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
     }
 
     .add-row-enter-from {
-        transform: translateX(-15px);
+        transform: translateX(-1rem);
         opacity: 0;
     }
 

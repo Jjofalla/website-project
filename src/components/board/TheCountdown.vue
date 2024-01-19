@@ -46,14 +46,14 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
 @import url('../../assets/main.css');
 .countdown {
     position: relative;
-    width: 550px;
+    width: 34rem;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: default;
-    gap: 15px;
-    font-size: 27px;
-    letter-spacing: 5px;
+    gap: 1rem;
+    font-size: 1.7rem;
+    letter-spacing: 0.4rem;
     font-weight: lighter;
     font-family: 'Trebuchet MS', sans-serif;
     color: var(--text-light);
@@ -73,12 +73,12 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
 
 .flip-enter-from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-1.2rem);
 }
 
 .flip-leave-to {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(1.2rem);
 }
 
 .flip-enter-active, 

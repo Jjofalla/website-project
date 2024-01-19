@@ -112,13 +112,7 @@ const handleEvent = (event, eventType) => {
         align-items: center;
         justify-content: center;
         aspect-ratio: 1/1;
-        width: 70px;
-    }
-
-    @media (max-width: 900px) {
-        .tile {
-            width: 65px;
-        }
+        width: 4.4rem;
     }
 
     .text {
@@ -126,10 +120,10 @@ const handleEvent = (event, eventType) => {
         width: 100%;
         cursor: default;
         border: none;
-        border-radius: 5px;
+        border-radius: 0.3rem;
         text-align: center;
         font-family: 'Trebuchet MS', sans-serif;
-        font-size: 38px;
+        font-size: 2.3rem;
         font-weight: bolder;
         transition: background-color 0.2s ease, color 0.2s ease;
         overflow: hidden;
@@ -137,7 +131,7 @@ const handleEvent = (event, eventType) => {
 
     .text:focus {
         outline: none;
-        border: 1.5px solid lightgrey;
+        border: 1px solid lightgrey;
         animation-name: flash;
         animation-duration: 1s;
         animation-iteration-count: infinite;
@@ -147,11 +141,11 @@ const handleEvent = (event, eventType) => {
 
     @keyframes flash {
         0%, 100% {
-            box-shadow: 0px 4px 4px rgb(180,180,180);
+            box-shadow: 0px 0.25rem 0.25rem rgb(180,180,180);
             border-color: white;
         }
         50% {
-            box-shadow: 0px 4px 7px darkslategrey;
+            box-shadow: 0px 0.25rem 0.45rem darkslategrey;
             border-color: lightgray;
         }
     }
@@ -172,7 +166,7 @@ const handleEvent = (event, eventType) => {
     }
 
     .inactive {
-        box-shadow: 0px 4px 4px lightgrey;
+        box-shadow: 0px 0.25rem 0.25rem lightgrey;
         cursor: default;
     }
 
