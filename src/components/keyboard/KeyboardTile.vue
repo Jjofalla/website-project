@@ -16,16 +16,19 @@ defineProps({
 <style scoped>
     .tile {
         background-color: white;
-        border: 1px solid black;
-        border-radius: 5px;
-        font-size: 20px;
-        aspect-ratio: 1/1.3;
-        width: 48px;
+        color: darkslategray;
+        border: 1px solid darkgrey;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        font-size: 25px;
+        font-family: Tahoma, Verdana, sans-serif;
+        aspect-ratio: 1/1.15;
+        width: 55px;
     }
     
     .grey {
         color: white;
-        background-color: grey;
+        background-color: lightgray;
     }
 
 </style>

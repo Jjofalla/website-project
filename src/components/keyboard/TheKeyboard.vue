@@ -12,6 +12,7 @@ import KeyboardRow from './KeyboardRow.vue';
 
 <style scoped>
     .keyboard {
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;

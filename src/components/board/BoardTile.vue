@@ -1,7 +1,9 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { getGameState } from '@/store/GameState';
+import { getOverlayManager } from '@/store/OverlayManager';
 
+const om = getOverlayManager();
 const gameState = getGameState();
 const props = defineProps({
     tileId: {
@@ -24,13 +26,27 @@ const tileRef = ref(null);
 watchEffect(() => {
     focusOnInput();
 });
- 
+
 function focusOnInput() {
-    if (props.isActive && props.focused && tileRef.value) {
-        tileRef.value.focus();
+    if (!tileRef.value) {
+        return;
+    } 
+    
+    if (gameState.gameData.finished) {
+        tileRef.value.blur();
+        return;
+    }
+
+    if (props.focused && props.isActive) {
+        if (!om.overlayEnabled) {
+            tileRef.value.style.animationPlayState = 'running';
+            tileRef.value.focus();
+        } else {
+            tileRef.value.style.animationPlayState = 'paused';
+        }
     }
 }
-
+ 
 const handleEvent = (event, eventType) => {
     if (props.isActive) {
         if (eventType === 'focus') {
@@ -67,7 +83,6 @@ const handleEvent = (event, eventType) => {
             @keydown="handleEvent($event, 'keydown')"
             @keyup="handleEvent($event, 'keyup')"
             @mousedown="handleEvent($event, 'focus')"
-            @blur="focusOnInput"
         >
     </div>
 </template>
@@ -77,15 +92,24 @@ const handleEvent = (event, eventType) => {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 60px;
-        width: 60px;
         border: none;
+        aspect-ratio: 1/1;
+        width: 70px;
+    }
+
+    @media (max-width: 900px) {
+        .tile {
+            width: 65px;
+        }
     }
 
     .text {
         height: 100%;
         width: 100%;
-        border: 1px solid black;
+        color: darkslategray;
+        border: 1.5px solid lightgrey;
+        box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
         box-sizing: border-box;
         cursor: default;
         overflow: hidden;
@@ -95,17 +119,23 @@ const handleEvent = (event, eventType) => {
     }
 
     .text:focus {
-        border-radius: 2px;
-        outline: 1.4px solid black;
+        border: none;
+        border-radius: 5px;
+        outline: 1.5px solid lightgrey;
         animation-name: flash;
         animation-duration: 1s;
         animation-iteration-count: infinite;
-        animation-timing-function: linear;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
     }
 
     @keyframes flash {
-        50% {border-color: transparent;}
-        0%, 100% {border-color: black;}
+        50% {
+            box-shadow: 0px 5px 8px black;
+        }
+        0%, 100% {
+            box-shadow: 0px 5px 5px lightgrey;
+        }
     }
 
     .text:hover {
@@ -118,7 +148,9 @@ const handleEvent = (event, eventType) => {
 
     .grey {
         color: white;
-        background-color: grey;
+        background-color: lightgray;
+        outline: none;
+        border: none;
     }
 
     .grey::selection {
@@ -127,9 +159,7 @@ const handleEvent = (event, eventType) => {
 
     .inactive {
         cursor: default;
-        opacity: 70%;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
     }
-
-
 
 </style>

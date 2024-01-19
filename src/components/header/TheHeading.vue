@@ -1,69 +1,100 @@
 <script setup>
-import { ref } from 'vue';
-import { getGameState } from '@/store/GameState';
-import OverlayHelp from './OverlayHelp.vue';
-
-const enableOverlay = ref(false);
-
-const toggleOverlay = () => {
-    enableOverlay.value = !enableOverlay.value;
-}
-
+import { getOverlayManager } from '@/store/OverlayManager';
+import TheOverlay from './TheOverlay.vue';
+const om = getOverlayManager();
 </script>
 
 <template>
-    <div class="heading">
-        <h1 class="title">Wordle</h1>
-        <OverlayHelp v-show="enableOverlay" @toggle-overlay="toggleOverlay"/>
-        <div class="buttons">
-            <button class="button" @click="toggleOverlay">
-                <font-awesome-icon icon="fa-solid fa-question" size="2x"/>
+    <div class="heading-wrapper" @mousedown.prevent>
+        <div class="heading">
+            <button class="button" @click="om.toggleOverlay('stats')">
+                <font-awesome-icon icon="fa-solid fa-chart-simple" size="3x"/>
             </button>
-            <button class="button" @click="getGameState().resetState()">Reset</button>
+            <h1 class="title">HARDLE</h1>
+            <Transition>
+                <TheOverlay v-show="om.overlayEnabled"/>
+            </Transition>
+            <button class="button" @click="om.toggleOverlay('tutorial')">
+                <font-awesome-icon icon="fa-solid fa-question" size="3x"/>
+            </button>
         </div>
     </div>
 </template>
 
 <style scoped>
 
-@media (min-width: 1024px) {
-    .heading {
-        display: flex;
-        position: relative;
-        align-items: center;
-        text-align: center;
-        justify-content: center;
-        border-bottom: 1px solid black;
-        height: 100px;
+.heading-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-height: 100px;
+    height: 10vh;
+    border: 1px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to right, white, darkslategray, white);
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+}
+
+.heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 90vh;
+    min-width: 600px;
+}
+
+.v-enter-active {
+  animation: fadeIn 0.2s ease;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.v-leave-active {
+  animation: fadeOut 0.2s ease;
+  background: rgba(0, 0, 0, .0)
+}
+
+
+@keyframes fadeIn {
+    0% {
+        background: rgba(0, 0, 0, .0);
+    }
+    100% {
+        background: rgba(0, 0, 0, 0.2);
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    100% {
+        background-color: rgba(0, 0, 0, .0);
     }
 }
 
 .title {
-    font-family: Tahoma, Verdana, sans-serif;
-    font-size: 45px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', sans-serif;
+    font-size: 48px;
     font-weight: lighter;
+    text-align: center;
+    letter-spacing: 7px;
+    color: darkslategray;
     cursor: default;
 }
 
-.buttons {
-    display: flex;
-    position: absolute;
-    gap: 12px;
-    padding: 5px;
-    top: 0;
-    right: 0;
-}
-
 .button {
-    width: 70px;
+    height: max-content;
     aspect-ratio: 7/5;
     border: none;
-    color: none;
+    background-color: white;
+    color: darkslategray;
     cursor: pointer;
 }
 
 .button:hover {
-    background-color: white;
+    color: black;
 }
 
 </style>
