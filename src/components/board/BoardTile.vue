@@ -34,20 +34,6 @@ watch(() => gameState.gameData.rows.length, () => {
     endInfiniteLoop();
 });
 
-// watch(() => om.overlayEnabled, (newBool) => {
-//     if (props.focused && props.isActive) {
-//         if (!newBool) {
-//             tileRef.value.focus();
-//         } else {
-//             endInfiniteLoop();
-//         }
-//     }
-// })
-
-// watch(() => gameState.gameData.finished, () => {
-//     tileRef.value.blur();
-// });
-
 function focusOnInput() {
     if (!tileRef.value) {
         return;
@@ -75,7 +61,6 @@ function endInfiniteLoop() {
         //     tileRef.value.style.animation = 'none';
         //     tileRef.value.blur();
         // });
-        // tileRef.value.blur();
     }
 }
  
@@ -97,7 +82,6 @@ const handleEvent = (event, eventType) => {
         if (!gameState.gameData.finished) {
             // flip colour
             gameState.updateStyle(props.rowNumber - 1, props.tileId);
-
         }
     }
 }

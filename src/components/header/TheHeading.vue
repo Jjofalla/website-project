@@ -5,8 +5,8 @@ const om = getOverlayManager();
 </script>
 
 <template>
-    <div class="heading-wrapper" @mousedown.prevent>
-        <div class="heading">
+    <div id="heading-wrapper" @mousedown.prevent>
+        <div id="heading">
             <button class="button" @click="om.toggleOverlay('stats')">
                 <font-awesome-icon icon="fa-solid fa-chart-simple" size="3x"/>
             </button>
@@ -23,7 +23,7 @@ const om = getOverlayManager();
 
 <style scoped>
 
-.heading-wrapper {
+#heading-wrapper {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -37,7 +37,7 @@ const om = getOverlayManager();
     border-top: 0;
 }
 
-.heading {
+#heading {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -75,7 +75,7 @@ const om = getOverlayManager();
 }
 
 .title {
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', sans-serif;
+    font-family: 'Trebuchet MS', sans-serif;
     font-size: 48px;
     font-weight: bolder;
     text-align: center;

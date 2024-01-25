@@ -1,8 +1,11 @@
 :root {
   --tile-white: white;
   --tile-lightgrey: #d3d3d3;
+  --tile-lightgrey-shadow: #d3d3d380;
   --tile-orange: #ffa500;
+  --tile-orange-shadow: #ffa50080;
   --tile-green: #6B8E23;
+  --tile-green-shadow: #6B8E2380;
   --text-dark: rgb(110,110,110);
   --text-light: rgb(180,180,180);
   --game-font: 'Trebuchet MS', sans-serif;

@@ -43,6 +43,7 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
 </template>
 
 <style scoped>
+@import url('../../assets/main.css');
 .countdown {
     position: relative;
     width: 550px;
@@ -55,7 +56,7 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
     letter-spacing: 5px;
     font-weight: lighter;
     font-family: 'Trebuchet MS', sans-serif;
-    color: rgb(180,180,180);
+    color: var(--text-light);
     margin-top: 0.5rem;
     margin-bottom: 1.5rem;
 }
@@ -63,7 +64,7 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
 .number {
     display: flex;
     flex-direction: row;
-    color: rgb(110, 110, 110);
+    color: var(--text-dark);
 }
 
 .flip-enter-before {
@@ -88,10 +89,10 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
 .grats {
     background: linear-gradient(
         to right, 
-        #6B8E23 0%, #6B8E23 25%, 
-        orange 25%, orange 50%,
-        rgb(180,180,180) 50%, rgba(180,180,180) 75%,
-        white 75%, white 100%);
+        var(--tile-green) 0%, var(--tile-green) 25%, 
+        var(--tile-orange) 25%, var(--tile-orange) 50%,
+        var(--tile-lightgrey) 50%, var(--tile-lightgrey) 75%,
+        var(--tile-white), var(--tile-white) 100%);
     background-size: 700%;
     background-position: right;
     animation: extend 2s ease-out 0.3s 1 normal forwards, expand 1s ease 0.8s;

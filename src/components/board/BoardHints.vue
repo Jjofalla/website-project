@@ -6,8 +6,7 @@ import { getStatsStore } from '@/store/UserStats';
 const stats = getStatsStore().stats;
 const gameState = getGameState();
 const gameData = gameState.gameData;
-const target = gameState.target;
-const numberOfTiles = gameState.numberOfTiles;
+const { target, numberOfTiles, tileColours } = gameState;
 
 const emit = defineEmits(['game-finished'])
 const props = defineProps({
@@ -16,7 +15,6 @@ const props = defineProps({
     }
 });
 
-const hintColours = ['#6B8E23', 'orange', 'lightgray'];
 const hints = ref(props.currentGuess === '     ' ? [0, 0, 0] : calculateHints(props.currentGuess));
 
 watch(() => props.currentGuess, newGuess => {
@@ -76,8 +74,9 @@ function handleStyle(key) {
     for (let i = 0; i < hints.value.length; i++) {
         if (key <= hints.value[i]) {
             return {
-                backgroundColor: hintColours[i],
-                border: '1px solid ' + hintColours[i],
+                // colours are ordered in reverse
+                backgroundColor: tileColours[3 - i],
+                border: '1px solid ' + tileColours[3 - i],
                 transitionDelay: 0.1 * key + 's',
             };
         }

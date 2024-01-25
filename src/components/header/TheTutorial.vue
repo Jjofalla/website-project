@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <div class="tutorial">
+    <div id="tutorial">
         <div class="intro">
             <h1>How To Play</h1>
             <p>
@@ -60,7 +60,8 @@
 </template>
 
 <style scoped>
-    .tutorial {
+@import url('../../assets/main.css');
+    #tutorial {
         font-family: 'Lucida Grande', sans-serif;
         font-size: 18px;
         margin: 2.5rem 2.5rem 3rem 2rem;
@@ -129,7 +130,7 @@
         font-family: 'Trebuchet MS', sans-serif;
         font-size: 30px;
         font-weight: bolder;
-        color: rgb(110,110,110);
+        color: var(--text-dark);
         box-shadow: 0px 4px 4px rgb(200,200,200);
     }
 
@@ -169,18 +170,18 @@
     }
 
     .correct {
-        background-color: #6B8E23;
-        border: #6B8E23;
+        background-color: var(--tile-green);
+        border: var(--tile-green);
     }
 
     .near {
-        background-color: orange;
-        border: orange;
+        background-color: var(--tile-orange);
+        border: var(--tile-orange);
     }
 
     .incorrect {
-        background-color: lightgray;
-        border: lightgray;
+        background-color: var(--tile-lightgrey);
+        border: var(--tile-lightgrey);
     }
     
     .rotate {
@@ -199,23 +200,23 @@
         from, to {}
         0%, 20%, 100% {
             background-color: white;
-            color: rgb(110, 110, 110);
+            color: var(--text-dark);
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
         }
         25%, 45% {
-            background-color: #d3d3d3;
+            background-color: var(--tile-lightgrey);
             color: white;
-            box-shadow: 0px 4px 4px #d3d3d380;
+            box-shadow: 0px 4px 4px var(--tile-lightgrey-shadow);
         }
         50%, 70% {
-            background-color: #ffa500;
+            background-color: var(--tile-orange);
             color: white;
-            box-shadow: 0px 4px 4px #ffa50080;
+            box-shadow: 0px 4px 4px var(--tile-orange-shadow);
         }
         75%, 95% {
-            background-color: #6B8E23;
+            background-color: var(--tile-green);
             color: white;
-            box-shadow: 0px 4px 4px #6B8E2380;
+            box-shadow: 0px 4px 4px var(--tile-green-shadow);
         }
     }
     .pointer {

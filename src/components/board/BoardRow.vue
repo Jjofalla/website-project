@@ -113,7 +113,7 @@ if (props.rowNumber === 7) {
         height: min-content;
         border: none;
         background-color: white;
-        color: rgb(180, 180, 180);  
+        color: var(--text-light);  
         cursor: pointer;
         transition: transform 0.2s ease;
     }

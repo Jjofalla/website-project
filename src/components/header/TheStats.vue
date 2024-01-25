@@ -71,12 +71,12 @@ function toString(value) {
         text-align: right;
         margin: 1.2rem 1rem 1.5rem 0rem;
         letter-spacing: 5px;
-        color: rgb(180, 180, 180);
+        color: var(--text-light);
         text-indent: 7.5px;
     }
 
     .stat h1 {
-        color: rgb(110, 110, 110);
+        color: var(--text-dark);
         margin: 0.5rem auto;
         font-size: 48px;
         text-indent: 0px;
@@ -125,7 +125,7 @@ function toString(value) {
         font-weight: bolder;
         padding-right: 0.5rem;
         text-align: right;
-        color: rgb(110,110,110);
+        color: var(--text-dark);
     }
     
 </style>
