@@ -13,7 +13,7 @@
 }
 
 html {
-  font-size: 12px;
+  font-size: 1vw;
 }
 
 body {
@@ -21,9 +21,4 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-#app {
-  width: 1400px;
-  max-width: 1400px;
 }

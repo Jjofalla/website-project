@@ -46,11 +46,11 @@ function onAlert(msg) {
 }
 
 if (props.rowNumber <= 6) {
-    emit('animate-table', 'height', 4 + (5.2 * props.rowNumber) + 'rem');
+    emit('animate-table', 'height', 4.5 + (4.6 * props.rowNumber) + 'rem');
 } 
 
 if (props.rowNumber === 7) {
-    emit('animate-table', 'width', '100%');
+    emit('animate-table', 'width', '90vw');
 } 
 
 
@@ -64,7 +64,7 @@ if (props.rowNumber === 7) {
                     v-show="!getGameState().gameData.finished && showClearButton" 
                     @click="handleClick(rowNumber - 1)" 
                     class="button">
-                        <font-awesome-icon icon="fa-solid fa-eraser" size="xl"/>
+                        <font-awesome-icon icon="fa-solid fa-eraser"/>
                 </button>
             </Transition>
         </div>
@@ -105,10 +105,11 @@ if (props.rowNumber === 7) {
         gap: 2.5rem;
         align-items: center;
         justify-content: space-evenly;
-        padding: 0.3rem 2rem 0.3rem 0;
+        padding: 0.2rem 2rem 0.2rem 0;
     }
 
     .button {
+        font-size: 1.5rem;
         border: none;
         background-color: white;
         color: var(--text-light);  

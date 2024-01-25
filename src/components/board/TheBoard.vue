@@ -15,7 +15,7 @@ const om = getOverlayManager();
 const showAlert = ref(false);
 const message = ref("");
 const alertTimer = ref();
-const tableStyle = ref({'width': '44.6rem', 'height': '5rem'})
+const tableStyle = ref({'width': '44vw', 'height': '6vh'})
 
 function getRow(row) {
     // zero-indexed to access array 
@@ -64,7 +64,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
 </script>
 
 <template>
-    <div id="board" @mousedown.prevent>
+    <div id="board">
 
         <Transition name="alert">
             <div class="alert" v-show="showAlert">
@@ -116,20 +116,17 @@ if (getStatsStore().stats.totalPlayed <= 0) {
 
 <style scoped>
     #board {
-        position: absolute;
-        top: 10%;
-        height: 90%;
-        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
+        width: 100vw;    
     }
 
     .table {
         display: flex;
         flex-direction: row;
-        transition: width 5s ease, height 0.4s ease;
-        min-width: 45rem;
+        transition: width 2s ease, height 0.4s ease;
         margin: 0 auto;
     }
 
@@ -139,7 +136,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         align-self: flex-start;
         height: min-content;
         width: min-content;
-        padding: 1rem 0rem 1.5rem 0rem;
+        padding: 1.5rem 0rem 1.5rem 0rem;
     }
 
     .fst {
@@ -148,7 +145,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
     }
 
     .snd {
-        margin-left: 0.8rem;
+        margin-left: 0.7rem;
         margin-right: auto;
     }
 

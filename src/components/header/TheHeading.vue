@@ -7,15 +7,15 @@ const om = getOverlayManager();
 <template>
     <div id="heading-wrapper" @mousedown.prevent>
         <div id="heading">
-            <button class="button" @click="om.toggleOverlay('stats')">
-                <font-awesome-icon icon="fa-solid fa-chart-simple" size="2x"/>
+            <button class="button left" @click="om.toggleOverlay('stats')">
+                <font-awesome-icon icon="fa-solid fa-chart-simple"/>
             </button>
-            <h1 class="title">HARDLE</h1>
+            <div class="title">HARDLE</div>
             <Transition>
                 <TheOverlay v-show="om.overlayEnabled"/>
             </Transition>
-            <button class="button" @click="om.toggleOverlay('tutorial')">
-                <font-awesome-icon icon="fa-solid fa-question" size="2x"/>
+            <button class="button right" @click="om.toggleOverlay('tutorial')">
+                <font-awesome-icon icon="fa-solid fa-question"/>
             </button>
         </div>
     </div>
@@ -24,25 +24,49 @@ const om = getOverlayManager();
 <style scoped>
 
 #heading-wrapper {
-    position: absolute;
-    display: flex;
-    justify-content: center;
+    display: inline-block;
+    width: 100vw;   
     top: 0;
-    height: 9%;
-    width: 100%;    
 }
 
 #heading {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    width: 35%;
+    width: 45vw;
+    margin: 0 auto;
+    padding: 1rem;
     border: 1px solid;
     border-image-slice: 1;
     border-image-source: linear-gradient(to right, white, darkslategray, white);
     border-left: 0;
     border-right: 0;
     border-top: 0;
+}
+
+.title {
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 2.9rem;
+    font-weight: bolder;
+    text-align: center;
+    letter-spacing: 0.5rem;
+    width: min-content;
+    color: darkslategray;
+    cursor: default;
+}
+
+.button {
+    font-size: 2.3vw;
+    background-color: white;
+    color: darkslategray;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.button:hover {
+    color: black;
+    transform: scale(1.1);
 }
 
 .v-enter-active {
@@ -74,29 +98,6 @@ const om = getOverlayManager();
     }
 }
 
-.title {
-    font-family: 'Trebuchet MS', sans-serif;
-    font-size: 2.7rem;
-    font-weight: bolder;
-    text-align: center;
-    letter-spacing: 7px;
-    color: darkslategray;
-    cursor: default;
-}
 
-.button {
-    height: max-content;
-    aspect-ratio: 7/5;
-    border: none;
-    background-color: white;
-    color: darkslategray;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.button:hover {
-    color: black;
-    transform: scale(1.1);
-}
 
 </style>

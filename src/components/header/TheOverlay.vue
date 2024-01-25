@@ -9,7 +9,7 @@ const om = getOverlayManager();
     <div class="overlay-wrapper" @click.self="om.handleOverlayClick()">
         <div class="overlay" :class="{'out': !om.overlayEnabled}">
             <button class="close" @click.stop="om.handleOverlayClick()">
-                <font-awesome-icon icon="fa-solid fa-x" size="2x"/>
+                <font-awesome-icon icon="fa-solid fa-x" />
             </button>
             <TheStats v-show="om.overlayId === 'stats'"/>
             <TheTutorial v-show="om.overlayId === 'tutorial'"/>
@@ -23,8 +23,8 @@ const om = getOverlayManager();
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 100%;
-        width: 100%;
+        height: 100vh;
+        width: 100vw;
         top: 0;
         left: 0;
         z-index: 10;
@@ -34,8 +34,8 @@ const om = getOverlayManager();
     .overlay {
         position: fixed;
         margin: auto;
-        width: 37.5rem;
-        max-width: 37.5rem;
+        width: 36vw;
+        max-width: 36vw;
         cursor: default;
         background-color: white;
         border: none;
@@ -64,6 +64,7 @@ const om = getOverlayManager();
         background-color: white;
         border: none;
         opacity: 60%;
+        font-size: 2rem;
     }
 
     .close:hover {

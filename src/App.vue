@@ -4,6 +4,14 @@ import TheBoard from './components/board/TheBoard.vue'
 </script>
 
 <template>
-  <TheHeading />
-  <TheBoard />
+  <div id="body">
+    <TheHeading />
+    <TheBoard />
+  </div>
 </template>
+
+<style scoped>
+  #body {
+    display: block;
+  }
+</style>

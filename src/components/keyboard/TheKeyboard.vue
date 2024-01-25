@@ -13,11 +13,11 @@ import KeyboardRow from './KeyboardRow.vue';
 <style scoped>
     #keyboard {
         width: 100%;
-        padding-bottom: 3rem;
+        padding-bottom: 0.3rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
 </style>

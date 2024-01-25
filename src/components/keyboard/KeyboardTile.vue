@@ -25,7 +25,7 @@ defineProps({
         font-weight: bolder;
         font-family: 'Trebuchet MS', sans-serif;
         aspect-ratio: 1/1.15;
-        width: 3.5rem;
+        width: 3.1rem;
         transition: 0.2s ease;
     }
 

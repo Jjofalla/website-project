@@ -76,7 +76,7 @@ function handleStyle(key) {
             return {
                 // colours are ordered in reverse
                 backgroundColor: tileColours[3 - i],
-                border: '1px solid ' + tileColours[3 - i],
+                border: '0.1rem solid ' + tileColours[3 - i],
                 transitionDelay: 0.1 * key + 's',
             };
         }

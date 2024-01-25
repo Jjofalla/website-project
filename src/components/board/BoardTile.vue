@@ -112,7 +112,7 @@ const handleEvent = (event, eventType) => {
         align-items: center;
         justify-content: center;
         aspect-ratio: 1/1;
-        width: 4.4rem;
+        width: 4.2rem;
     }
 
     .text {
