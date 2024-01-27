@@ -77,7 +77,7 @@ const om = getOverlayManager();
 .title {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', sans-serif;
     font-size: 48px;
-    font-weight: lighter;
+    font-weight: bolder;
     text-align: center;
     letter-spacing: 7px;
     color: darkslategray;
@@ -91,10 +91,12 @@ const om = getOverlayManager();
     background-color: white;
     color: darkslategray;
     cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
 .button:hover {
     color: black;
+    transform: scale(1.1);
 }
 
 </style>

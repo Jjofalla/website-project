@@ -2,11 +2,11 @@
 import { ref } from 'vue';
 import BoardRow from './BoardRow.vue';
 import TheOverlay from '../header/TheOverlay.vue';
+import TheCountdown from './TheCountdown.vue';
 import TheKeyboard from '../keyboard/TheKeyboard.vue';
 import { getOverlayManager } from '@/store/OverlayManager';
 import { getGameState } from '@/store/GameState';
 import { getStatsStore } from '@/store/UserStats';
-
 
 const gameState = getGameState();
 const gameData = gameState.gameData;
@@ -15,6 +15,7 @@ const om = getOverlayManager();
 const showAlert = ref(false);
 const message = ref("");
 const alertTimer = ref();
+const tableStyle = ref({'width': '715px', 'height': '80px'})
 
 function getRow(row) {
     // zero-indexed to access array 
@@ -49,11 +50,13 @@ function resetAlert() {
 
 function handleGameFinishEvent() {
     setTimeout(() => {
-        om.toggleOverlay('stats');
-    }, 2000);
+        if (!om.overlayEnabled) {
+            om.toggleOverlay('stats');
+        }
+    }, 3200);
 }
 
-if (getStatsStore().stats.totalPlayed <= 1) {
+if (getStatsStore().stats.totalPlayed <= 0) {
     setTimeout(() => {
         om.toggleOverlay('tutorial');
     }, 100);
@@ -61,7 +64,7 @@ if (getStatsStore().stats.totalPlayed <= 1) {
 </script>
 
 <template>
-    <div class="body" @mousedown.prevent>
+    <div id="board" @mousedown.prevent>
 
         <Transition name="alert">
             <div class="alert" v-show="showAlert">
@@ -73,45 +76,49 @@ if (getStatsStore().stats.totalPlayed <= 1) {
             <TheOverlay v-show="om.overlayEnabled"/>
         </Transition>
 
-        <div class="table">
-            <div class="rows">
+        <div class="table" :style="tableStyle">
+            <div class="rows fst" :style="{'margin-right': gameState.rowsToRender > 6 ? '10px' : 'auto'}">
                 <TransitionGroup name="add-row">
                     <BoardRow 
                         v-for="row in Math.min(6, gameState.rowsToRender)" 
                         :key="row"
+                        :rowNumber="row"
                         :currentGuess="getRow(row)"
                         :isActive="determineActiveRow(row)"
                         @on-alert="handleAlert"
                         @game-finished="handleGameFinishEvent"
+                        @animate-table="(k, v) => tableStyle[k] = v"
                     />
                 </TransitionGroup>
             </div>
+
             <template v-if="gameState.rowsToRender > 6">
-                <div class="rows">
+                <div class="rows snd">
                     <TransitionGroup name="add-row">
                         <BoardRow 
                             v-for="row in Math.min(6, gameState.rowsToRender - 6)" 
                             :key="row"
+                            :rowNumber="row + 6"
                             :currentGuess="getRow(row + 6)"
                             :isActive="determineActiveRow(row + 6)"
                             @on-alert="handleAlert"
                             @game-finished="handleGameFinishEvent"
+                            @animate-table="(k, v) => tableStyle[k] = v"
                         />
                     </TransitionGroup>
                 </div>
             </template>
         </div>
-
+        <TheCountdown />
         <TheKeyboard />
     </div>
 </template>
 
 <style scoped>
-    .body {
+    #board {
         position: absolute;
         height: 90vh;
         width: 100%;
-        margin: 0 auto;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -119,27 +126,42 @@ if (getStatsStore().stats.totalPlayed <= 1) {
 
     .table {
         display: flex;
-        width: min-content;
-        transition: 1s;
+        flex-direction: row;
+        transition: width 2s ease, height 0.4s ease;
+        min-width: 715px;
+        margin: 0 auto;
     }
 
     .rows {
         display: flex;
         flex-direction: column;
         align-self: flex-start;
+        height: min-content;
         width: min-content;
-        padding: 2em 1em 2em 1em;
+        padding: 2em 0em 1.5em 0em;
     }
-    
+
+    .fst {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .snd {
+        margin-left: 10px;
+        margin-right: auto;
+    }
+
     .alert {
         position: absolute;
         justify-content: center;
         height: max-content;
+        top: -1%;
         padding: 10px 20px 10px 20px;
         background-color: darkslategray;
         border: 1px solid;
         border-radius: 10px;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+        z-index: 1;
     }
 
     .alert h1 {

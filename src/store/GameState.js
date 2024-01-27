@@ -26,26 +26,26 @@ function shuffleWordArray(seed) {
 }
 
 // reviver
-const jsonToSet = (key, value) => {
-    if (value && typeof value === 'object' && value.__setType === 'Set') {
-        return new Set(value.values);
-    }
-    return value;
-};
+// const jsonToSet = (key, value) => {
+//     if (value && typeof value === 'object' && value.__setType === 'Set') {
+//         return new Set(value.values);
+//     }
+//     return value;
+// };
 
-// replacer 
-const setToJson = (key, value) => {
-    if (value instanceof Set) {
-        return { __setType: 'Set', values: Array.from(value) };
-    }
-    return value;
-};
+// // replacer 
+// const setToJson = (key, value) => {
+//     if (value instanceof Set) {
+//         return { __setType: 'Set', values: Array.from(value) };
+//     }
+//     return value;
+// };
 
 
 export const getGameState = defineStore('gameState', () => {
     const gameData = ref({
         rows: [],
-        discardChars: new Set(),
+        tileStyleMap: [Array(5).fill(0)],
         finished: false,
         dateLastPlayed: null,
     });
@@ -59,7 +59,7 @@ export const getGameState = defineStore('gameState', () => {
     
     // check existing local storage
     if (localStorage.getItem("gameData")) {
-        prevGameData = JSON.parse(localStorage.getItem("gameData"), jsonToSet);
+        prevGameData = JSON.parse(localStorage.getItem("gameData"));
         prevDate = prevGameData.dateLastPlayed;
     }
 
@@ -78,36 +78,81 @@ export const getGameState = defineStore('gameState', () => {
     // assign constants
     const rowsToRender = ref(0);
     const target = targets[currentTargetIdx % targets.length];
-    console.log(target);
     const numberOfTiles = target.length;
     const maxGuesses = 12;
 
     function updateRows() {
         let numberOfRows = gameData.value.rows.length;
         if (!gameData.value.finished) {
+            // add row of styles
             rowsToRender.value = numberOfRows + 1;
         } else {
             rowsToRender.value = numberOfRows;
         }
     }
 
-    function isDiscarded(char) {
-        return gameData.value.discardChars.has(char);
+    // if (!gameData.value.tileStyleMap || gameData.value.tileStyleMap.length !== rowsToRender.value) {
+    //     gameData.value.tileStyleMap = Array.from({length: rowsToRender.value}, () => Array(rowsToRender.value).fill(0));
+    // }
+
+    // tile styles
+    const tileColours = ['white', '#d3d3d3', '#ffa500', '#6B8E23'];
+
+    function addStyleRow() {
+        gameData.value.tileStyleMap.push(Array(numberOfTiles).fill(0));
     }
 
-    function toggleDiscard(char) {
-        if (isDiscarded(char)) {
-            gameData.value.discardChars.delete(char)
-        } else {
-            gameData.value.discardChars.add(char);
+    function updateStyle(rowNumber, tileId) {
+        let curr = gameData.value.tileStyleMap[rowNumber][tileId];
+        gameData.value.tileStyleMap[rowNumber][tileId] = (curr + 1) % 4;
+
+    }
+
+    function readStyle(rowNumber, tileId) {
+        let idx = gameData.value.tileStyleMap[rowNumber][tileId];
+        if (typeof idx === 'undefined' || idx < 0 || idx > 3) {
+            idx = 0;
+        }
+        return getStyle(idx);
+    }
+
+    function getStyle(idx) {
+        return {
+            'background-color': tileColours[idx],
+            'color': idx === 0 ? 'rgb(110, 110, 110)' : 'white',
+            'box-shadow': '0px 4px 4px ' + (idx === 0 ? 'rgb(200,200,200)' : tileColours[idx] + '90'),
         }
     }
 
+    function clearStyleRow(rowNumber) {
+        for (let i = 0; i < numberOfTiles; i++) {
+            gameData.value.tileStyleMap[rowNumber][i] = 0;
+        }
+    }
+
+    function trackKeyboardTile(char) {
+        let charStyles = [];
+        gameData.value.rows.forEach((word, i) => {
+            Array.from(word).forEach((ch, j) => {
+                if (ch === char) {
+                    charStyles.push(gameData.value.tileStyleMap[i][j]);
+                }
+            })
+        });
+
+        if (charStyles.length === 0) {
+            return getStyle(0);
+        } 
+
+        return getStyle(Math.max(...charStyles));
+    }
+
     watch(gameData, (newData) => {
-        localStorage.setItem("gameData", JSON.stringify(newData, setToJson));
+        localStorage.setItem("gameData", JSON.stringify(newData));
     }, { deep: true });
 
     updateRows();
+    console.log(target);
 
     return { 
         gameData,
@@ -115,8 +160,11 @@ export const getGameState = defineStore('gameState', () => {
         target,
         numberOfTiles,
         maxGuesses,
-        isDiscarded, 
-        toggleDiscard,
         updateRows,
+        addStyleRow,
+        updateStyle,
+        readStyle,
+        clearStyleRow,
+        trackKeyboardTile,
     }
 }); 

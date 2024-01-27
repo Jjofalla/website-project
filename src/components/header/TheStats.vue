@@ -6,7 +6,7 @@ const stats = userStats.stats;
 const pixelSpan = () => {
     const vals = Object.values(stats.guessDistribution);
     const mode = Math.max(...vals);
-    return vals.map((x) => 15 + (x ? (x / mode) * 200 : 0));
+    return vals.map((x) => 20 + (x ? (x / mode) * 400 : 0));
 }
 
 function toString(value) {
@@ -17,18 +17,26 @@ function toString(value) {
 
 <template>
     <div class="stats">
-        <div class="title">Stats</div>
-        <div class="grid-container">
-            <div class="grid-item grid-col">Played</div>
-            <div class="grid-item grid-col">Win %</div>
-            <div class="grid-item grid-col">Avg. Guess</div>
-            <div class="grid-item grid-row">{{ toString(stats.totalPlayed) }}</div>
-            <div class="grid-item grid-row">{{ toString(userStats.winRate) }}</div>
-            <div class="grid-item grid-row">{{ toString(userStats.avg) }}</div>
+        <div class="title">Statistics</div>
+        <div class="stat-grid">
+            <div class="stat">
+                <h1>{{ toString(stats.totalPlayed) }}</h1>
+            PLAYED </div>
+            <div class="stat">
+                <h1>{{ toString(userStats.winRate) }}</h1>
+            WIN %</div>
+            <div class="stat">
+                <h1>{{ toString(userStats.avg) }}</h1>
+            AVERAGE GUESS</div>
         </div>
+        <div class="guess">GUESS DISTRIBUTION</div>
         <div class="bars">
-            <div class="tally" v-for="(n, idx) in pixelSpan()" :key="idx" :style="{height: n + 'px'}">
-                <h1 class="number">{{ Object.values(stats.guessDistribution)[idx] }}</h1>
+            <div class="bar" v-for="(n, idx) in pixelSpan()" :key="idx">
+                <div class="label"> {{ idx + 1 }}</div>
+                <div class="tally" :style="{width: n + 'px', backgroundColor: n === 420 ? 'rgb(110,110,110' : 'rgb(180,180,180)'}">
+                    <h1 class="number">{{ Object.values(stats.guessDistribution)[idx] }}</h1>
+                </div>
+
             </div>
         </div>
     </div>
@@ -36,71 +44,88 @@ function toString(value) {
 
 <style scoped>
     .stats {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        height: 70vh;
-        width: 100%;
+        font-size: 18px;
+        margin: 2.5rem 1.5rem 3rem 2rem;
+        font-family: 'Trebuchet MS', sans-serif;
     }
 
     .title {
+        display: block;
+        font-size: 36px;
+        font-weight: lighter;
+        letter-spacing: 2px;
+        padding-left: 0.2em;
+    }
+
+    .stat-grid {
         display: flex;
-        padding: 20px 0px 20px 0px;
-        width: 75%;
-        font-size: 40px;
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .stat {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: right;
+        margin: 1.2rem 1rem 1.5rem 0rem;
         letter-spacing: 5px;
-        justify-content: left;
+        color: rgb(180, 180, 180);
+        text-indent: 7.5px;
     }
 
-    .grid-container {
-        display: grid;
-        text-align: center;
-        grid-template-columns: repeat(3, auto);
-        grid-template-rows: repeat(2, 1fr);
+    .stat h1 {
+        color: rgb(110, 110, 110);
+        margin: 0.5rem auto;
+        font-size: 48px;
+        text-indent: 0px;
     }
 
-    .grid-item {
-        margin: auto;
-        padding: 0px 40px 0px 40px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-    }
-
-    .grid-col {
-        font-size: 20px;
-    }
-
-    .grid-row {
-        text-decoration-color: green;
-        font-size: 40px;
+    .guess {
+        margin-left: 0.4rem;
+        padding-top: 20px;
+        letter-spacing: 3px;
+        color: rgb(150,150,150);
     }
 
     .bars {
-        padding-top: 30px;
+        padding-top: 15px;
         height: max-content;
         display: flex;
+        flex-direction: column;
+    }
+
+    .bar {
+        display: flex;
         flex-direction: row;
-        gap: 5px;
+        align-items: center;
+        font-family: 'Courier New', Courier, monospace;
+        height: min-content;
+        padding: 2px 0;
     }
 
     .tally {
-        align-self: flex-end;
-        justify-content: center;
+        display: flex;
         background-color: darkslategray;
-        padding: 0.5rem;
-        width: min-content;
-        max-width: 25px;
+        justify-content: right;
+        min-width: min-content;
     }
 
     .number {
-        display: flex;
-        justify-content: center;
-        margin: auto;
         color: white;
-        font-family: 'Courier New', Courier, monospace;
+        margin-top: 3px;
+        margin-bottom: 2px;
+        padding-right: 5px;
         font-size: 16px;
     }
+
+    .label {
+        width: 25px;
+        font-weight: bolder;
+        padding-right: 0.5rem;
+        text-align: right;
+        color: rgb(110,110,110);
+    }
+    
 </style>

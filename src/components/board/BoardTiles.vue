@@ -10,6 +10,9 @@ import { allowableGuesses } from '@/assets/words';
 const numberOfTiles = getGameState().numberOfTiles;
 const emit = defineEmits(['on-enter', 'on-click', 'on-alert']);
 const props = defineProps({
+    rowNumber: {
+        type: Number,
+    },
     currentGuess: {
         type: String,
     },
@@ -51,11 +54,14 @@ function onKeyDown(key, tileId) {
 }
 
 function shiftRight() {
-    targetIdx.value = (targetIdx.value + 1) % numberOfTiles;
+    if (targetIdx.value >= numberOfTiles - 1) {
+        return;
+    }
+    targetIdx.value++;
 }
 
 function shiftLeft() {
-    targetIdx.value = targetIdx.value <= 0 ? numberOfTiles - 1 : targetIdx.value - 1; 
+    targetIdx.value = targetIdx.value <= 0 ? targetIdx.value : targetIdx.value - 1; 
 }
 
 function onFocus(tileId) {
@@ -73,14 +79,13 @@ function handleEnter(chars) {
         return;
     } 
 
-    const word = chars.join('');
+    const word = chars.join('').toLowerCase();
     if (!isValidWord(word)) {
         emit('on-alert', 'Not in Wordlist');
         return;
     }    
 
     emit('on-enter', word)
-    targetIdx.value = 0;
 }
 
 function isValidWord(word) {
@@ -110,6 +115,7 @@ function isValidWord(word) {
         <BoardTile
             v-for="tile in numberOfTiles"
             :key="tile"
+            :rowNumber="rowNumber"
             :tileId="tile-1"
             :char="chars[tile-1]" 
             :focused="targetIdx === tile-1"
@@ -124,7 +130,7 @@ function isValidWord(word) {
 <style scoped>
     .tiles {
         display: flex;
-        height: max-content;
+        height: 73px;
         align-items: center;
         justify-content: center;
         user-select: none;

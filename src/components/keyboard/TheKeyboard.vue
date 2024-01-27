@@ -3,7 +3,7 @@ import KeyboardRow from './KeyboardRow.vue';
 </script>
 
 <template>
-    <div class="keyboard">
+    <div class="keyboard" tabindex="-1">
         <KeyboardRow chars="qwertyuiop" />
         <KeyboardRow chars="asdfghjkl" />
         <KeyboardRow chars="zxcvbnm" />
@@ -13,10 +13,11 @@ import KeyboardRow from './KeyboardRow.vue';
 <style scoped>
     .keyboard {
         width: 100%;
+        padding-bottom: 3rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 5px;
+        gap: 7px;
     }
 </style>

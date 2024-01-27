@@ -1,5 +1,18 @@
+:root {
+  --tile-white: white;
+  --tile-lightgrey: #d3d3d3;
+  --tile-orange: #ffa500;
+  --tile-green: #6B8E23;
+  --text-dark: rgb(110,110,110);
+  --text-light: rgb(180,180,180);
+  --game-font: 'Trebuchet MS', sans-serif;
+  --doc-font: 'Lucida Grande', sans-serif;
+}
+
 body {
+  min-height: 100vh;
   margin: 0 auto;
+  font-family: var(--game-font);
 }
 
 @media (min-width: 1024px) {

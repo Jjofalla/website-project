@@ -16,8 +16,8 @@ const props = defineProps({
     }
 });
 
-const blanks = ref(numberOfTiles);
-const hints = ref(calculateHints(props.currentGuess));
+const hintColours = ['#6B8E23', 'orange', 'lightgray'];
+const hints = ref(props.currentGuess === '     ' ? [0, 0, 0] : calculateHints(props.currentGuess));
 
 watch(() => props.currentGuess, newGuess => {
     // update hint tiles
@@ -39,6 +39,8 @@ watch(() => props.currentGuess, newGuess => {
         getStatsStore().calculateAvg();
     }
 
+    gameState.addStyleRow();
+
     // update store after hint animation reveal
     setTimeout(() => {
         gameState.updateRows();
@@ -47,11 +49,6 @@ watch(() => props.currentGuess, newGuess => {
 });
 
 function calculateHints(newGuess) {
-    if (newGuess === '     ') {
-        return [0, 0, 0];
-    }
-
-    blanks.value = 0;
     let near = 0, correct = 0;
     const uniqueChars = new Set(newGuess);
 
@@ -73,49 +70,33 @@ function countOccurrences(ch, str) {
 }
 
 function handleStyle(key) {
+    if (props.currentGuess === '     ') {
+        return {backgroundColor: 'white', border: '1px solid lightgrey'}
+    }
     for (let i = 0; i < hints.value.length; i++) {
         if (key <= hints.value[i]) {
-            const delay = 0.2 * key;
-            return hintStyles(hintColours[i], delay);
+            return {
+                backgroundColor: hintColours[i],
+                border: '1px solid ' + hintColours[i],
+                transitionDelay: 0.1 * key + 's',
+            };
         }
     }
-}
-
-const hintColours = ['#6B8E23', 'orange', 'lightgray']
-const hintStyles = (colour, delay) => {
-    return {
-        backgroundColor: colour,
-        border: '1px solid ' + colour,
-        transitionDelay: delay,
-    }
-}
-
-const beforeEnter = (el) => {
-    const delayIndex = el.getAttribute('delay-index');
-    el.style.transitionDelay = delayIndex * 0.1 + 's';
 }
 
 </script>
 
 <template>
     <div class="hints">
-        <TransitionGroup name="reveal" @before-enter="beforeEnter">
-            <div 
-                class="hint"
-                v-for="i in hints[2]" 
-                :key="i"
-                :delay-index="i"
-                :style="handleStyle(i)">
-            </div>
-        </TransitionGroup>
         <div
             class="hint"
-            v-for="i in blanks"
-            :key="i">
+            v-for="i in numberOfTiles"
+            :key="i"
+            :style="handleStyle(i)">
         </div>
     </div>
 </template>
-
+        
 <style scoped>
     .hints {
         overflow: hidden;
@@ -127,12 +108,11 @@ const beforeEnter = (el) => {
     }
 
     .hint {
-        box-sizing: border-box;
         border-radius: 5px;
-        border: 1.5px solid lightgrey;
         aspect-ratio: 1/1;
         width: 42px;
         min-width: 42px;
+        transition: 0.4s ease;
     }
 
     .reveal-enter-from {

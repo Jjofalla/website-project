@@ -1,11 +1,14 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import { getGameState } from '@/store/GameState';
 import { getOverlayManager } from '@/store/OverlayManager';
-
 const om = getOverlayManager();
 const gameState = getGameState();
+
 const props = defineProps({
+    rowNumber: {
+        type: Number,
+    },
     tileId: {
         type: Number
     },
@@ -27,6 +30,24 @@ watchEffect(() => {
     focusOnInput();
 });
 
+watch(() => gameState.gameData.rows.length, () => {
+    endInfiniteLoop();
+});
+
+// watch(() => om.overlayEnabled, (newBool) => {
+//     if (props.focused && props.isActive) {
+//         if (!newBool) {
+//             tileRef.value.focus();
+//         } else {
+//             endInfiniteLoop();
+//         }
+//     }
+// })
+
+// watch(() => gameState.gameData.finished, () => {
+//     tileRef.value.blur();
+// });
+
 function focusOnInput() {
     if (!tileRef.value) {
         return;
@@ -46,6 +67,17 @@ function focusOnInput() {
         }
     }
 }
+
+function endInfiniteLoop() {
+    if (props.isActive && props.focused && tileRef.value) {
+        tileRef.value.blur();
+        // tileRef.value.addEventListener('animationiteration', () => {
+        //     tileRef.value.style.animation = 'none';
+        //     tileRef.value.blur();
+        // });
+        // tileRef.value.blur();
+    }
+}
  
 const handleEvent = (event, eventType) => {
     if (props.isActive) {
@@ -63,7 +95,9 @@ const handleEvent = (event, eventType) => {
     } else if (eventType === 'focus') {
         event.preventDefault();
         if (!gameState.gameData.finished) {
-            gameState.toggleDiscard(props.char);
+            // flip colour
+            gameState.updateStyle(props.rowNumber - 1, props.tileId);
+
         }
     }
 }
@@ -75,7 +109,8 @@ const handleEvent = (event, eventType) => {
         <input 
             ref="tileRef"
             class="text"
-            :class="{'grey': gameState.isDiscarded(char), 'inactive': !isActive}"
+            :class="{'inactive': !isActive}"
+            :style="[gameState.readStyle(rowNumber - 1, tileId), {'cursor': gameState.gameData.finished ? 'default' : 'pointer'}]"
             maxlength="1"
             :tabindex="isActive ? null : -1"
             readonly
@@ -92,7 +127,6 @@ const handleEvent = (event, eventType) => {
         display: flex;
         align-items: center;
         justify-content: center;
-        border: none;
         aspect-ratio: 1/1;
         width: 70px;
     }
@@ -106,22 +140,20 @@ const handleEvent = (event, eventType) => {
     .text {
         height: 100%;
         width: 100%;
-        color: darkslategray;
-        border: 1.5px solid lightgrey;
-        box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        box-sizing: border-box;
         cursor: default;
-        overflow: hidden;
+        border: none;
+        border-radius: 5px;
         text-align: center;
-        font-family: Tahoma, Verdana, sans-serif;
+        font-family: 'Trebuchet MS', sans-serif;
         font-size: 38px;
+        font-weight: bolder;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        overflow: hidden;
     }
 
     .text:focus {
-        border: none;
-        border-radius: 5px;
-        outline: 1.5px solid lightgrey;
+        outline: none;
+        border: 1.5px solid lightgrey;
         animation-name: flash;
         animation-duration: 1s;
         animation-iteration-count: infinite;
@@ -130,16 +162,14 @@ const handleEvent = (event, eventType) => {
     }
 
     @keyframes flash {
-        50% {
-            box-shadow: 0px 5px 8px black;
-        }
         0%, 100% {
-            box-shadow: 0px 5px 5px lightgrey;
+            box-shadow: 0px 4px 4px rgb(180,180,180);
+            border-color: white;
         }
-    }
-
-    .text:hover {
-        cursor: pointer;
+        50% {
+            box-shadow: 0px 4px 7px darkslategrey;
+            border-color: lightgray;
+        }
     }
 
     .text::selection {
@@ -158,8 +188,8 @@ const handleEvent = (event, eventType) => {
     }
 
     .inactive {
+        box-shadow: 0px 4px 4px lightgrey;
         cursor: default;
-        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
     }
 
 </style>
