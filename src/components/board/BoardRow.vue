@@ -77,7 +77,6 @@ function onAlert(msg) {
 </template>
 
 <style scoped>
-
     .button-row {
         display: flex;
         margin-left: -1.5rem;
@@ -86,7 +85,7 @@ function onAlert(msg) {
 
     .placeholder {
         height: inherit;
-        width: 3.43rem;
+        width: 3rem;
     }
 
     .row {
@@ -102,7 +101,7 @@ function onAlert(msg) {
     .button {
         font-size: 1.5rem;
         border: none;
-        background-color: white;
+        background-color: transparent;
         color: var(--text-light);  
         cursor: pointer;
         transition: transform 0.2s ease;
@@ -133,8 +132,15 @@ function onAlert(msg) {
     }
 
     @media only screen and (max-width: 450px) {
+        .button-row {
+            margin-left: 0;
+        }
+        .placeholder {
+            width: 4rem;
+        }
+
         .row {
-            gap: 1.5rem;
+            gap: 1rem;
         }
     }
 

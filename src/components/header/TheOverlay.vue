@@ -36,7 +36,7 @@ const om = getOverlayManager();
         overflow-y: scroll;
         overscroll-behavior: contain;
         margin: auto;
-        width: max(36vw, 400px);
+        width: min(40rem, 100vw);
         cursor: default;
         background-color: white;
         border: none;
@@ -48,11 +48,6 @@ const om = getOverlayManager();
         width: 0.3rem;
     }
         
-    /* #overlay::-webkit-scrollbar-track {
-        margin-right: 0.3rem;
-        border-radius: 2rem;
-    }
-         */
     #overlay::-webkit-scrollbar-thumb {
         background-color: transparent;
         border-radius: 1rem;
@@ -74,9 +69,10 @@ const om = getOverlayManager();
     .close {
         position: absolute;
         z-index: 1;
-        margin: 2rem;
+        margin: 2rem 1.5rem;
         right: 0;
         background-color: white;
+        color: darkslategrey;
         border: none;
         opacity: 60%;
         font-size: 2rem;
@@ -85,6 +81,19 @@ const om = getOverlayManager();
     .close:hover {
         cursor: pointer;
         opacity: 100%;
+    }
+
+    .closer:active {
+        color: black;
+    }
+
+    @media only screen and (max-width: 450px) {
+        #overlay {
+            max-height: 80vh;
+        }
+        .close {
+            margin-right: 0.7rem;
+        }
     }
 
 </style>

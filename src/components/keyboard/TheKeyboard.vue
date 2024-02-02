@@ -28,6 +28,7 @@ import { keyPress } from '@/store/KeyPress';
         align-items: center;
         justify-content: center;
         gap: 0.3rem;
+        padding-bottom: 0.5rem;
     }
 
     .key-row {
@@ -71,12 +72,12 @@ import { keyPress } from '@/store/KeyPress';
     @media only screen and (max-width: 850px) {
         .key-tile {
             font-size: 4vw;
-            width: calc(100vw/11);
-            height: 10vh;
+            width: calc(100vw/11.5);
+            height: 9vh;
         }
 
         .tool {
-            height: 10vh;
+            height: 9vh;
             width: calc(100vw/7);
         }
     }

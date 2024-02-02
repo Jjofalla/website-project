@@ -17,8 +17,17 @@ html {
 }
 
 body {
+  margin: 0;
   font-family: var(--game-font);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media only screen and (max-width: 850px) {
+  body {
+    overflow: hidden;
+  }
 }

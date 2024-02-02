@@ -43,9 +43,9 @@ const om = getOverlayManager();
 
 .title {
     font-family: 'Trebuchet MS', sans-serif;
-    font-size: 32px;
+    font-size: max(2.5vw, 32px);
     font-weight: bolder;
-    text-align: center;
+    text-indent: 0.5rem;
     letter-spacing: 0.5rem;
     width: min-content;
     color: darkslategray;
@@ -53,16 +53,19 @@ const om = getOverlayManager();
 }
 
 .button {
-    margin: 0 5rem;
-    width: 50px;
-    aspect-ratio: 1/1;
-    padding: 1rem;
-    font-size: max(2.3vw, 25px);
-    background-color: white;
-    color: darkslategray;
     border: none;
+    width: 5rem;
+    padding: 1rem;
+    aspect-ratio: 1/1;
+    font-size: max(2.3vw, 25px);
+    background-color: transparent;
+    color: darkslategray;
     cursor: pointer;
     transition: transform 0.2s ease;
+}
+
+.right {
+    padding-left: 0.3rem;
 }
 
 .button:hover {
@@ -72,9 +75,10 @@ const om = getOverlayManager();
 
 @media only screen and (max-width: 850px) {
     #heading {
+        min-width: min-content;
         border: none;
     }
-    
+ 
     #heading-wrapper {
         border: 1px solid;
         border-image-slice: 1;
@@ -82,6 +86,11 @@ const om = getOverlayManager();
         border-left: 0;
         border-right: 0;
         border-top: 0;
+    }
+}
+@media only screen and (max-width: 450px) {
+    #heading {
+        min-width: 80vw;
     }
 }
 

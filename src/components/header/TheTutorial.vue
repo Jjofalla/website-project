@@ -89,8 +89,9 @@ import TutorialRow from './TutorialRow.vue'
 <style>
 @import url('../../assets/main.css');
     #tutorial {
+        display: block;
         font-family: 'Lucida Grande', sans-serif;
-        margin: 2.5rem 2.5rem 3rem 2rem;
+        margin: 2.5rem 2rem 3rem 2rem;
         height: 85vh;
     }
 

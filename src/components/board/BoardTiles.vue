@@ -149,4 +149,10 @@ function isValidWord(word) {
             gap: 0.4rem;
         }
     }
+
+    @media only screen and (max-width: 450px) {
+        .tiles {
+            height: min-content;
+        }
+    }
 </style>

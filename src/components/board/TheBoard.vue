@@ -82,7 +82,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
                 'display': 'flex',
                 'margin': '0 auto',
                 'transition': 'width 2s ease, height 0.4s ease',
-                'height': Math.min(32.5, 5 + (4.8 * gameState.rowsToRender)) + 'rem',
+                'height': Math.min(35, 5 + (5 * gameState.rowsToRender)) + 'rem',
                 'width': gameState.rowsToRender > 6 ? '100vw' : '46vw'
             }">
 
@@ -123,9 +123,12 @@ if (getStatsStore().stats.totalPlayed <= 0) {
                 'flex-direction': 'column',
                 'transition-property': 'height',
                 'transition-duration': '0.4s',
-                'max-height': '40vh',
+                'height': '40vh',
                 'width': '100vw',
-                'overflow': 'scroll',
+                'margin': '0 auto',
+                'overflow-y': 'scroll',
+                'overflow-x': 'hidden',
+                'overscroll-behavior': 'contain',
             }">
 
                 <div class="rows">
@@ -157,8 +160,9 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 100%; 
+        width: 100vw; 
         padding-bottom: 2rem;   
+        overflow-x: hidden;
     }
 
     .rows {
@@ -169,6 +173,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         width: min-content;
         padding: 1.5rem 0rem 1.5rem 0rem;
         margin: 0 auto;
+        gap: 0.3rem;
     }
 
     .fst {
@@ -257,21 +262,14 @@ if (getStatsStore().stats.totalPlayed <= 0) {
     .add-row-enter-active {
         transition: all 0.5s ease-in;
     }
-    
-    @media screen and (max-width: 880px) {
-        .fst {
-            margin-left: 2rem;
-            margin-right: auto;
+   
+    @media only screen and (max-width: 850px) {
+        #board {
+            padding-bottom: 0;
         }
 
-        .snd {
-            margin-right: 0rem;
-            margin-left: auto;
-        }
-    }
-
-    @media screen and (max-width: 850px) {
         .table {
+            align-items: center;
             flex-direction: column;
             transition-property: height;
             transition-duration: 0.4s;
@@ -281,14 +279,16 @@ if (getStatsStore().stats.totalPlayed <= 0) {
             border-left: 0;
             border-right: 0;
             border-top: 0;
+            overflow-x: hidden;
         }
 
         .rows {
-            padding-top: 1rem;
+            padding: 1rem 0;
         }
 
         #footer {
             display: flex;
+            width: 100vw;
             flex-direction: column;
             justify-content: center;
             align-items: center;

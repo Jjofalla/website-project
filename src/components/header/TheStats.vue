@@ -47,7 +47,7 @@ function assignColour(n) {
 <style scoped>
     .stats {
         font-size: 1.1rem;
-        margin: 2.5rem 1.5rem 3rem 2rem;
+        margin: 2.5rem 1.5rem 2.5rem 2rem;
         font-family: 'Trebuchet MS', sans-serif;
     }
 

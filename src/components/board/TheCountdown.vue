@@ -136,9 +136,9 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
 
 @media only screen and (max-width: 850px) {
     .countdown {
-        margin-top: 2rem;
+        max-height: 53vh;
+        margin-top: 1rem;
         margin-bottom: 1rem;
-        padding-top: 0.5rem; 
     }
 }
 

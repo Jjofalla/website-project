@@ -90,22 +90,20 @@ const handleEvent = (event, eventType) => {
 </script>
 
 <template>
-    <div class="tile">
-        <input
-            :id="rowNumber + ',' + tileId"
-            ref="tileRef"
-            class="text"
-            :class="{'inactive': !isActive}"
-            :style="[gameState.readStyle(rowNumber - 1, tileId), {'cursor': gameState.gameData.finished ? 'default' : 'pointer'}]"
-            maxlength="1"
-            :tabindex="isActive ? null : -1"
-            readonly
-            :value="char.toUpperCase()"
-            @keydown="handleEvent($event, 'keydown')"
-            @keyup="handleEvent($event, 'keyup')"
-            @mousedown="handleEvent($event, 'focus')"
-        >
-    </div>
+    <input
+        :id="rowNumber + ',' + tileId"
+        ref="tileRef"
+        class="tile"
+        :class="{'inactive': !isActive}"
+        :style="[gameState.readStyle(rowNumber - 1, tileId), {'cursor': gameState.gameData.finished ? 'default' : 'pointer'}]"
+        maxlength="1"
+        :tabindex="isActive ? null : -1"
+        readonly
+        :value="char.toUpperCase()"
+        @keydown="handleEvent($event, 'keydown')"
+        @keyup="handleEvent($event, 'keyup')"
+        @mousedown="handleEvent($event, 'focus')"
+    >
 </template>
 
 <style scoped>
@@ -113,25 +111,23 @@ const handleEvent = (event, eventType) => {
         display: flex;
         align-items: center;
         justify-content: center;
-        aspect-ratio: 1/1;
-        width: 4.2rem;
-    }
-
-    .text {
-        height: 100%;
-        width: 100%;
+        height: 4.6rem;
+        width: 4.4rem;
+        border-radius: 0.3rem;
         cursor: default;
         border: none;
-        border-radius: 0.3rem;
+        user-select: none;
+        box-sizing: border-box;
         text-align: center;
         font-family: 'Trebuchet MS', sans-serif;
         font-size: 2.3rem;
         font-weight: bolder;
+        -webkit-appearance: none;
+        appearance: none;
         transition: background-color 0.2s ease, color 0.2s ease;
-        overflow: hidden;
     }
 
-    .text:focus {
+    .tile:focus {
         outline: none;
         border: 1px solid lightgrey;
         animation-name: flash;
@@ -143,16 +139,16 @@ const handleEvent = (event, eventType) => {
 
     @keyframes flash {
         0%, 100% {
-            box-shadow: 0px 0.25rem 0.25rem rgb(180,180,180);
+            box-shadow: 0rem 0.25rem 0.25rem rgb(180,180,180);
             border-color: white;
         }
         50% {
-            box-shadow: 0px 0.25rem 0.45rem darkslategrey;
+            box-shadow: 0rem 0.25rem 0.45rem darkslategrey;
             border-color: lightgray;
         }
     }
 
-    .text::selection {
+    .tile::selection {
         color: black;
     }
 
@@ -168,24 +164,22 @@ const handleEvent = (event, eventType) => {
     }
 
     .inactive {
-        box-shadow: 0px 0.25rem 0.25rem lightgrey;
+        box-shadow: 0rem 0.25rem 0.25rem lightgrey;
         cursor: default;
     }
 
     @media only screen and (max-width: 1000px) {
         .tile {
+            height: 4.2rem;
             width: 3.9rem;
         }
     }
 
     @media only screen and (max-width: 450px) {
         .tile {
-            height: 3.2rem;
+            height: 3.4rem;
             width: 3.2rem;
-        }
-        
-        .text {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
         }
     }
 
