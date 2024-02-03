@@ -3,7 +3,7 @@ import { getGameState } from '@/store/GameState';
 import { ref, watch } from 'vue';
 
 const remainingGuesses = ref(12 - getGameState().gameData.rows.length);
-const effort = [['VERY EASILY!', 10], ['FANTASTIC JOB!', 8], ['GREAT JOB!', 5], ['GOOD JOB!', 1], ['CLOSE ONE!', 0]];
+const effort = [['VERY EASILY!', 10], ['AMAZING JOB!', 8], ['GREAT JOB!', 5], ['GOOD JOB!', 1], ['CLOSE ONE!', 0]];
 
 function getEffort(remainingGuesses) {
     for (let i = 0; i < effort.length; i++) {
@@ -46,7 +46,7 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
 @import url('../../assets/main.css');
 .countdown {
     position: relative;
-    width: 34rem;
+    width: 40rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -108,8 +108,8 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 103%;
-    width: 100%;
+    height: 105%;
+    width: 103%;
     mix-blend-mode: screen;
 }
 
@@ -131,6 +131,14 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
     }
     100% {
         transform: scale(1);
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    .countdown {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        padding-top: 0.5rem; 
     }
 }
 

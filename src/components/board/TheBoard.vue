@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import BoardRow from './BoardRow.vue';
 import TheOverlay from '../header/TheOverlay.vue';
 import TheCountdown from './TheCountdown.vue';
@@ -12,10 +12,14 @@ const gameState = getGameState();
 const gameData = gameState.gameData;
 const om = getOverlayManager();
 
+const windowWidth = ref(window.innerWidth);
+const onWidthChange = () => windowWidth.value = window.innerWidth;
+onMounted(() => window.addEventListener('resize', onWidthChange));
+onUnmounted(() => window.removeEventListener('resize', onWidthChange));
+
 const showAlert = ref(false);
 const message = ref("");
 const alertTimer = ref();
-const tableStyle = ref({'width': '44vw', 'height': '6vh'})
 
 function getRow(row) {
     // zero-indexed to access array 
@@ -61,6 +65,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         om.toggleOverlay('tutorial');
     }, 100);
 }
+
 </script>
 
 <template>
@@ -76,24 +81,32 @@ if (getStatsStore().stats.totalPlayed <= 0) {
             <TheOverlay v-show="om.overlayEnabled"/>
         </Transition>
 
-        <div class="table" :style="tableStyle">
-            <div class="rows fst" :style="{'margin-right': gameState.rowsToRender > 6 ? '0.7rem' : 'auto'}">
-                <TransitionGroup name="add-row">
-                    <BoardRow 
-                        v-for="row in Math.min(6, gameState.rowsToRender)" 
-                        :key="row"
-                        :rowNumber="row"
-                        :currentGuess="getRow(row)"
-                        :isActive="determineActiveRow(row)"
-                        @on-alert="handleAlert"
-                        @game-finished="handleGameFinishEvent"
-                        @animate-table="(k, v) => tableStyle[k] = v"
-                    />
-                </TransitionGroup>
-            </div>
 
-            <template v-if="gameState.rowsToRender > 6">
-                <div class="rows snd">
+        <template v-if="windowWidth > 850">
+
+            <div class="table" :style="{
+                'display': 'flex',
+                'margin': '0 auto',
+                'transition': 'width 2s ease, height 0.4s ease',
+                'height': Math.min(32.5, 5 + (4.8 * gameState.rowsToRender)) + 'rem',
+                'width': gameState.rowsToRender > 6 ? '100vw' : '46vw'
+            }">
+
+                <div class="rows fst" :style="{'margin-right': gameState.rowsToRender > 6 ? '0.7rem' : 'auto'}">
+                    <TransitionGroup name="add-row">
+                        <BoardRow 
+                            v-for="row in Math.min(6, gameState.rowsToRender)" 
+                            :key="row"
+                            :rowNumber="row"
+                            :currentGuess="getRow(row)"
+                            :isActive="determineActiveRow(row)"
+                            @on-alert="handleAlert"
+                            @game-finished="handleGameFinishEvent"
+                        />
+                    </TransitionGroup>
+                </div>
+
+                <div class="rows snd" v-if="gameState.rowsToRender > 6">
                     <TransitionGroup name="add-row">
                         <BoardRow 
                             v-for="row in Math.min(6, gameState.rowsToRender - 6)" 
@@ -103,14 +116,44 @@ if (getStatsStore().stats.totalPlayed <= 0) {
                             :isActive="determineActiveRow(row + 6)"
                             @on-alert="handleAlert"
                             @game-finished="handleGameFinishEvent"
-                            @animate-table="(k, v) => tableStyle[k] = v"
                         />
                     </TransitionGroup>
                 </div>
-            </template>
+            </div>
+        
+        </template>
+
+        <template v-else>
+            <div class="table" :style="{
+                'display': 'flex',
+                'flex-direction': 'column',
+                'transition-property': 'height',
+                'transition-duration': '0.4s',
+                'max-height': '40vh',
+                'width': '100vw',
+                'overflow': 'scroll',
+            }">
+
+                <div class="rows">
+                    <TransitionGroup name="add-row">
+                        <BoardRow 
+                            v-for="row in gameState.rowsToRender" 
+                            :key="row"
+                            :rowNumber="row"
+                            :currentGuess="getRow(row)"
+                            :isActive="determineActiveRow(row)"
+                            @on-alert="handleAlert"
+                            @game-finished="handleGameFinishEvent"
+                        />
+                    </TransitionGroup>
+                </div>
+            </div>
+        </template>
+        
+        <div id="footer">
+            <TheCountdown />
+            <TheKeyboard />
         </div>
-        <TheCountdown />
-        <TheKeyboard />
     </div>
 </template>
 
@@ -120,14 +163,8 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 100vw;    
-    }
-
-    .table {
-        display: flex;
-        flex-direction: row;
-        transition: width 2s ease, height 0.4s ease;
-        margin: 0 auto;
+        width: 100%; 
+        padding-bottom: 2rem;   
     }
 
     .rows {
@@ -137,6 +174,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         height: min-content;
         width: min-content;
         padding: 1.5rem 0rem 1.5rem 0rem;
+        margin: 0 auto;
     }
 
     .fst {
@@ -150,13 +188,13 @@ if (getStatsStore().stats.totalPlayed <= 0) {
     }
 
     .alert {
-        position: absolute;
+        position: fixed;
         justify-content: center;
         height: max-content;
-        top: -1%;
+        top: 10%;
         padding: 0.8rem 1.2rem 0.8rem 1.2rem;
         background-color: darkslategray;
-        border: 1px solid;
+        border: 1px solid darkslategray;
         border-radius: 0.3rem;
         box-shadow: 0px 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
         z-index: 1;
@@ -234,6 +272,44 @@ if (getStatsStore().stats.totalPlayed <= 0) {
     .overlay-leave-active {
         animation: fadeOut 0.3s ease;
         background: rgba(0, 0, 0, 0)
+    }
+
+    
+    @media screen and (max-width: 880px) {
+        .fst {
+            margin-left: 2rem;
+            margin-right: auto;
+        }
+
+        .snd {
+            margin-right: 0rem;
+            margin-left: auto;
+        }
+    }
+
+    @media screen and (max-width: 850px) {
+        .table {
+            flex-direction: column;
+            transition-property: height;
+            transition-duration: 0.4s;
+            border: 1px solid;
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to right, white, darkslategray, white);
+            border-left: 0;
+            border-right: 0;
+            border-top: 0;
+        }
+
+        .rows {
+            padding-top: 1rem;
+        }
+
+        #footer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
     }
 
 </style>

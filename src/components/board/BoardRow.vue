@@ -6,7 +6,7 @@ import { getGameState } from '@/store/GameState';
 
 const map = getGameState().gameData.tileStyleMap;
 
-const emit = defineEmits(['on-alert', 'game-finished', 'animate-table']);
+const emit = defineEmits(['on-alert', 'game-finished']);
 const props = defineProps({
     rowNumber: {
         type: Number
@@ -44,15 +44,6 @@ function handleEnter(word) {
 function onAlert(msg) {
     emit('on-alert', msg);
 }
-
-if (props.rowNumber <= 6) {
-    emit('animate-table', 'height', 4.5 + (4.6 * props.rowNumber) + 'rem');
-} 
-
-if (props.rowNumber === 7) {
-    emit('animate-table', 'width', '90vw');
-} 
-
 
 </script>
 
@@ -130,6 +121,21 @@ if (props.rowNumber === 7) {
     .show-button-enter-active,
     .show-button-leave-active {
         transition: all 0.3s ease-in;
+    }
+
+    @media only screen and (max-width: 1050px) {
+        .placeholder {
+            width: 2.9rem;
+        }
+        .row {
+            gap: 2.0rem;
+        }
+    }
+
+    @media only screen and (max-width: 450px) {
+        .row {
+            gap: 1.5rem;
+        }
     }
 
     

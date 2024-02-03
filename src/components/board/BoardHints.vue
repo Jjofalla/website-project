@@ -110,7 +110,6 @@ function handleStyle(key) {
         border-radius: 0.3rem;
         aspect-ratio: 1/1;
         width: 2.5rem;
-        min-width: 2.5rem;
         transition: 0.4s ease;
     }
 
@@ -120,6 +119,21 @@ function handleStyle(key) {
 
     .reveal-enter-active {
         transition: all 0.5s ease;
+    }
+
+    @media only screen and (max-width: 1000px) {
+        .hint {
+            width: 1.9rem;
+        }
+    }
+
+    @media only screen and (max-width: 450px) {
+        .hints {
+            gap: 0.2rem;
+        }
+        .hint {
+            width: 1.4rem;
+        }
     }
 
 </style>

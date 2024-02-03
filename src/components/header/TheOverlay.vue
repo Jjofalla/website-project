@@ -33,9 +33,9 @@ const om = getOverlayManager();
 
     .overlay {
         position: fixed;
+        overflow: scroll;
         margin: auto;
-        width: 36vw;
-        max-width: 36vw;
+        width: max(36vw, 400px);
         cursor: default;
         background-color: white;
         border: none;

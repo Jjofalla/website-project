@@ -6,7 +6,7 @@ const stats = userStats.stats;
 const pixelSpan = () => {
     const vals = Object.values(stats.guessDistribution);
     const mode = Math.max(...vals);
-    return vals.map((x) => 1.5 + (x ? (x / mode) * 25 : 0));
+    return vals.map((x) => 4 + (x ? (x / mode) * 80 : 0));
 }
 
 function toString(value) {
@@ -33,7 +33,7 @@ function toString(value) {
         <div class="bars">
             <div class="bar" v-for="(n, idx) in pixelSpan()" :key="idx">
                 <div class="label"> {{ idx + 1 }}</div>
-                <div class="tally" :style="{width: n + 'rem', backgroundColor: n === 25 ? 'rgb(110,110,110' : 'rgb(180,180,180)'}">
+                <div class="tally" :style="{width: n + '%', backgroundColor: n >= 84 ? 'rgb(110,110,110' : 'rgb(180,180,180)'}">
                     <h1 class="number">{{ Object.values(stats.guessDistribution)[idx] }}</h1>
                 </div>
 

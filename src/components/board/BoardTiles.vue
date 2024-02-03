@@ -1,10 +1,9 @@
 <script setup>
-/**
- * 
- */
+
 import BoardTile from './BoardTile.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { getGameState } from '@/store/GameState';
+import { keyPress } from '@/store/KeyPress';
 import { allowableGuesses } from '@/assets/words';
 
 const numberOfTiles = getGameState().numberOfTiles;
@@ -24,6 +23,13 @@ const props = defineProps({
 const chars = ref(Array.from(props.currentGuess));
 const targetIdx = ref(0);
 const handled = ref(new Set());
+
+watch(() => keyPress.value.isClicked, () => {
+    if (props.isActive) {
+        onKeyDown(keyPress.value.char, targetIdx.value);
+        onKeyUp(keyPress.value.char);
+    }
+});
 
 function onKeyDown(key, tileId) {
     if (handled.value.has(key)) {
@@ -135,5 +141,12 @@ function isValidWord(word) {
         justify-content: center;
         user-select: none;
         gap: 0.5rem;
+    }
+
+    @media only screen and (max-width: 1000px) {
+        .tiles {
+            height: 4.2rem;
+            gap: 0.4rem;
+        }
     }
 </style>

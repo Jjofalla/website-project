@@ -56,7 +56,8 @@ function getTileColours() {
 export const getGameState = defineStore('gameState', () => {
     // get local time and calculate idx offset
     const originDate = dayjs('2024-01-01T00:00:00.000Z');
-    const currentTargetIdx = dayjs().diff(originDate, 'days');
+    let targetIdx = dayjs().diff(originDate, 'days');
+    const currentTargetIdx = targetIdx >= 0 ? targetIdx : 0;
 
     const gameData = ref(retrieveLocalStorage(originDate, currentTargetIdx));
     const rowsToRender = ref(0);
@@ -104,6 +105,8 @@ export const getGameState = defineStore('gameState', () => {
             'background-color': tileColours[idx],
             'color': idx === 0 ? 'rgb(110, 110, 110)' : 'white',
             'box-shadow': '0rem 0.25rem 0.25rem ' + (idx === 0 ? 'rgb(200,200,200)' : tileColours[idx] + '90'),
+            '-webkit-box-shadow': '0rem 0.25rem 0.25rem ' + (idx === 0 ? 'rgb(200,200,200)' : tileColours[idx] + '90'),
+            '-moz-box-shadow': '0rem 0.25rem 0.25rem ' + (idx === 0 ? 'rgb(200,200,200)' : tileColours[idx] + '90'),
         }
     }
 
@@ -134,8 +137,6 @@ export const getGameState = defineStore('gameState', () => {
         localStorage.setItem("gameData", JSON.stringify(newData));
     }, { deep: true });
 
-    console.log(target);
-
     return { 
         gameData,
         rowsToRender,
@@ -146,6 +147,7 @@ export const getGameState = defineStore('gameState', () => {
         updateRows,
         addStyleRow,
         updateStyle,
+        getStyle,
         readStyle,
         clearStyleRow,
         trackKeyboardTile,

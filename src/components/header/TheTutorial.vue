@@ -1,85 +1,130 @@
 <script setup>
+import TutorialRow from './TutorialRow.vue'
 </script>
 
 <template>
     <div id="tutorial">
-        <div class="intro">
+        <div id="intro">
             <h1>How To Play</h1>
             <p>
                 Played <a href="https://www.nytimes.com/games/wordle">Wordle</a>? This game is a lot harder!
-                You have 12 attempts to guess the word, and each attempt will reveal an <i>ordered</i> colour code,
-                from green to grey. 
+                You have 12 attempts to guess the word, and each attempt will reveal five squares, marked with a 
+                certain colour. 
             </p>
         </div>
-        <div class="examples">
+
+        <div id="squares">
             <span>
-                <div class="hint correct"></div>
+                <div class="tutorial-hint correct"></div>
                 <p>A green square means one of the letters is in the word, and in the correct position.</p>
             </span>
             <span>
-                <div class="hint near"></div>
-                <p>An orange square means one of the letters is in the word, but not in the right position.</p>
+                <div class="tutorial-hint near"></div>
+                <p>An orange square means one of the letters is in the word, but not in the correct position.</p>
             </span>
             <span>
-                <div class="hint incorrect"></div>
+                <div class="tutorial-hint incorrect"></div>
                 <p>A grey square means one of the letters is <b>not</b> in the word.</p>
             </span>
         </div>
-        <div class="row">
-            <div class="tiles">
-                <div class="tile" v-for="(n, idx) in Array.from('BOARD')" :key="idx">{{ n }}</div>
-            </div>
-            <div class="hints">
-                <div class="hint" v-for="(cls, idx) in ['correct', 'near', 'near', 'incorrect', 'incorrect']" :key="idx" :class="cls"></div>
-            </div>
-        </div>
-        <p>Significantly, the colour code <b>does not <i>necessarily</i> correspond</b> to the position of the letters in a guess. For example, having entered "board", 
-            it is revealed that one of the letters is in the right place, and two of the letters are in the word but not in the right position.</p>
-        <div class="controls">
+
+        <p id="order" class="linebreak">
+            However, the squares are always presented in the same order: first green, then orange, then grey. 
+            Therefore, the position of the squares <b>does not <i>necessarily</i> correspond</b> to the position of the letters in a guess.
+        </p>
+        <p class="subtitle">Controls</p>
+
+        <div id="controls" class="linebreak">
             <span>
-                <div class="hint rotate">H</div>
-                <div class="pointer">
-                    <font-awesome-icon 
-                        class="icon" 
-                        icon="fa-regular fa-border fa-hand-pointer" 
-                        size="2x"/>
+                <div class="left-align">
+                    <font-awesome-icon class="caret" icon="fa-solid fa-square-caret-left" size="2x"></font-awesome-icon>
+                    <font-awesome-icon class="caret" icon="fa-solid fa-square-caret-right" size="2x"></font-awesome-icon>
                 </div>
-
-                <svg width="0" height="0">
-                    <clipPath id="clipPath" clipPathUnits="objectBoundingBox">
-                        <path d="M0.19,0.2 L0.2,0.11 L0.21,0.1 L0.22,0.08 L0.25,0.05 L0.3,0.02 L0.34,0.03 L0.39,0.04 L0.42,0.06 L0.44,0.08 L0.5,0.33 L1.1,0.37 L1,1 L0.35,1 L0.03,0.69 L0.03,0.6 L0.07,0.55 L0.1,0.54 L0.12,0.53 L0.15,0.53 L0.16,0.53 L0.27,0.6 Z"></path>
-                    </clipPath>
-                </svg>
-
-                <p>To help you progress, click on the tiles of your previous guesses to mark them with a colour.
+                <p>
+                    Use the arrow keys or click on a tile to enter a letter in a certain position. 
+                    Press Return to submit a guess.
+                </p>
+            </span>
+            <span>
+                <div class="left-align">
+                    <div class="tutorial-hint rotate">H</div>
+                    <div id="pointer">
+                        <font-awesome-icon class="icon" icon="fa-regular fa-border fa-hand-pointer" size="2x"/>
+                    </div>
+                </div>
+                <p>Click on the tiles of your previous guesses to mark them with a colour.
                    Click once to make a tile grey, twice for orange, and three times for green.
                 </p>
             </span>
+            <span>
+                <div class="left-align">
+                    <font-awesome-icon style="color:var(--text-light)" icon="fa-solid fa-eraser" size="2x"/>
+                </div>
+                <p>
+                    Click the eraser at the left of each guess to remove all marks from the tiles on that guess.
+                </p>
+            </span>
         </div>
+
+        <div id="example">
+            <p class="subtitle">An Example</p>
+            <TutorialRow 
+                :word="'SHARE'" 
+                :code="['correct', 'near', 'near', 'incorrect', 'incorrect']" 
+                :styleMap="[3, 3]"/>
+            <TutorialRow 
+                :word="'SHAPE'" 
+                :code="['near', 'near', 'incorrect', 'incorrect', 'incorrect']"
+                :styleMap="[3, 1]"/>
+            <p id="logic">
+                Since R is the only letter that has changed in the second guess, R must be in the word, and in the correct place, so it can be marked green.
+                Conversely, as P was swapped for R, P cannot be in the word, and can be marked grey.
+            </p>
+        </div>
+
+        
     </div>
 </template>
 
-<style scoped>
+<style>
 @import url('../../assets/main.css');
     #tutorial {
         font-family: 'Lucida Grande', sans-serif;
         margin: 2.5rem 2.5rem 3rem 2rem;
+        height: 85vh;
     }
 
-    .intro {
+    .subtitle {
+        margin: 1.5rem 0 0.5rem 0;
+        font-family: 'Trebuchet MS', sans-serif;
+        font-size: 1.5rem;
+        letter-spacing: 0.1rem;
+    }
+
+    .linebreak {
+        padding-bottom: 1.8rem;
+        border: 1px solid;
+        border-image-slice: 1;
+        border-image-source: linear-gradient(to right, white, darkslategray, white);
+        border-left: 0;
+        border-right: 0;
+        border-top: 0;
+    }
+
+    #intro {
         display: block;
         height: 6.5rem;
-        padding-bottom: 1.5em;
+        padding-bottom: 1.5rem;
     }
 
-    .intro h1 {
+    #intro h1 {
         font-size: 2.1rem;
         font-family: 'Trebuchet MS', sans-serif;
         font-weight: lighter;
         letter-spacing: 0.125rem;
     }
 
-    .intro p {
+    #intro p {
         position: relative;
         top: -1rem;
         align-content: center;
@@ -87,70 +132,63 @@
         font-size: 1.1rem;
     }
 
-    .examples {
+    #squares {
         display: block;
     }
 
-    span {
-        position: relative;
+    #squares span {
+        margin-left: 0.5rem;
         gap: 1rem;
         height: 3.15rem;
         display: flex;
         flex-direction: row;
         align-items: center;
+        font-size: 1rem;
+    }
+
+    #order {
         font-size: 1.1rem;
     }
 
-    .row {
-        display: flex;
-        height: max-content;
-        max-width: fit-content;
-        padding: 1rem 0.5rem 0rem 0.5rem;
-        gap: 1.5rem;
-        align-items: center;
-        justify-content: space-evenly;
+    #controls {
+        display: block;
+        margin-top: -0.5rem;
     }
 
-    .tiles {
+    #controls span {
+        position: relative;
         display: flex;
-        height: 4.5rem;
+        flex-direction: row;
         align-items: center;
-        justify-content: center;
+        font-size: 1.1rem;
+        margin-bottom: -0.8rem;
+    }
+
+    .left-align {
         gap: 0.5rem;
-    }
-
-    .tile {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0.3rem;
-        aspect-ratio: 1/1;
-        width: 3.43rem;
-        font-family: 'Trebuchet MS', sans-serif;
-        font-size: 1.9rem;
-        font-weight: bolder;
-        color: var(--text-dark);
-        box-shadow: 0rem 0.25rem 0.25rem rgb(200,200,200);
-    }
-
-    .hints {
-        display: flex;
-        min-width: fit-content;
-        gap: 0.4rem;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .controls {
+        min-width: 6rem;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 6.25rem;
     }
 
-    .controls span {
-        font-size: 1.1rem;
-        gap: 0.7rem;
+    #controls span p {
+        margin-left: 1rem;
+    }
+
+    .caret {
+        color: darkslategray;
+    }
+
+    #pointer {
+        position: absolute;
+        bottom: 3%;
+        left: 10%;
+        background-color: transparent;
+        animation-name: click;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-delay: 0.1s;
     }
 
     .icon {
@@ -158,7 +196,12 @@
         transform: rotate(350deg);
     }
 
-    .hint {
+    #logic {
+        font-size: 1.1rem;
+        padding-bottom: 2rem;
+    }
+
+    .tutorial-hint {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -181,9 +224,9 @@
         background-color: var(--tile-lightgrey);
         border: var(--tile-lightgrey);
     }
-    
+
     .rotate {
-        height: 4.375rem;
+        height: 4.32rem;
         border-radius: 0.4rem;
         text-align: center;
         font-size: 2.1rem;
@@ -193,7 +236,7 @@
         animation-duration: 8s;
         animation-iteration-count: infinite;
     }
-
+    
     @keyframes rotate-color {
         from, to {}
         0%, 20%, 100% {
@@ -216,17 +259,6 @@
             color: white;
             box-shadow: 0rem 0.25rem 0.25rem var(--tile-green-shadow);
         }
-    }
-    .pointer {
-        position: absolute;
-        bottom: -35%;
-        left: 9%;
-        background-color: white;
-        clip-path: url(#clipPath);
-        animation-name: click;
-        animation-duration: 2s;
-        animation-iteration-count: infinite;
-        animation-delay: 0.1s;
     }
 
     @keyframes click {

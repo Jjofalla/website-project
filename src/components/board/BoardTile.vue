@@ -66,7 +66,8 @@ function endInfiniteLoop() {
  
 const handleEvent = (event, eventType) => {
     if (props.isActive) {
-        if (eventType === 'focus') {
+        if (eventType === 'focus' && event.which === 1) {
+            tileRef.value.focus();
             emit('on-focus', props.tileId);
             return;
         }
@@ -77,7 +78,7 @@ const handleEvent = (event, eventType) => {
             emit('on-key-up', event.key);
         } 
         
-    } else if (eventType === 'focus') {
+    } else if (eventType === 'focus' && event.which === 1) {
         event.preventDefault();
         if (!gameState.gameData.finished) {
             // flip colour
@@ -168,6 +169,23 @@ const handleEvent = (event, eventType) => {
     .inactive {
         box-shadow: 0px 0.25rem 0.25rem lightgrey;
         cursor: default;
+    }
+
+    @media only screen and (max-width: 1000px) {
+        .tile {
+            width: 3.9rem;
+        }
+    }
+
+    @media only screen and (max-width: 450px) {
+        .tile {
+            height: 3.2rem;
+            width: 3.2rem;
+        }
+        
+        .text {
+            font-size: 1.8rem;
+        }
     }
 
 </style>

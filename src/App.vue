@@ -4,7 +4,7 @@ import TheBoard from './components/board/TheBoard.vue'
 </script>
 
 <template>
-  <div id="body">
+  <div id="body" @mousedown.prevent>
     <TheHeading />
     <TheBoard />
   </div>
@@ -12,6 +12,10 @@ import TheBoard from './components/board/TheBoard.vue'
 
 <style scoped>
   #body {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
   }
 </style>
