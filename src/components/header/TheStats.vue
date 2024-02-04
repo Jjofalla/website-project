@@ -2,15 +2,17 @@
 import { getStatsStore } from '@/store/UserStats';
 const userStats = getStatsStore();
 const stats = userStats.stats;
-
-const pixelSpan = () => {
-    const vals = Object.values(stats.guessDistribution);
-    const mode = Math.max(...vals);
-    return vals.map((x) => 4 + (x ? (x / mode) * 80 : 0));
-}
-
+const pixelSpan = userStats.getPixelSpan();
+ 
 function toString(value) {
     return value ? value : '-';
+}
+
+function assignColour(n) {
+    if (n >= 84) {
+        return 'rgb(110,110,110)';
+    }
+    return 'rgb(180,180,180)';
 }
 
 </script>
@@ -31,10 +33,10 @@ function toString(value) {
         </div>
         <div class="guess">GUESS DISTRIBUTION</div>
         <div class="bars">
-            <div class="bar" v-for="(n, idx) in pixelSpan()" :key="idx">
-                <div class="label"> {{ idx + 1 }}</div>
-                <div class="tally" :style="{width: n + '%', backgroundColor: n >= 84 ? 'rgb(110,110,110' : 'rgb(180,180,180)'}">
-                    <h1 class="number">{{ Object.values(stats.guessDistribution)[idx] }}</h1>
+            <div class="bar" v-for="(n, index) in pixelSpan" :key="index">
+                <div class="label"> {{ index + 1 }}</div>
+                <div class="tally" :style="{width: n + '%', backgroundColor: assignColour(n)}">
+                    <h1 class="number">{{ Object.values(stats.guessDistribution)[index] }}</h1>
                 </div>
 
             </div>

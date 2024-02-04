@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import BoardRow from './BoardRow.vue';
-import TheOverlay from '../header/TheOverlay.vue';
 import TheCountdown from './TheCountdown.vue';
 import TheKeyboard from '../keyboard/TheKeyboard.vue';
 import { getOverlayManager } from '@/store/OverlayManager';
@@ -76,11 +75,6 @@ if (getStatsStore().stats.totalPlayed <= 0) {
                 <h1>{{ message }}</h1>
             </div>
         </Transition>
-
-        <Transition name="overlay">
-            <TheOverlay v-show="om.overlayEnabled"/>
-        </Transition>
-
 
         <template v-if="windowWidth > 850">
 
@@ -263,17 +257,6 @@ if (getStatsStore().stats.totalPlayed <= 0) {
     .add-row-enter-active {
         transition: all 0.5s ease-in;
     }
-   
-    .overlay-enter-active {
-        animation: fadeIn 0.4s ease;
-        background: rgba(0, 0, 0, .2)
-    }
-
-    .overlay-leave-active {
-        animation: fadeOut 0.3s ease;
-        background: rgba(0, 0, 0, 0)
-    }
-
     
     @media screen and (max-width: 880px) {
         .fst {

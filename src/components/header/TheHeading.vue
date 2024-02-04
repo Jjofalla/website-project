@@ -1,6 +1,5 @@
 <script setup>
 import { getOverlayManager } from '@/store/OverlayManager';
-import TheOverlay from './TheOverlay.vue';
 const om = getOverlayManager();
 </script>
 
@@ -11,9 +10,6 @@ const om = getOverlayManager();
                 <font-awesome-icon icon="fa-solid fa-chart-simple"/>
             </button>
             <div class="title">HARDLE</div>
-            <Transition>
-                <TheOverlay v-show="om.overlayEnabled"/>
-            </Transition>
             <button class="button right" @click="om.toggleOverlay('tutorial')">
                 <font-awesome-icon icon="fa-solid fa-question"/>
             </button>
@@ -74,35 +70,6 @@ const om = getOverlayManager();
     transform: scale(1.1);
 }
 
-.v-enter-active {
-  animation: fadeIn 0.2s ease;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.v-leave-active {
-  animation: fadeOut 0.2s ease;
-  background: rgba(0, 0, 0, .0)
-}
-
-
-@keyframes fadeIn {
-    0% {
-        background: rgba(0, 0, 0, .0);
-    }
-    100% {
-        background: rgba(0, 0, 0, 0.2);
-    }
-}
-
-@keyframes fadeOut {
-    0% {
-        background-color: rgba(0, 0, 0, 0.2);
-    }
-    100% {
-        background-color: rgba(0, 0, 0, .0);
-    }
-}
-
 @media only screen and (max-width: 850px) {
     #heading {
         border: none;
@@ -117,7 +84,5 @@ const om = getOverlayManager();
         border-top: 0;
     }
 }
-
-
 
 </style>

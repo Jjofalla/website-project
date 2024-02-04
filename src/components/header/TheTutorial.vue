@@ -78,7 +78,7 @@ import TutorialRow from './TutorialRow.vue'
                 :styleMap="[3, 1]"/>
             <p id="logic">
                 Since R is the only letter that has changed in the second guess, R must be in the word, and in the correct place, so it can be marked green.
-                Conversely, as P was swapped for R, P cannot be in the word, and can be marked grey.
+                Conversely, as R was swapped for P, P cannot be in the word, and can be marked grey.
             </p>
         </div>
 

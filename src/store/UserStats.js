@@ -46,10 +46,17 @@ export const getStatsStore = defineStore('userStats', () => {
 
     calculateAvg();
 
+    function getPixelSpan() {
+        const vals = Object.values(stats.value.guessDistribution);
+        const mode = Math.max(...vals);
+        return vals.map((x) => 4 + (x ? (x / mode) * 80 : 0));
+    }
+    
     return {
         stats,
         avg,
         winRate,
+        getPixelSpan,
         calculateAvg
     }
 });

@@ -91,7 +91,8 @@ const handleEvent = (event, eventType) => {
 
 <template>
     <div class="tile">
-        <input 
+        <input
+            :id="rowNumber + ',' + tileId"
             ref="tileRef"
             class="text"
             :class="{'inactive': !isActive}"
