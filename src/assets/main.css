@@ -8,17 +8,16 @@
   --tile-green-shadow: #6B8E2380;
   --text-dark: rgb(110,110,110);
   --text-light: rgb(180,180,180);
-  --game-font: 'Trebuchet MS', sans-serif;
   --doc-font: 'Lucida Grande', sans-serif;
 }
 
 html {
+  font-family: 'Trebuchet MS', sans-serif;
   font-size: max(0.9vw, 11px);
 }
 
 body {
   margin: 0;
-  font-family: var(--game-font);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

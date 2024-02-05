@@ -54,8 +54,6 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
     gap: 1rem;
     font-size: 1.7rem;
     letter-spacing: 0.4rem;
-    font-weight: lighter;
-    font-family: 'Trebuchet MS', sans-serif;
     color: var(--text-light);
     margin-top: 0.5rem;
     margin-bottom: 1.5rem;
@@ -144,7 +142,8 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
 
 @media only screen and (max-width: 450px) {
     .countdown {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        letter-spacing: 0.2rem;
     }
 }
 

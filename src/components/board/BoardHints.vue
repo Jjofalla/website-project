@@ -39,7 +39,7 @@ watch(() => props.currentGuess, newGuess => {
 
     gameState.addStyleRow();
 
-    // update store after hint animation reveal
+    // update store after hint animation reveal to delay adding row
     setTimeout(() => {
         gameState.updateRows();
     }, 800);

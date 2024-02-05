@@ -9,11 +9,11 @@ import { keyPress } from '@/store/KeyPress';
         <KeyboardRow chars="qwertyuiop" />
         <KeyboardRow chars="asdfghjkl" />
         <div class="key-row">
-            <button class="key-tile tool" @click="keyPress.setChar('Backspace')">
+            <button class="key-tile tool" readonly tabindex='-1' @click="keyPress.setChar('Backspace')">
                 <font-awesome-icon icon="fa-solid fa-delete-left"/>
             </button>
             <KeyboardRow chars="zxcvbnm" />
-            <button class="key-tile tool enter" @click="keyPress.setChar('Enter')">
+            <button class="key-tile tool enter" readonly tabindex='-1' @click="keyPress.setChar('Enter')">
                 ENTER
             </button>
         </div>
@@ -48,13 +48,13 @@ import { keyPress } from '@/store/KeyPress';
         font-size: 1.3rem;
         font-weight: bolder;
         font-family: 'Trebuchet MS', sans-serif;
+        user-select: none;
         width: 3rem;
         height: 4rem;
         transition: 0.2s ease;
         -webkit-tap-highlight-color: grey;
     }
 
-   
     .key-tile:active {
         transform: scale(0.9);
     }

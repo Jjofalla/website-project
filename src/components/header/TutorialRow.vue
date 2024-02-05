@@ -55,6 +55,7 @@ defineProps({
     align-items: center;
     justify-content: center;
     border-radius: 0.3rem;
+    box-sizing: border-box;
     aspect-ratio: 1/1;
     width: 3.43rem;
     font-family: 'Trebuchet MS', sans-serif;

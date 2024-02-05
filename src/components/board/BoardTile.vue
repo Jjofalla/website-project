@@ -1,5 +1,4 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
 import { getGameState } from '@/store/GameState';
 const gameState = getGameState();
 
@@ -17,71 +16,41 @@ const props = defineProps({
         type: Boolean
     },
     isActive: {
-        type: Boolean
+        type: Boolean,
     }
 });
 
-const emit = defineEmits(['on-key-down', 'on-focus', 'on-key-up'])
-const tileRef = ref(null);
-
-onMounted(() => {
-    if (props.focused && props.isActive) {
-        tileRef.value.focus();
-    }
-});
-
-watch(() => props.focused, () => {
-    if (props.focused) {
-        tileRef.value.focus();
-    } else {
-        tileRef.value.blur();
-    }
-});
-
-watch(() => gameState.gameData.finished, () => {
-    tileRef.value.blur();
-});
+const emit = defineEmits(['on-focus'])
  
-const handleEvent = (event, eventType) => {
+function handleClick(event) {
+    if (event.which !== 1) {
+        return;
+    }
+
     if (props.isActive) {
-        if (eventType === 'focus' && event.which === 1) {
-            tileRef.value.focus();
-            emit('on-focus', props.tileId);
-            return;
-        }
-        event.preventDefault();
-        if (eventType === 'keydown') {
-            emit('on-key-down', event.key, props.tileId);
-        } else if (eventType === 'keyup') {
-            emit('on-key-up', event.key);
-        } 
-        
-    } else if (eventType === 'focus' && event.which === 1) {
-        event.preventDefault();
-        if (!gameState.gameData.finished) {
-            // flip colour
-            gameState.updateStyle(props.rowNumber - 1, props.tileId);
-        }
+        emit('on-focus', props.tileId);
+
+    } else if (!gameState.gameData.finished) {
+        gameState.updateStyle(props.rowNumber - 1, props.tileId);
     }
 }
 
 </script>
 
 <template>
-    <input
-        :id="rowNumber + ',' + tileId"
-        ref="tileRef"
+    <div
         class="tile"
-        :class="{'inactive': !isActive}"
-        :style="[gameState.readStyle(rowNumber - 1, tileId), {'cursor': gameState.gameData.finished ? 'default' : 'pointer'}]"
+        :class="{'flash': focused && isActive}"
+        :style="[
+            gameState.readStyle(rowNumber - 1, tileId), 
+            {'cursor': gameState.gameData.finished ? 'default' : 'pointer'}
+        ]"
         maxlength="1"
-        :tabindex="isActive ? null : -1"
         readonly
-        :value="char.toUpperCase()"
-        @keydown="handleEvent($event, 'keydown')"
-        @keyup="handleEvent($event, 'keyup')"
-        @mousedown="handleEvent($event, 'focus')"
+        @mousedown="handleClick($event)"
     >
+    {{ char.toUpperCase() }}
+    </div>
 </template>
 
 <style scoped>
@@ -92,22 +61,15 @@ const handleEvent = (event, eventType) => {
         height: 4.6rem;
         width: 4.4rem;
         border-radius: 0.3rem;
-        cursor: default;
         border: none;
         user-select: none;
         box-sizing: border-box;
-        text-align: center;
-        font-family: 'Trebuchet MS', sans-serif;
         font-size: 2.3rem;
         font-weight: bolder;
-        -webkit-appearance: none;
-        appearance: none;
         transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .tile:focus {
-        outline: none;
-        border: 1px solid lightgrey;
+    .flash {
         animation-name: flash;
         animation-duration: 1s;
         animation-iteration-count: infinite;
@@ -118,32 +80,18 @@ const handleEvent = (event, eventType) => {
     @keyframes flash {
         0%, 100% {
             box-shadow: 0rem 0.25rem 0.25rem rgb(180,180,180);
+            border: 1px solid;
             border-color: white;
         }
         50% {
             box-shadow: 0rem 0.25rem 0.45rem darkslategrey;
+            border: 1px solid;
             border-color: lightgray;
         }
     }
 
     .tile::selection {
         color: black;
-    }
-
-    .grey {
-        color: white;
-        background-color: lightgray;
-        outline: none;
-        border: none;
-    }
-
-    .grey::selection {
-        color: white;
-    }
-
-    .inactive {
-        box-shadow: 0rem 0.25rem 0.25rem lightgrey;
-        cursor: default;
     }
 
     @media only screen and (max-width: 1000px) {

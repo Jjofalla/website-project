@@ -1,7 +1,7 @@
 <script setup>
 
 import BoardTile from './BoardTile.vue';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { getGameState } from '@/store/GameState';
 import { keyPress } from '@/store/KeyPress';
 import { allowableGuesses } from '@/assets/words';
@@ -20,33 +20,49 @@ const props = defineProps({
     }
 });
 
+const tilesRef = ref(null);
 const chars = ref(Array.from(props.currentGuess));
 const targetIdx = ref(0);
 const handled = ref(new Set());
 
+
+onMounted(() => {
+    if (props.rowNumber === getGameState().rowsToRender) {
+        tilesRef.value.focus();
+    }
+});
+
+watch(() => getGameState().gameData.finished, () => {
+    tilesRef.value.blur();
+});
+
 watch(() => keyPress.value.isClicked, () => {
-    if (props.isActive) {
-        onKeyDown(keyPress.value.char, targetIdx.value);
+    if (props.isActive && document.activeElement === tilesRef.value) {
+        onKeyDown(keyPress.value.char);
         onKeyUp(keyPress.value.char);
     }
 });
 
-function onKeyDown(key, tileId) {
-    if (handled.value.has(key)) {
+function onKeyDown(key, event=null) {
+    if (!props.isActive || handled.value.has(key)) {
         return;
     }
     handled.value.add(key);
 
+    if (event !== null) {
+        event.preventDefault();
+    }
+    
     // check for input of alphabet character
     if (/^[a-zA-Z]$/.test(key)) {
-        chars.value[tileId] = key;
+        chars.value[targetIdx.value] = key;
         shiftRight();
     
     } else if (key === 'Backspace' || key === 'Delete') {
-        if (chars.value[tileId] === ' ') {
+        if (chars.value[targetIdx.value] === ' ') {
             shiftLeft();
         }
-        chars.value[tileId] = ' ';
+        chars.value[targetIdx.value] = ' ';
 
     } else if (key === 'Enter') {
         handleEnter(chars.value);
@@ -71,6 +87,7 @@ function shiftLeft() {
 }
 
 function onFocus(tileId) {
+    tilesRef.value.focus();
     targetIdx.value = tileId;
 }
 
@@ -90,8 +107,10 @@ function handleEnter(chars) {
         emit('on-alert', 'Not in Wordlist');
         return;
     }    
-
+    
     targetIdx.value = -1;
+    tilesRef.value.blur();
+    tilesRef.value.removeAttribute('tabindex');
     emit('on-enter', word)
 }
 
@@ -118,7 +137,13 @@ function isValidWord(word) {
 </script>
 
 <template>
-    <div class="tiles">
+    <div 
+        ref="tilesRef"
+        class="tiles"
+        :tabindex="isActive ? 1 : -1"
+        @keydown="onKeyDown($event.key, $event)"
+        @keyup="onKeyUp($event.key)"
+    >
         <BoardTile
             v-for="tile in numberOfTiles"
             :key="tile"
@@ -127,10 +152,9 @@ function isValidWord(word) {
             :char="chars[tile-1]" 
             :focused="targetIdx === tile-1"
             :isActive="isActive"
-            @on-key-down="onKeyDown"
-            @on-key-up="onKeyUp"
             @on-focus="onFocus"
         />
+
     </div>
 </template>
 
@@ -142,6 +166,10 @@ function isValidWord(word) {
         justify-content: center;
         user-select: none;
         gap: 0.5rem;
+    }
+
+    .tiles:focus {
+        outline: none;
     }
 
     @media only screen and (max-width: 1000px) {

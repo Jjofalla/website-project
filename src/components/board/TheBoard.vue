@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import BoardRow from './BoardRow.vue';
 import TheCountdown from './TheCountdown.vue';
 import TheKeyboard from '../keyboard/TheKeyboard.vue';
@@ -19,6 +19,19 @@ onUnmounted(() => window.removeEventListener('resize', onWidthChange));
 const showAlert = ref(false);
 const message = ref("");
 const alertTimer = ref();
+const scrollTable = ref(null);
+
+watch(() => gameState.rowsToRender, () => {
+    if (scrollTable.value === null) {
+        return;
+    }
+    setTimeout(() => {
+        scrollTable.value.scrollTo({
+            top: scrollTable.value.scrollHeight,
+            behaviour: 'smooth',
+        });
+    }, 0);
+});
 
 function getRow(row) {
     // zero-indexed to access array 
@@ -62,7 +75,7 @@ function handleGameFinishEvent() {
 if (getStatsStore().stats.totalPlayed <= 0) {
     setTimeout(() => {
         om.toggleOverlay('tutorial');
-    }, 100);
+    }, 200);
 }
 
 </script>
@@ -79,9 +92,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         <template v-if="windowWidth > 850">
 
             <div class="table" :style="{
-                'display': 'flex',
-                'margin': '0 auto',
-                'transition': 'width 2s ease, height 0.4s ease',
+                'transition': 'width 2.5s ease, height 0.4s ease',
                 'height': Math.min(35, 5 + (5 * gameState.rowsToRender)) + 'rem',
                 'width': gameState.rowsToRender > 6 ? '100vw' : '46vw'
             }">
@@ -118,28 +129,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         </template>
 
         <template v-else>
-            <div class="table" :style="{
-                'display': 'flex',
-                'align-items': 'center',
-                'flex-direction': 'column',
-                'transition-property': 'height',
-                'transition-duration': '0.4s',
-                'height': '40vh',
-                'width': '100vw',
-                'margin': '0 auto',
-                'overflow-y': 'scroll',
-                'overflow-x': 'hidden',
-                'overscroll-behavior': 'contain',
-                'scrollbar-width': 'none',
-                'ms-overflow-style': 'none',
-                'border': '1px solid',
-                'border-image-slice': '1',
-                'border-image-source': 'linear-gradient(to right, white, darkslategray, white)',
-                'border-left': '0',
-                'border-right': '0',
-                'border-top': '0',
-            }">
-
+            <div ref="scrollTable" class="table mobile linebreak">
                 <div class="rows">
                     <TransitionGroup name="add-row">
                         <BoardRow 
@@ -174,6 +164,33 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         overflow-x: hidden;
     }
 
+    .table {
+        display: flex;
+        margin: 0 auto;
+    }
+
+    .mobile {
+        height: 40vh;
+        width: 100vw;
+        align-items: center;
+        flex-direction: column;
+        transition: none;
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .linebreak {
+        border: 1px solid;
+        border-image-slice: 1;
+        border-image-source: linear-gradient(to right, white, darkslategray, white);
+        border-left: 0;
+        border-right: 0;
+        border-top: 0;
+    }
+
     .rows {
         display: flex;
         flex-direction: column;
@@ -199,7 +216,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         position: fixed;
         justify-content: center;
         height: max-content;
-        top: 10%;
+        top: 8vh;
         padding: 0.8rem 1.2rem 0.8rem 1.2rem;
         background-color: darkslategray;
         border: 1px solid darkslategray;
@@ -212,7 +229,6 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         color: white;
         letter-spacing: 1px;
         font-size: 1.2rem;
-        font-family: 'Trebuchet MS', sans-serif;
     }
 
     .shake {

@@ -206,7 +206,7 @@ import TutorialRow from './TutorialRow.vue'
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 0.2rem;
+        border-radius: 0.3rem;
         aspect-ratio: 1/1;
         height: 2rem;
     }

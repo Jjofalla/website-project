@@ -48,7 +48,6 @@ function assignColour(n) {
     .stats {
         font-size: 1.1rem;
         margin: 2.5rem 1.5rem 2.5rem 2rem;
-        font-family: 'Trebuchet MS', sans-serif;
     }
 
     .title {

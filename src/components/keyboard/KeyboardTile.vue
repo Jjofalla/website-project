@@ -16,6 +16,7 @@ defineProps({
         :style="getGameState().trackKeyboardTile(char)"
         @click="keyPress.setChar(char)"
         readonly
+        tabindex="-1"
         >{{ char.toUpperCase() }}
     </button>
 </template>

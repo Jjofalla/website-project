@@ -6,16 +6,27 @@ import { getOverlayManager } from '@/store/OverlayManager';
 </script>
 
 <template>
-  <div id="body" @mousedown.prevent>
-    <TheHeading />
-    <TheBoard />
-    <Transition name="overlay">
-        <TheOverlay v-show="getOverlayManager().overlayEnabled"/>
-    </Transition>
+  <div id="wrapper" @mousedown.prevent>
+    <div id="body">
+      <TheHeading />
+      <TheBoard />
+      <Transition name="overlay">
+          <TheOverlay v-show="getOverlayManager().overlayEnabled"/>
+      </Transition>
+    </div>
   </div>
 </template>
 
 <style scoped>
+  #wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
   #body {
     display: flex;
     flex-direction: column;
