@@ -91,6 +91,7 @@ function handleEnter(chars) {
         return;
     }    
 
+    targetIdx.value = -1;
     emit('on-enter', word)
 }
 

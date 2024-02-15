@@ -48,7 +48,7 @@ function onAlert(msg) {
 </script>
 
 <template>
-    <div class="button-row">
+    <div class="parent-row">
         <div class="placeholder">
             <Transition name="show-button">
                 <button 
@@ -77,30 +77,27 @@ function onAlert(msg) {
 </template>
 
 <style scoped>
-    .button-row {
-        display: flex;
-        margin-left: -1.5rem;
-        align-items: center;
+    .parent-row {
+        display: inline-flex;
+        margin-left: -3rem;
     }
 
     .placeholder {
-        height: inherit;
+        display: flex;
         width: 3rem;
     }
 
     .row {
         display: flex;
-        height: max-content;
-        max-width: fit-content;
         gap: 2.5rem;
         align-items: center;
         justify-content: space-evenly;
-        padding: 0.2rem 2rem 0.2rem 0;
+        padding: 0.2rem 0;
     }
 
     .button {
-        font-size: 1.5rem;
         border: none;
+        font-size: 1.5rem;
         background-color: transparent;
         color: var(--text-light);  
         cursor: pointer;
@@ -122,25 +119,22 @@ function onAlert(msg) {
         transition: all 0.3s ease-in;
     }
 
-    @media only screen and (max-width: 1050px) {
-        .placeholder {
-            width: 2.9rem;
-        }
+    @media only screen and (max-width: 850px) {
         .row {
             gap: 2.0rem;
         }
     }
 
     @media only screen and (max-width: 450px) {
-        .button-row {
-            margin-left: 0;
-        }
-        .placeholder {
-            width: 4rem;
-        }
-
         .row {
             gap: 1rem;
+        }
+        .parent-row {
+            margin-left: -4rem;
+        }
+
+        .placeholder {
+            width: 4rem;
         }
     }
 

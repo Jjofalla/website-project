@@ -51,8 +51,10 @@ import { keyPress } from '@/store/KeyPress';
         width: 3rem;
         height: 4rem;
         transition: 0.2s ease;
+        -webkit-tap-highlight-color: grey;
     }
 
+   
     .key-tile:active {
         transform: scale(0.9);
     }
@@ -71,14 +73,14 @@ import { keyPress } from '@/store/KeyPress';
 
     @media only screen and (max-width: 850px) {
         .key-tile {
-            font-size: 4vw;
-            width: calc(100vw/11.5);
-            height: 9vh;
+            font-size: min(2rem, 4vw);
+            width: min(4rem, calc(100vw/11.4));
+            height: 9.1vh;
         }
 
         .tool {
-            height: 9vh;
-            width: calc(100vw/7);
+            height: 9.1vh;
+            width: min(8rem, calc(100vw/7));
         }
     }
 

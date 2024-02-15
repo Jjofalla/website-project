@@ -89,6 +89,7 @@ const om = getOverlayManager();
 
     @media only screen and (max-width: 450px) {
         #overlay {
+            top: 9vh;
             max-height: 80vh;
         }
         .close {

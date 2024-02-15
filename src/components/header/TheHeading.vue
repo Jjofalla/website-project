@@ -45,11 +45,11 @@ const om = getOverlayManager();
     font-family: 'Trebuchet MS', sans-serif;
     font-size: max(2.5vw, 32px);
     font-weight: bolder;
-    text-indent: 0.5rem;
     letter-spacing: 0.5rem;
     width: min-content;
     color: darkslategray;
     cursor: default;
+    text-indent: 0.5rem;
 }
 
 .button {
@@ -65,7 +65,7 @@ const om = getOverlayManager();
 }
 
 .right {
-    padding-left: 0.3rem;
+    padding: 1rem 1rem 1rem 0;
 }
 
 .button:hover {
@@ -90,7 +90,7 @@ const om = getOverlayManager();
 }
 @media only screen and (max-width: 450px) {
     #heading {
-        min-width: 80vw;
+        min-width: 90vw;
     }
 }
 

@@ -1,8 +1,6 @@
 <script setup>
-import { ref, watch, watchEffect } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { getGameState } from '@/store/GameState';
-import { getOverlayManager } from '@/store/OverlayManager';
-const om = getOverlayManager();
 const gameState = getGameState();
 
 const props = defineProps({
@@ -26,43 +24,23 @@ const props = defineProps({
 const emit = defineEmits(['on-key-down', 'on-focus', 'on-key-up'])
 const tileRef = ref(null);
 
-watchEffect(() => {
-    focusOnInput();
-});
-
-watch(() => gameState.gameData.rows.length, () => {
-    endInfiniteLoop();
-});
-
-function focusOnInput() {
-    if (!tileRef.value) {
-        return;
-    } 
-    
-    if (gameState.gameData.finished) {
-        tileRef.value.blur();
-        return;
-    }
-
+onMounted(() => {
     if (props.focused && props.isActive) {
-        if (!om.overlayEnabled) {
-            tileRef.value.style.animationPlayState = 'running';
-            tileRef.value.focus();
-        } else {
-            tileRef.value.style.animationPlayState = 'paused';
-        }
+        tileRef.value.focus();
     }
-}
+});
 
-function endInfiniteLoop() {
-    if (props.isActive && props.focused && tileRef.value) {
+watch(() => props.focused, () => {
+    if (props.focused) {
+        tileRef.value.focus();
+    } else {
         tileRef.value.blur();
-        // tileRef.value.addEventListener('animationiteration', () => {
-        //     tileRef.value.style.animation = 'none';
-        //     tileRef.value.blur();
-        // });
     }
-}
+});
+
+watch(() => gameState.gameData.finished, () => {
+    tileRef.value.blur();
+});
  
 const handleEvent = (event, eventType) => {
     if (props.isActive) {

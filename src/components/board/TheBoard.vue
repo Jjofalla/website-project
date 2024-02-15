@@ -86,7 +86,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
                 'width': gameState.rowsToRender > 6 ? '100vw' : '46vw'
             }">
 
-                <div class="rows fst" :style="{'margin-right': gameState.rowsToRender > 6 ? '0.7rem' : 'auto'}">
+                <div class="rows fst" :style="{'margin-right': gameState.rowsToRender > 6 ? '2.5rem' : 'auto'}">
                     <TransitionGroup name="add-row">
                         <BoardRow 
                             v-for="row in Math.min(6, gameState.rowsToRender)" 
@@ -120,6 +120,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         <template v-else>
             <div class="table" :style="{
                 'display': 'flex',
+                'align-items': 'center',
                 'flex-direction': 'column',
                 'transition-property': 'height',
                 'transition-duration': '0.4s',
@@ -129,6 +130,14 @@ if (getStatsStore().stats.totalPlayed <= 0) {
                 'overflow-y': 'scroll',
                 'overflow-x': 'hidden',
                 'overscroll-behavior': 'contain',
+                'scrollbar-width': 'none',
+                'ms-overflow-style': 'none',
+                'border': '1px solid',
+                'border-image-slice': '1',
+                'border-image-source': 'linear-gradient(to right, white, darkslategray, white)',
+                'border-left': '0',
+                'border-right': '0',
+                'border-top': '0',
             }">
 
                 <div class="rows">
@@ -182,7 +191,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
     }
 
     .snd {
-        margin-left: 0.7rem;
+        margin-left: 2.5rem;
         margin-right: auto;
     }
 
@@ -268,22 +277,12 @@ if (getStatsStore().stats.totalPlayed <= 0) {
             padding-bottom: 0;
         }
 
-        .table {
-            align-items: center;
-            flex-direction: column;
-            transition-property: height;
-            transition-duration: 0.4s;
-            border: 1px solid;
-            border-image-slice: 1;
-            border-image-source: linear-gradient(to right, white, darkslategray, white);
-            border-left: 0;
-            border-right: 0;
-            border-top: 0;
-            overflow-x: hidden;
+        .table::-webkit-scrollbar {
+            display: none;
         }
 
         .rows {
-            padding: 1rem 0;
+            padding: 1rem 0rem;
         }
 
         #footer {

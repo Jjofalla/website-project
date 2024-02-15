@@ -142,4 +142,10 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
     }
 }
 
+@media only screen and (max-width: 450px) {
+    .countdown {
+        font-size: 1.5rem;
+    }
+}
+
 </style>
