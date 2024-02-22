@@ -47,7 +47,7 @@ import { keyPress } from '@/store/KeyPress';
         border-radius: 5px;
         font-size: 1.3rem;
         font-weight: bolder;
-        font-family: 'Trebuchet MS', sans-serif;
+        font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
         user-select: none;
         width: 3rem;
         height: 4rem;
@@ -75,11 +75,11 @@ import { keyPress } from '@/store/KeyPress';
         .key-tile {
             font-size: min(2rem, 4vw);
             width: min(4rem, calc(100vw/11.4));
-            height: 9.1vh;
+            height: 8.8vh;
         }
 
         .tool {
-            height: 9.1vh;
+            height: 8.8vh;
             width: min(8rem, calc(100vw/7));
         }
     }

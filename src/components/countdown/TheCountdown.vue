@@ -1,8 +1,14 @@
 <script setup>
-import { getGameState } from '@/store/GameState';
 import { ref, watch } from 'vue';
+import { getGameState } from '@/store/GameState';
+import { getSettingsManager } from '@/store/ManagerSettings';
+import CounterTime from './CounterTime.vue';
+import CounterGuess from './CounterGuess.vue';
 
-const remainingGuesses = ref(12 - getGameState().gameData.rows.length);
+const sm = getSettingsManager();
+const gs = getGameState();
+const target = gs.target;
+const remainingGuesses = ref(12 - gs.gameData.rows.length);
 const effort = [['VERY EASILY!', 10], ['AMAZING JOB!', 8], ['GREAT JOB!', 5], ['GOOD JOB!', 1], ['CLOSE ONE!', 0]];
 
 function getEffort(remainingGuesses) {
@@ -13,55 +19,75 @@ function getEffort(remainingGuesses) {
     }
 }
 
-watch(() => getGameState().gameData.rows.length, (newTotal) => {
+watch(() => gs.gameData.rows.length, (newTotal) => {
     remainingGuesses.value = 12 - newTotal;
 });
 
 </script>
 
 <template>
-    <Transition mode="out-in" name="flip">
-        <div class="countdown" v-if="!getGameState().gameData.finished">
-            <Transition mode="out-in" name="flip">
-                <div class="number" 
-                    :key="remainingGuesses"
-                    :style="{'text-align': remainingGuesses < 10 ? 'center' : 'right'}"
-                >
-                {{ remainingGuesses }}
-                </div>
-            </Transition>
-        {{ (remainingGuesses === 1 ? 'GUESS' : 'GUESSES') + ' REMAINING' }} 
-        </div>
-        <div v-else-if="remainingGuesses <= 0 && getGameState().gameData.rows[11] !== getGameState().target" class="countdown">
-            BAD LUCK, IT IS HARDLE!
-        </div>
-        <div v-else class="countdown grats" :style="{'color': 'transparent'}">
-            <div class="msg">{{ getEffort(remainingGuesses) }}</div>
-            PLACEHOLDER
-        </div>
-    </Transition>
+    <div class="countdown-wrapper">
+        <Transition mode="out-in" name="flip">
+            <div class="countdown c" v-if="!gs.gameData.finished">
+                <CounterGuess :remaining="remainingGuesses" :enable-timer="sm.settings['mmode'][0]"/>
+                <CounterTime :enable-timer="sm.settings['mmode'][0]" @game-finished="$emit('game-finished')"/>
+            </div>
+            <div 
+                v-else-if="gs.gameData.rows.slice(-1)[0] === target" 
+                class="countdown grats" 
+                :style="{'color': 'transparent'}"
+            >
+                    <div class="msg">{{ getEffort(remainingGuesses) }}</div>
+                PLACEHOLDER
+            </div>
+            <div v-else class="countdown">
+                BAD LUCK, THE WORD IS
+                <div class="target">{{ target.toUpperCase() }}</div>
+            </div>
+            
+        </Transition>
+    </div>
 </template>
 
-<style scoped>
+<style>
 @import url('../../assets/main.css');
-.countdown {
+
+.countdown-wrapper {
     position: relative;
-    width: 40rem;
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+    height: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: default;
+}
+
+.countdown {
+    width: 40rem;
+    display: flex;
     gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
     font-size: 1.7rem;
     letter-spacing: 0.4rem;
     color: var(--text-light);
-    margin-top: 0.5rem;
-    margin-bottom: 1.5rem;
+    transition: width 0.4s ease;
+}
+
+.c {
+    position: relative;
+    width: 32rem;
+    min-width: 32rem;
 }
 
 .number {
     display: flex;
     flex-direction: row;
+    color: var(--text-dark);
+}
+
+.target {
     color: var(--text-dark);
 }
 
@@ -81,7 +107,7 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
 
 .flip-enter-active, 
 .flip-leave-active {
-    transition: all 0.4s ease;
+    transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
 .grats {
@@ -134,7 +160,6 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
 
 @media only screen and (max-width: 850px) {
     .countdown {
-        max-height: 53vh;
         margin-top: 1rem;
         margin-bottom: 1rem;
     }
@@ -144,6 +169,11 @@ watch(() => getGameState().gameData.rows.length, (newTotal) => {
     .countdown {
         font-size: 1.4rem;
         letter-spacing: 0.2rem;
+    }
+
+    .c {
+        min-width: 23rem;
+        width: 23rem;
     }
 }
 

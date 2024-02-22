@@ -35,7 +35,7 @@ export const getStatsStore = defineStore('userStats', () => {
 
         if (wonTotal) {
             stats.value.totalPlayed = wonTotal > stats.value.totalPlayed ? wonTotal : stats.value.totalPlayed;
-            winRate.value = wonTotal < stats.value.totalPlayed ? Math.round((wonTotal / stats.value.totalPlayed) * 100): 100;
+            winRate.value = wonTotal < stats.value.totalPlayed ? Math.floor((wonTotal / stats.value.totalPlayed) * 100): 100;
             avg.value = (guessSum / wonTotal).toFixed(1);
         } 
     }

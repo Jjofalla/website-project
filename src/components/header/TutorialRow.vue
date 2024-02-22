@@ -58,7 +58,7 @@ defineProps({
     box-sizing: border-box;
     aspect-ratio: 1/1;
     width: 3.43rem;
-    font-family: 'Trebuchet MS', sans-serif;
+    font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
     font-size: 1.9rem;
     font-weight: bolder;
     color: var(--text-dark);

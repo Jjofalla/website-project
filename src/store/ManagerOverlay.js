@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from 'vue';
 
-export const getOverlayManager = defineStore('overlayManager', () => {
+export const getOverlayManager = defineStore('overlay', () => {
     const overlayId = ref("");
     const overlayEnabled = ref(false);
     const isBeingToggled = ref(false);
@@ -24,6 +24,7 @@ export const getOverlayManager = defineStore('overlayManager', () => {
     return {
         overlayId,
         overlayEnabled,
+        isBeingToggled,
         toggleOverlay,
         handleOverlayClick,
     }

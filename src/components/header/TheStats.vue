@@ -3,13 +3,15 @@ import { getStatsStore } from '@/store/UserStats';
 const userStats = getStatsStore();
 const stats = userStats.stats;
 const pixelSpan = userStats.getPixelSpan();
+let modeAssigned = false;
  
 function toString(value) {
     return value ? value : '-';
 }
 
 function assignColour(n) {
-    if (n >= 84) {
+    if (!modeAssigned && n >= 84) {
+        modeAssigned = true;
         return 'rgb(110,110,110)';
     }
     return 'rgb(180,180,180)';
@@ -62,6 +64,7 @@ function assignColour(n) {
         display: flex;
         justify-content: space-between;
         width: 100%;
+        padding-left: 0.5rem;
     }
 
     .stat {

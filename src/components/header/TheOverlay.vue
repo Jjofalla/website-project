@@ -1,18 +1,20 @@
 <script setup>
-import { getOverlayManager } from '@/store/OverlayManager';
+import { getOverlayManager } from '@/store/ManagerOverlay';
 import TheStats from './TheStats.vue';
 import TheTutorial from './TheTutorial.vue';
+import TheSettings from './TheSettings.vue';
 const om = getOverlayManager();
 </script>
 
 <template>
     <div id="overlay-wrapper" @click.self="om.handleOverlayClick()">
         <div id="overlay" :class="{'out': !om.overlayEnabled}">
-            <button class="close" @click.stop="om.handleOverlayClick()">
+            <button class="close" tabindex="-1" @click.stop="om.handleOverlayClick()">
                 <font-awesome-icon icon="fa-solid fa-x" />
             </button>
             <TheStats v-if="om.overlayId === 'stats'"/>
             <TheTutorial v-if="om.overlayId === 'tutorial'"/>
+            <TheSettings v-if="om.overlayId === 'settings'"/>
         </div>
     </div>
 </template>
@@ -97,4 +99,4 @@ const om = getOverlayManager();
         }
     }
 
-</style>
+</style>@/store/ManagerOverlay

@@ -3,11 +3,14 @@
 import BoardTile from './BoardTile.vue';
 import { ref, watch, onMounted } from 'vue';
 import { getGameState } from '@/store/GameState';
+import { getAlertManager } from '@/store/ManagerAlert';
+import { getOverlayManager } from '@/store/ManagerOverlay';
 import { keyPress } from '@/store/KeyPress';
 import { allowableGuesses } from '@/assets/words';
+const am = getAlertManager();
 
 const numberOfTiles = getGameState().numberOfTiles;
-const emit = defineEmits(['on-enter', 'on-click', 'on-alert']);
+const emit = defineEmits(['on-enter', 'on-click']);
 const props = defineProps({
     rowNumber: {
         type: Number,
@@ -36,6 +39,12 @@ watch(() => getGameState().gameData.finished, () => {
     tilesRef.value.blur();
 });
 
+watch(() => getOverlayManager().isBeingToggled, (bool) => {
+    if (bool && props.isActive) {
+        tilesRef.value.focus();
+    }
+});
+
 watch(() => keyPress.value.isClicked, () => {
     if (props.isActive && document.activeElement === tilesRef.value) {
         onKeyDown(keyPress.value.char);
@@ -44,7 +53,7 @@ watch(() => keyPress.value.isClicked, () => {
 });
 
 function onKeyDown(key, event=null) {
-    if (!props.isActive || handled.value.has(key)) {
+    if (getOverlayManager().overlayEnabled || !props.isActive || handled.value.has(key)) {
         return;
     }
     handled.value.add(key);
@@ -57,6 +66,9 @@ function onKeyDown(key, event=null) {
     if (/^[a-zA-Z]$/.test(key)) {
         chars.value[targetIdx.value] = key;
         shiftRight();
+    
+    } else if (/^[1-5]$/.test(key)) {
+        onFocus(key - 1);
     
     } else if (key === 'Backspace' || key === 'Delete') {
         if (chars.value[targetIdx.value] === ' ') {
@@ -87,7 +99,6 @@ function shiftLeft() {
 }
 
 function onFocus(tileId) {
-    tilesRef.value.focus();
     targetIdx.value = tileId;
 }
 
@@ -98,13 +109,13 @@ function onKeyUp(key) {
 function handleEnter(chars) {
     // check that word is valid
     if (chars.some(x => x === ' ')) {
-        emit('on-alert', 'Not Enough Letters');
+        am.handleAlert('Not Enough Letters');
         return;
     } 
 
     const word = chars.join('').toLowerCase();
     if (!isValidWord(word)) {
-        emit('on-alert', 'Not in Wordlist');
+        am.handleAlert('Not in Wordlist');
         return;
     }    
     
@@ -185,3 +196,4 @@ function isValidWord(word) {
         }
     }
 </style>
+@/store/ManagerOverlay@/store/ManagerAlert

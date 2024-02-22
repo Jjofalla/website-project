@@ -7,7 +7,7 @@ import TutorialRow from './TutorialRow.vue'
         <div id="intro">
             <h1>How To Play</h1>
             <p>
-                Played <a href="https://www.nytimes.com/games/wordle">Wordle</a>? This game is a lot harder!
+                Played <a href="https://www.nytimes.com/games/wordle" tabindex="-1">Wordle</a>? This game is a lot harder!
                 You have 12 attempts to guess the word, and each attempt will reveal five squares, marked with a 
                 certain colour. 
             </p>

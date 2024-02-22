@@ -144,6 +144,7 @@ export const getGameState = defineStore('gameState', () => {
         numberOfTiles,
         maxGuesses,
         tileColours,
+        currentTargetIdx,
         updateRows,
         addStyleRow,
         updateStyle,

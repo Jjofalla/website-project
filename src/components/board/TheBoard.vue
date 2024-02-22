@@ -1,9 +1,9 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from 'vue';
 import BoardRow from './BoardRow.vue';
-import TheCountdown from './TheCountdown.vue';
+import TheCountdown from '../countdown/TheCountdown.vue';
 import TheKeyboard from '../keyboard/TheKeyboard.vue';
-import { getOverlayManager } from '@/store/OverlayManager';
+import { getOverlayManager } from '@/store/ManagerOverlay';
 import { getGameState } from '@/store/GameState';
 import { getStatsStore } from '@/store/UserStats';
 
@@ -16,9 +16,6 @@ const onWidthChange = () => windowWidth.value = window.innerWidth;
 onMounted(() => window.addEventListener('resize', onWidthChange));
 onUnmounted(() => window.removeEventListener('resize', onWidthChange));
 
-const showAlert = ref(false);
-const message = ref("");
-const alertTimer = ref();
 const scrollTable = ref(null);
 
 watch(() => gameState.rowsToRender, () => {
@@ -43,28 +40,8 @@ function determineActiveRow(row) {
     return !gameData.finished && row === gameState.rowsToRender;
 }
 
-function handleAlert(msg) {
-    if (showAlert.value) {
-        let alert = document.querySelector('.alert');
-        clearTimeout(alertTimer.value);
-        alert.classList.add('shake');
-        alert.addEventListener('animationend', () => {
-            alert.classList.remove('shake');
-        }, { once: true });
-    } else {
-        showAlert.value = true;
-    }
-    alertTimer.value = resetAlert();
-    message.value = msg;
-}
-
-function resetAlert() {
-    return setTimeout(() => {
-        showAlert.value = false;
-    }, 2000);
-}
-
 function handleGameFinishEvent() {
+    gameData.finished = true;
     setTimeout(() => {
         if (!om.overlayEnabled) {
             om.toggleOverlay('stats');
@@ -82,19 +59,12 @@ if (getStatsStore().stats.totalPlayed <= 0) {
 
 <template>
     <div id="board">
-
-        <Transition name="alert">
-            <div class="alert" v-show="showAlert">
-                <h1>{{ message }}</h1>
-            </div>
-        </Transition>
-
         <template v-if="windowWidth > 850">
 
             <div class="table" :style="{
-                'transition': 'width 2.5s ease, height 0.4s ease',
+                'transition': 'width 2s ease, height 0.4s ease',
                 'height': Math.min(35, 5 + (5 * gameState.rowsToRender)) + 'rem',
-                'width': gameState.rowsToRender > 6 ? '100vw' : '46vw'
+                'width': gameState.rowsToRender > 6 ? '88rem' : '42rem'
             }">
 
                 <div class="rows fst" :style="{'margin-right': gameState.rowsToRender > 6 ? '2.5rem' : 'auto'}">
@@ -105,7 +75,6 @@ if (getStatsStore().stats.totalPlayed <= 0) {
                             :rowNumber="row"
                             :currentGuess="getRow(row)"
                             :isActive="determineActiveRow(row)"
-                            @on-alert="handleAlert"
                             @game-finished="handleGameFinishEvent"
                         />
                     </TransitionGroup>
@@ -119,7 +88,6 @@ if (getStatsStore().stats.totalPlayed <= 0) {
                             :rowNumber="row + 6"
                             :currentGuess="getRow(row + 6)"
                             :isActive="determineActiveRow(row + 6)"
-                            @on-alert="handleAlert"
                             @game-finished="handleGameFinishEvent"
                         />
                     </TransitionGroup>
@@ -138,7 +106,6 @@ if (getStatsStore().stats.totalPlayed <= 0) {
                             :rowNumber="row"
                             :currentGuess="getRow(row)"
                             :isActive="determineActiveRow(row)"
-                            @on-alert="handleAlert"
                             @game-finished="handleGameFinishEvent"
                         />
                     </TransitionGroup>
@@ -147,7 +114,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         </template>
         
         <div id="footer">
-            <TheCountdown />
+            <TheCountdown @game-finished="handleGameFinishEvent"/>
             <TheKeyboard />
         </div>
     </div>
@@ -212,73 +179,6 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         margin-right: auto;
     }
 
-    .alert {
-        position: fixed;
-        justify-content: center;
-        height: max-content;
-        top: 8vh;
-        padding: 0.8rem 1.2rem 0.8rem 1.2rem;
-        background-color: darkslategray;
-        border: 1px solid darkslategray;
-        border-radius: 0.3rem;
-        box-shadow: 0px 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
-        z-index: 1;
-    }
-
-    .alert h1 {
-        color: white;
-        letter-spacing: 1px;
-        font-size: 1.2rem;
-    }
-
-    .shake {
-        animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
-    }
-
-    @keyframes fadeIn {
-        0% {
-            opacity: 0%;
-        }
-        100% {
-            opacity: 100%;
-        }
-    }
-
-    @keyframes fadeOut {
-        0% {
-            opacity: 100%;
-        }
-        100% {
-            opacity: 0%;
-        }
-    }
-
-    @keyframes shake {
-        10%, 90% {
-            transform: translate(-1px, 0);
-        }
-        
-        20%, 80% {
-            transform: translate(0.125rem, 0);
-        }
-
-        30%, 50%, 70% {
-            transform: translate(-0.25rem, 0);
-        }
-
-        40%, 60% {
-            transform: translate(0.25rem, 0);
-        }
-    }
-
-    .alert-enter-active {
-        animation: fadeIn 0.1s ease;
-    }
-
-    .alert-leave-active {
-        animation: fadeOut 0.2s ease;
-    }
-
     .add-row-enter-from {
         transform: translateX(-1rem);
         opacity: 0;
@@ -286,6 +186,14 @@ if (getStatsStore().stats.totalPlayed <= 0) {
 
     .add-row-enter-active {
         transition: all 0.5s ease-in;
+    }
+
+    #footer {
+        display: flex;
+        width: 100vw;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
    
     @media only screen and (max-width: 850px) {
@@ -301,13 +209,6 @@ if (getStatsStore().stats.totalPlayed <= 0) {
             padding: 1rem 0rem;
         }
 
-        #footer {
-            display: flex;
-            width: 100vw;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
     }
 
 </style>

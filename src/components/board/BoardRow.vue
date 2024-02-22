@@ -6,7 +6,7 @@ import { getGameState } from '@/store/GameState';
 
 const map = getGameState().gameData.tileStyleMap;
 
-const emit = defineEmits(['on-alert', 'game-finished']);
+defineEmits(['game-finished']);
 const props = defineProps({
     rowNumber: {
         type: Number
@@ -41,10 +41,6 @@ function handleEnter(word) {
     guess.value = word;
 }
 
-function onAlert(msg) {
-    emit('on-alert', msg);
-}
-
 </script>
 
 <template>
@@ -54,6 +50,7 @@ function onAlert(msg) {
                 <button 
                     v-show="!getGameState().gameData.finished && showClearButton" 
                     @click="handleClick(rowNumber - 1)" 
+                    tabindex="-1"
                     class="button">
                         <font-awesome-icon icon="fa-solid fa-eraser"/>
                 </button>
@@ -66,7 +63,6 @@ function onAlert(msg) {
                 :currentGuess="guess"
                 :isActive="isActive"
                 @on-enter="handleEnter"
-                @on-alert="onAlert"
             />
             <BoardHints 
                 :currentGuess="guess"
@@ -79,6 +75,8 @@ function onAlert(msg) {
 <style scoped>
     .parent-row {
         display: inline-flex;
+        justify-content: center;
+        align-items: center;
         margin-left: -3rem;
     }
 
@@ -97,6 +95,7 @@ function onAlert(msg) {
 
     .button {
         border: none;
+        height: min-content;
         font-size: 1.5rem;
         background-color: transparent;
         color: var(--text-light);  
@@ -135,6 +134,10 @@ function onAlert(msg) {
 
         .placeholder {
             width: 4rem;
+        }
+
+        .button {
+            font-size: 1.2rem;
         }
     }
 
