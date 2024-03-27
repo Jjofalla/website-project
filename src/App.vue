@@ -5,10 +5,13 @@ import TheOverlay from './components/header/TheOverlay.vue';
 import BoardAlert from './components/board/BoardAlert.vue';
 import { getOverlayManager } from '@/store/ManagerOverlay';
 import { getAlertManager } from '@/store/ManagerAlert';
+import { getSettingsManager } from './store/ManagerSettings';
+
+const sm = getSettingsManager();
 </script>
 
 <template>
-  <div id="wrapper" @mousedown.prevent>
+  <div id="wrapper" @mousedown.prevent :class="{'dark': sm.settings.dark}">
     <div id="body">
       <TheHeading />
       <TheBoard />
@@ -30,6 +33,7 @@ import { getAlertManager } from '@/store/ManagerAlert';
     width: 100vw;
     height: 100vh;
     overflow-y: auto;
+    transition: background-color 0.5s ease;
 }
 
 #body {
@@ -42,8 +46,7 @@ import { getAlertManager } from '@/store/ManagerAlert';
 
 
 .dark {
-    background-color: rgb(40, 40, 40);
-    color: rgb(180, 180, 180);
+    background-color: #121212;
 }
 
 

@@ -1,5 +1,7 @@
 <script setup>
 import { getGameState } from '@/store/GameState';
+import { getSettingsManager } from '@/store/ManagerSettings';
+const sm = getSettingsManager();
 const gameState = getGameState();
 
 const props = defineProps({
@@ -30,7 +32,7 @@ function handleClick(event) {
     if (props.isActive) {
         emit('on-focus', props.tileId);
 
-    } else if (!gameState.gameData.finished) {
+    } else if (gameState.gameData.status === 'IN_PROGRESS') {
         gameState.updateStyle(props.rowNumber - 1, props.tileId);
     }
 }
@@ -39,11 +41,11 @@ function handleClick(event) {
 
 <template>
     <div
-        class="tile"
-        :class="{'flash': focused && isActive}"
+        class="tile flash"
+        :class="{'flash-dark': focused && isActive && sm.settings.dark, 'flash-light': focused && isActive && !sm.settings.dark}"
         :style="[
             gameState.readStyle(rowNumber - 1, tileId), 
-            {'cursor': gameState.gameData.finished ? 'default' : 'pointer'}
+            {'cursor': gameState.gameData.status === 'IN_PROGRESS' ? 'pointer' : 'default'},
         ]"
         maxlength="1"
         readonly
@@ -70,14 +72,17 @@ function handleClick(event) {
     }
 
     .flash {
-        animation-name: flash;
         animation-duration: 1s;
         animation-iteration-count: infinite;
         animation-timing-function: ease-in-out;
         animation-fill-mode: forwards;
     }
 
-    @keyframes flash {
+    .flash-light {
+        animation-name: flash-light;
+    }
+
+    @keyframes flash-light {
         0%, 100% {
             box-shadow: 0rem 0.25rem 0.25rem rgb(180,180,180);
             border: 1px solid;
@@ -87,6 +92,19 @@ function handleClick(event) {
             box-shadow: 0rem 0.25rem 0.45rem darkslategrey;
             border: 1px solid;
             border-color: lightgray;
+        }
+    }
+
+    .flash-dark {
+        animation-name: flash-dark;
+    }
+
+    @keyframes flash-dark {
+        0%, 100% {
+            background-color: var(--tile-dark-white);
+        }
+        50% {
+            background-color: rgb(60,60,60);
         }
     }
 

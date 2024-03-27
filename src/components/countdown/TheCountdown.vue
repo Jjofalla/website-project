@@ -5,8 +5,8 @@ import { getSettingsManager } from '@/store/ManagerSettings';
 import CounterTime from './CounterTime.vue';
 import CounterGuess from './CounterGuess.vue';
 
-const sm = getSettingsManager();
 const gs = getGameState();
+const sm = getSettingsManager();
 const target = gs.target;
 const remainingGuesses = ref(12 - gs.gameData.rows.length);
 const effort = [['VERY EASILY!', 10], ['AMAZING JOB!', 8], ['GREAT JOB!', 5], ['GOOD JOB!', 1], ['CLOSE ONE!', 0]];
@@ -26,23 +26,24 @@ watch(() => gs.gameData.rows.length, (newTotal) => {
 </script>
 
 <template>
-    <div class="countdown-wrapper">
+    <div class="countdown-wrapper" :style="{'color': sm.settings.dark ? 'var(--text-dark)' : 'var(--text-light)'}">
         <Transition mode="out-in" name="flip">
-            <div class="countdown c" v-if="!gs.gameData.finished">
-                <CounterGuess :remaining="remainingGuesses" :enable-timer="sm.settings['mmode'][0]"/>
-                <CounterTime :enable-timer="sm.settings['mmode'][0]" @game-finished="$emit('game-finished')"/>
+            <div class="countdown c" v-if="gs.gameData.status === 'IN_PROGRESS'">
+                <CounterGuess :remaining="remainingGuesses" :enable-timer="sm.settings.mmode"/>
+                <CounterTime :enable-timer="sm.settings.mmode" @game-finished="$emit('game-finished')"/>
             </div>
             <div 
-                v-else-if="gs.gameData.rows.slice(-1)[0] === target" 
-                class="countdown grats" 
+                v-else-if="gs.gameData.status === 'WON'" 
+                class="countdown" 
+                :class="sm.settings.dark ? 'grats-dark': 'grats-light'"
                 :style="{'color': 'transparent'}"
             >
-                    <div class="msg">{{ getEffort(remainingGuesses) }}</div>
+                    <div class="msg" :class="sm.settings.dark ? 'msg-dark' : 'msg-light'">{{ getEffort(remainingGuesses) }}</div>
                 PLACEHOLDER
             </div>
             <div v-else class="countdown">
                 BAD LUCK, THE WORD IS
-                <div class="target">{{ target.toUpperCase() }}</div>
+                <div class="target" :style="{'color': sm.settings.dark ? 'var(--text-light)' : 'var(--text-dark)'}">{{ target.toUpperCase() }}</div>
             </div>
             
         </Transition>
@@ -55,8 +56,7 @@ watch(() => gs.gameData.rows.length, (newTotal) => {
 .countdown-wrapper {
     position: relative;
     margin-bottom: 1.5rem;
-    margin-top: 0.5rem;
-    height: 2rem;
+    margin-top: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,6 +64,7 @@ watch(() => gs.gameData.rows.length, (newTotal) => {
 
 .countdown {
     width: 40rem;
+    min-width: 40rem;
     display: flex;
     gap: 1rem;
     align-items: center;
@@ -71,24 +72,13 @@ watch(() => gs.gameData.rows.length, (newTotal) => {
     cursor: default;
     font-size: 1.7rem;
     letter-spacing: 0.4rem;
-    color: var(--text-light);
     transition: width 0.4s ease;
 }
 
 .c {
     position: relative;
-    width: 32rem;
-    min-width: 32rem;
-}
-
-.number {
-    display: flex;
-    flex-direction: row;
-    color: var(--text-dark);
-}
-
-.target {
-    color: var(--text-dark);
+    width: 31.5rem;
+    min-width: 31.5rem;
 }
 
 .flip-enter-before {
@@ -110,31 +100,55 @@ watch(() => gs.gameData.rows.length, (newTotal) => {
     transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-.grats {
+.grats-light {
     background: linear-gradient(
         to right, 
         var(--tile-green) 0%, var(--tile-green) 25%, 
         var(--tile-orange) 25%, var(--tile-orange) 50%,
         var(--tile-lightgrey) 50%, var(--tile-lightgrey) 75%,
-        var(--tile-white), var(--tile-white) 100%);
+        var(--tile-white) 75%, var(--tile-white) 100%);
     background-size: 700%;
     background-position: right;
-    animation: extend 2s ease-out 0.3s 1 normal forwards, expand 1s ease 0.8s;
+    animation: extend 2s linear 0.3s 1 normal forwards, expand 1s ease 1.1s 1 normal forwards;
+}
+
+.grats-dark {
+    background: linear-gradient(
+        to right, 
+        var(--tile-dark-green) 0%, var(--tile-dark-green) 25%, 
+        var(--tile-dark-orange) 25%, var(--tile-dark-orange) 50%,
+        var(--tile-dark-lightgrey) 50%, var(--tile-dark-lightgrey) 75%,
+        #121212 75%, #121212 100%);
+    background-size: 700%;
+    background-position: right;
+    animation: extend 2s linear 0.3s 1 normal forwards, expand 1s ease 1.1s 1 normal forwards;
 }
 
 .msg {
-    background-color: white;
+    transition: border 0.5s ease;
     font-weight: bolder;
-    color: black;
     margin: 0 auto;
     text-align: center;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 105%;
-    width: 103%;
+    height: 100%;
+    width: 100%;
+}
+
+.msg-light {
     mix-blend-mode: screen;
+    background-color: white;
+    border: 3px solid white;
+    color: black;
+}
+
+.msg-dark {
+    mix-blend-mode: darken;
+    background-color: #121212;
+    border: 3px solid #121212;
+    color: rgb(210,210,210);
 }
 
 @keyframes extend {
@@ -158,22 +172,21 @@ watch(() => gs.gameData.rows.length, (newTotal) => {
     }
 }
 
-@media only screen and (max-width: 850px) {
-    .countdown {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
-}
-
 @media only screen and (max-width: 450px) {
+    .countdown-wrapper {
+        margin-bottom: 0.9rem;
+    }
+
     .countdown {
+        width: 90vw;
+        min-width: 90vw;
         font-size: 1.4rem;
         letter-spacing: 0.2rem;
     }
 
     .c {
-        min-width: 23rem;
-        width: 23rem;
+        min-width: 24.5rem;
+        width: 24.5rem;
     }
 }
 

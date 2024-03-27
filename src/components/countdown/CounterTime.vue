@@ -3,6 +3,7 @@ import { watch } from 'vue';
 import { getGameState } from '@/store/GameState';
 import { getSettingsManager } from '@/store/ManagerSettings';
 const sm = getSettingsManager();
+const gs = getGameState();
 
 const emit = defineEmits(['game-finished']);
 const props = defineProps({
@@ -13,29 +14,33 @@ const props = defineProps({
 
 watch(() => props.enableTimer, () => {
     if (!props.enableTimer) {
-        sm.endTimer();
+        gs.endTimer();
     }
 });
 
-watch(() => getGameState().gameData.rows.length, () => {
+watch(() => gs.gameData.rows.length, () => {
     if (props.enableTimer) {
-        sm.startTimer();
+        gs.startTimer();
     }
 });
 
-watch(() => sm.settings['mmode'][1], (newTime) => {
-    if (newTime === 0) {
+watch(() => gs.gameData.mmodeTime, (newTime) => {
+    if (newTime <= 0) {
+        gs.gameData.status = 'LOST';
         emit('game-finished');
-        sm.endTimer();
     }
 });
+
+if (gs.gameData.mmodeTime != 120 && props.enableTimer && gs.gameData.status === 'IN_PROGRESS') {
+    gs.startTimer();
+}
 
 </script>
 
 <template>
     <Transition mode="out-in" name="flip">
-        <div id="timer" v-if="enableTimer">
-            {{ sm.settings['mmode'][1] }}
+        <div id="timer" v-if="enableTimer" :style="{'color': sm.settings.dark ? 'var(--text-light)' : 'var(--text-dark)'}">
+            {{ gs.gameData.mmodeTime }}
         </div>
     </Transition>
 </template>
@@ -43,7 +48,6 @@ watch(() => sm.settings['mmode'][1], (newTime) => {
 <style scoped>
     #timer {  
         position: absolute;
-        right: 0.5rem;
-        color: var(--text-dark);
+        right: 0rem;
     }
 </style>

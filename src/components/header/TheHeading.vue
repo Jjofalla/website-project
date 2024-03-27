@@ -1,25 +1,23 @@
 <script setup>
-import { getOverlayManager } from '@/store/ManagerOverlay';
 import ButtonShare from './ButtonShare.vue';
-const om = getOverlayManager();
+import ButtonHeading from './ButtonHeading.vue';
+import { getSettingsManager } from '@/store/ManagerSettings';
+const sm = getSettingsManager();
 </script>
 
 <template>
-    <div id="heading-wrapper" @mousedown.prevent>
-        <div id="heading" class="linebreak">
+    <div 
+      id="heading-wrapper" 
+      @mousedown.prevent 
+      :style="{'border-image-source': sm.settings.dark ? 'linear-gradient(to right, rgb(10,10,10), rgb(210,210,210), rgb(10,10,10))' : 'linear-gradient(to right, white, darkslategray, white)'}">
+        <div id="heading" class="linebreak" :class="{'line-dark': sm.settings.dark}" >
             <div class="buttons">
-                <button class="button" tabindex="-1" @click="om.toggleOverlay('settings')">
-                    <font-awesome-icon icon="fa-solid fa-gear"/>
-                </button>
-                <button class="button" tabindex="-1" @click="om.toggleOverlay('stats')">
-                    <font-awesome-icon icon="fa-solid fa-chart-simple"/>
-                </button>
+                <ButtonHeading :overlay="'settings'" :icon="'gear'" />
+                <ButtonHeading :overlay="'stats'" :icon="'chart-simple'" />
             </div>  
-            <div class="title" readonly>HARDLE</div>
+            <div class="title" :style="{'color': sm.settings.dark ? 'rgb(210,210,210)' : 'darkslategrey'}" readonly>DIFFIKLE</div>
             <div class="buttons">
-                <button class="button" tabindex="-1" @click="om.toggleOverlay('tutorial')">
-                    <font-awesome-icon icon="fa-solid fa-circle-info"/>
-                </button>
+                <ButtonHeading :overlay="'tutorial'" :icon="'circle-info'" />
                 <ButtonShare />
             </div>
         </div>
@@ -54,13 +52,17 @@ const om = getOverlayManager();
     border-top: 0;
 }
 
+.line-dark {
+    border-image-source: linear-gradient(to right, rgb(10,10,10), rgb(210,210,210), rgb(10,10,10));
+}
+
 .title {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
-    font-size: max(2.5vw, 32px);
+    font-size: max(2.2vw, 25px);
     font-weight: bolder;
     letter-spacing: 0.5rem;
     width: min-content;
@@ -77,21 +79,6 @@ const om = getOverlayManager();
     width: min-content;
 }
 
-.button {
-    border: none;
-    padding: 1rem 0.5rem;
-    font-size: max(2.3vw, 25px);
-    background-color: transparent;
-    color: darkslategray;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.button:hover {
-    color: black;
-    transform: scale(1.1);
-}
-
 @media only screen and (max-width: 850px) {
     #heading {
         min-width: 70vw;
@@ -105,7 +92,6 @@ const om = getOverlayManager();
     #heading-wrapper {
         border: 1px solid;
         border-image-slice: 1;
-        border-image-source: linear-gradient(to right, white, darkslategray, white);
         border-left: 0;
         border-right: 0;
         border-top: 0;
@@ -126,4 +112,4 @@ const om = getOverlayManager();
     }
 }
 
-</style>@/store/ManagerOverlay
+</style>

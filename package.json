@@ -20,6 +20,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.5",
     "dayjs": "^1.11.10",
     "fs": "^0.0.1-security",
+    "gsap": "^3.12.5",
     "pinia": "^2.1.7",
     "raw-loader": "^4.0.2",
     "vue": "^3.3.10",

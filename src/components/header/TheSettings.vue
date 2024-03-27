@@ -1,16 +1,16 @@
 <script setup>
 import { getAlertManager } from '@/store/ManagerAlert';
-import { getSettingsManager } from '@/store/ManagerSettings';
 import { getGameState } from '@/store/GameState';
+import { getSettingsManager } from '@/store/ManagerSettings';
 
-const { gameData } = getGameState();
 const sm = getSettingsManager();
+const { gameData } = getGameState();
 
-function handleCheckbox(key) {
-    if (sm.settings[key][0] || gameData.finished || gameData.rows.length === 0) {
-        sm.enableSetting(key);
+function handleCheckbox() {
+    if (sm.settings.mmode || gameData.rows.length === 0 || gameData.status != 'IN_PROGRESS') {
+        sm.toggleMMode();
     } else {
-        getAlertManager().handleAlert("Cannot be Toggled as Game is in Progress")
+        getAlertManager().handleAlert("Cannot be Turned On While Game is in Progress")
     }
 }
 
@@ -22,7 +22,7 @@ function handleCheckbox(key) {
             Settings
         </div>
 
-        <span id="mode">
+        <span class="mode">
             <div class="wrapper">
                 <div class="setting">Masochist Mode</div>
                 <div>
@@ -30,21 +30,21 @@ function handleCheckbox(key) {
                     Word games have never been more stressful.
                 </div>
             </div>
-            <label class="switch" :class="{'active': sm.settings['mmode'][0]}">
-                <input type="checkbox" @change="handleCheckbox('mmode')">
-                <span class='slider' :class="sm.settings['mmode'][0] ? 'slider-right' : 'slider-left'" ></span>
+            <label class="switch" :class="{'active': sm.settings.mmode}">
+                <input type="checkbox" @change="handleCheckbox()">
+                <span class='slider' :class="sm.settings.mmode ? 'slider-right' : 'slider-left'" ></span>
             </label>
         </span>
 
-        <!-- <span id="mode">
+        <span class="mode">
             <div class="wrapper">
                 <div class="setting">Dark Mode</div>
             </div>
-            <label class="switch" :class="{'active': sm.enabled[1]}">
-                <input type="checkbox" @change="sm.enableSetting(1)">
-                <span class='slider' :class="sm.enabled[1] ? 'slider-right' : 'slider-left'" ></span>
+            <label class="switch" :class="{'active': sm.settings.dark}">
+                <input type="checkbox" @change="sm.toggleDarkMode">
+                <span class='slider' :class="sm.settings.dark ? 'slider-right' : 'slider-left'"></span>
             </label>
-        </span> -->
+        </span>
        
     </div>
 </template>
@@ -68,7 +68,7 @@ function handleCheckbox(key) {
         margin-right: 2rem;
     }
 
-    #mode {
+    .mode {
         height: 7rem;
         align-items: center;
     }
@@ -89,10 +89,10 @@ function handleCheckbox(key) {
         display: inline-block;
         min-width: 5rem;
         height: 2.8rem;
-        border: 2px solid white;
+        border: 2px solid #ccc;
         border-radius: 34px;
         background-position: left;
-        background: linear-gradient(45deg, #ccc 15%, #afa 60%, #4b4 100%); 
+        background: linear-gradient(45deg, #ccc 0%, #ccc 50%, #afa 60%, #4b4 100%); 
         background-size: 500%;
         transition: all 300ms cubic-bezier(0.76, 0.01, 0.15, 0.97);
     }
@@ -132,4 +132,4 @@ function handleCheckbox(key) {
         background-position: right;
     }
 
-</style>@/store/ManagerAlert
+</style>

@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
 import { targets } from '../assets/words';
+import { tileColours } from './ManagerStyle';
 import dayjs from 'dayjs';
+
+const TIME = 120;
 
 function SeededPRNG(seed) {
     this.m = Math.pow(2, 31) - 1;
@@ -42,15 +45,10 @@ function retrieveLocalStorage(originDate, currentTargetIdx) {
     return {
         rows: [],
         tileStyleMap: [Array(5).fill(0)],
-        finished: false,
+        status: 'IN_PROGRESS',
         dateLastPlayed: dayjs(),
+        mmodeTime: TIME,
     }
-}
-
-function getTileColours() {
-    const cssCols = ['--tile-white', '--tile-lightgrey', '--tile-orange', '--tile-green'];
-    const root = document.documentElement;
-    return cssCols.map((x) => getComputedStyle(root).getPropertyValue(x));
 }
 
 export const getGameState = defineStore('gameState', () => {
@@ -73,15 +71,30 @@ export const getGameState = defineStore('gameState', () => {
 
     function updateRows() {
         let numberOfRows = gameData.value.rows.length;
-        if (!gameData.value.finished) {
+        if (gameData.value.status === 'IN_PROGRESS') {
             rowsToRender.value = numberOfRows + 1;
         } else {
             rowsToRender.value = numberOfRows;
         }
     }
 
-    // tile styles
-    const tileColours = getTileColours();
+
+    // mmode
+    let timer;
+    let timerActive = false;
+    function startTimer() {
+        if (!timerActive) {
+            timer = setInterval(function() {
+                gameData.value.mmodeTime--;
+            }, 1000);
+            timerActive = true;
+        }
+    }
+
+    function endTimer() {
+        clearInterval(timer);
+        gameData.value.mmodeTime = TIME;
+    }
 
     function addStyleRow() {
         gameData.value.tileStyleMap.push(Array(numberOfTiles).fill(0));
@@ -97,17 +110,7 @@ export const getGameState = defineStore('gameState', () => {
         if (typeof idx === 'undefined' || idx < 0 || idx > 3) {
             idx = 0;
         }
-        return getStyle(idx);
-    }
-
-    function getStyle(idx) {
-        return {
-            'background-color': tileColours[idx],
-            'color': idx === 0 ? 'rgb(110, 110, 110)' : 'white',
-            'box-shadow': '0rem 0.25rem 0.25rem ' + (idx === 0 ? 'rgb(200,200,200)' : tileColours[idx] + '90'),
-            '-webkit-box-shadow': '0rem 0.25rem 0.25rem ' + (idx === 0 ? 'rgb(200,200,200)' : tileColours[idx] + '90'),
-            '-moz-box-shadow': '0rem 0.25rem 0.25rem ' + (idx === 0 ? 'rgb(200,200,200)' : tileColours[idx] + '90'),
-        }
+        return tileColours.value.getStyle(idx);
     }
 
     function clearStyleRow(rowNumber) {
@@ -127,10 +130,10 @@ export const getGameState = defineStore('gameState', () => {
         });
 
         if (charStyles.length === 0) {
-            return getStyle(0);
+            return tileColours.value.getStyle(0);
         } 
 
-        return getStyle(Math.max(...charStyles));
+        return tileColours.value.getStyle(Math.max(...charStyles));
     }
 
     watch(gameData, (newData) => {
@@ -143,12 +146,12 @@ export const getGameState = defineStore('gameState', () => {
         target,
         numberOfTiles,
         maxGuesses,
-        tileColours,
         currentTargetIdx,
+        startTimer,
+        endTimer,
         updateRows,
         addStyleRow,
         updateStyle,
-        getStyle,
         readStyle,
         clearStyleRow,
         trackKeyboardTile,

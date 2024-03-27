@@ -50,4 +50,4 @@ import { getAlertManager } from '@/store/ManagerAlert';
         }
     }
 
-</style>@/store/ManagerAlert
+</style>

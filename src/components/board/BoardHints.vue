@@ -2,11 +2,12 @@
 import { ref, watch } from 'vue';
 import { getGameState } from '@/store/GameState';
 import { getStatsStore } from '@/store/UserStats';
+import { tileColours } from '@/store/ManagerStyle';
 
 const stats = getStatsStore().stats;
 const gameState = getGameState();
 const gameData = gameState.gameData;
-const { target, numberOfTiles, tileColours } = gameState;
+const { target, numberOfTiles } = gameState;
 
 const emit = defineEmits(['game-finished'])
 const props = defineProps({
@@ -28,13 +29,16 @@ watch(() => props.currentGuess, newGuess => {
 
     if (isCorrectGuess || isMaxGuessesReached) {
         stats.totalPlayed++;
-        gameData.finished = true;
         emit('game-finished');
     }
 
     if (isCorrectGuess) {
         stats.guessDistribution[rows]++;
         getStatsStore().calculateAvg();
+        gameData.status = 'WON';
+        
+    } else if (isMaxGuessesReached) {
+        gameData.status = 'LOST';
     }
 
     gameState.addStyleRow();
@@ -69,14 +73,18 @@ function countOccurrences(ch, str) {
 
 function handleStyle(key) {
     if (props.currentGuess === '     ') {
-        return {backgroundColor: 'white', border: '0.1rem solid lightgrey'}
+        return {
+            backgroundColor: tileColours.value.curr[0], 
+            border: tileColours.value.isDark ? '0.1rem solid var(--tile-dark-white)' : '0.1rem solid lightgrey',
+            transitionDelay: 0.1 * key + 's',
+        }
     }
     for (let i = 0; i < hints.value.length; i++) {
         if (key <= hints.value[i]) {
             return {
                 // colours are ordered in reverse
-                backgroundColor: tileColours[3 - i],
-                border: '0.1rem solid ' + tileColours[3 - i],
+                backgroundColor: tileColours.value.curr[3 - i],
+                border: '0.1rem solid ' + tileColours.value.curr[3 - i],
                 transitionDelay: 0.1 * key + 's',
             };
         }

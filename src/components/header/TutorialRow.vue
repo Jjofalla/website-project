@@ -1,6 +1,5 @@
 <script setup>
-
-import { getGameState } from '@/store/GameState';
+import { tileColours } from '@/store/ManagerStyle';
 
 
 defineProps({
@@ -21,10 +20,10 @@ defineProps({
 <template>
     <div class="row">
         <div class="tiles">
-            <div class="tile" v-for="(n, idx) in Array.from(word)" :key="idx" :style="styleMap[0] === idx ? getGameState().getStyle(styleMap[1]) : ''">{{ n }}</div>
+            <div class="tile" v-for="(n, idx) in Array.from(word)" :key="idx" :style="styleMap[0] === idx ? tileColours.getStyle(styleMap[1]) : tileColours.getStyle(0)">{{ n }}</div>
         </div>
         <div class="hints">
-            <div class="tutorial-hint" v-for="(cls, idx) in code" :key="idx" :class="cls"></div>
+            <div class="tutorial-hint" v-for="(cls, idx) in code" :key="idx" :style="{'background-color': tileColours.curr[cls]}"></div>
         </div>
     </div>
 </template>

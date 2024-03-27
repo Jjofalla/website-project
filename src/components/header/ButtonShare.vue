@@ -1,4 +1,5 @@
 <script setup>
+import ButtonHeading from './ButtonHeading.vue';
 import { getAlertManager } from '@/store/ManagerAlert';
 import { getGameState } from '@/store/GameState';
 const gs = getGameState();
@@ -6,10 +7,10 @@ const { target, numberOfTiles } = getGameState();
 
 async function webShare() {
     const shareBoxes = getShareBoxes();
-    const remaining = gs.gameData.finished && gs.gameData.rows.slice(-1)[0] === gs.target ? gs.gameData.rows.length : 'X';
+    const remaining = gs.gameData.status === 'WON' ? gs.gameData.rows.length : 'X';
     const result = {
-        title: 'Hardle Result',
-        text: 'Hardle ' + gs.currentTargetIdx + ' ' + remaining + '/12\n\n' + shareBoxes,
+        title: 'Diffikle Result',
+        text: 'Diffikle ' + gs.currentTargetIdx + ' ' + remaining + '/12\n\n' + shareBoxes + '\n\n',
     }
 
     if (navigator.share) {
@@ -35,20 +36,30 @@ function getShareBoxes() {
     const colours = ['\u{1F7E9}', '\u{1F7E8}', '\u{2B1C}'];
     let shareBoxes = [];
 
-    for (let i = 0; i < rows.length; i++) {
-        let row = [];
-        let hints = calculateHints(rows[i]);
-        
-        for (let j = 0; j < numberOfTiles; j++) {
-            for (let k = 0; k < hints.length; k++) {
-                if (j < hints[k]) {
-                    row.push(colours[k]);
-                    break;
-                } 
+    if (gs.gameData.status === 'IN_PROGRESS') {
+        for (let i = 0; i < rows.length; i++) {
+            let row = [];
+            let hints = calculateHints(rows[i]);
+            
+            for (let j = 0; j < numberOfTiles; j++) {
+                for (let k = 0; k < hints.length; k++) {
+                    if (j < hints[k]) {
+                        row.push(colours[k]);
+                        break;
+                    } 
+                }
             }
+            shareBoxes.push(row.join(''))
         }
-        shareBoxes.push(row.join(''))
+
+    } else {
+        for (let i = 0; i < rows.length; i++) {
+            let hints = calculateWordleHint(rows[i]);
+            shareBoxes.push(hints.join(''))
+        }
     }
+
+    
     return shareBoxes.join('\n');
 }
 
@@ -69,6 +80,35 @@ function calculateHints(newGuess) {
     return [correct, near + correct, numberOfTiles];
 }
 
+function calculateWordleHint(newGuess) {
+    let hints = [];
+    const uniqueChars = new Set(newGuess);
+
+    for (const ch of uniqueChars) {
+        let near = Math.min(countOccurrences(ch, newGuess), countOccurrences(ch, target));
+        
+        for (let i = 0; i < newGuess.length; i++) {
+            if (ch === newGuess[i] && ch === target[i]) {
+                near -= 1;
+            }
+        }
+
+        for (let i = 0; i < newGuess.length; i++) {
+            if (ch === newGuess[i]) {
+                if (ch === target[i]) {
+                    hints[i] = '\u{1F7E9}';
+                } else if (near > 0) {
+                    hints[i] = '\u{1F7E8}';
+                    near--;
+                } else {
+                    hints[i] = '\u{2B1C}';
+                }
+            } 
+        }
+    }
+    return hints;
+}
+
 function countOccurrences(ch, str) {
     return str.split(ch).length - 1;
 }
@@ -76,24 +116,5 @@ function countOccurrences(ch, str) {
 </script>
 
 <template>
-    <button class="button" tabindex="-1" @click="webShare">
-        <font-awesome-icon icon="fa-solid fa-share-nodes"/>
-    </button>
+    <ButtonHeading :overlay="''" :icon="'share-nodes'" @click="webShare"/>
 </template>
-
-<style scoped>
-.button {
-    border: none;
-    padding: 1rem 0.5rem;
-    font-size: max(2.3vw, 25px);
-    background-color: transparent;
-    color: darkslategray;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.button:hover {
-    color: black;
-    transform: scale(1.1);
-}
-</style>@/store/ManagerAlert

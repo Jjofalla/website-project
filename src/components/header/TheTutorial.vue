@@ -1,5 +1,31 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import TutorialRow from './TutorialRow.vue'
+import { tileColours } from '@/store/ManagerStyle';
+import { getSettingsManager } from '@/store/ManagerSettings';
+import { gsap } from 'gsap'
+const sm = getSettingsManager();
+
+const rotateRef = ref(null);
+
+onMounted(() => {
+    gsap.to(rotateRef.value, {
+        keyframes: {
+            "0%": tileColours.value.getStyle(0),
+            "22%": tileColours.value.getStyle(0),
+            "25%": tileColours.value.getStyle(1),
+            "47%": tileColours.value.getStyle(1),
+            "50%": tileColours.value.getStyle(2),
+            "72%": tileColours.value.getStyle(2),
+            "75%": tileColours.value.getStyle(3),
+            "97%": tileColours.value.getStyle(3),
+            "100%": tileColours.value.getStyle(0),
+            easeEach: 'power4.out',
+        },
+        duration: 8,
+        repeat: -1,
+    });
+});
 </script>
 
 <template>
@@ -7,7 +33,7 @@ import TutorialRow from './TutorialRow.vue'
         <div id="intro">
             <h1>How To Play</h1>
             <p>
-                Played <a href="https://www.nytimes.com/games/wordle" tabindex="-1">Wordle</a>? This game is a lot harder!
+                Played <a href="https://www.nytimes.com/games/wordle" tabindex="-1" :style="{'color': sm.settings.dark ? '#6495ED' : 'blue'}">Wordle</a>? This game is a lot harder!
                 You have 12 attempts to guess the word, and each attempt will reveal five squares, marked with a 
                 certain colour. 
             </p>
@@ -15,26 +41,26 @@ import TutorialRow from './TutorialRow.vue'
 
         <div id="squares">
             <span>
-                <div class="tutorial-hint correct"></div>
+                <div class="tutorial-hint" :style="{'background-color': tileColours.curr[3]}"></div>
                 <p>A green square means one of the letters is in the word, and in the correct position.</p>
             </span>
             <span>
-                <div class="tutorial-hint near"></div>
+                <div class="tutorial-hint" :style="{'background-color': tileColours.curr[2]}"></div>
                 <p>An orange square means one of the letters is in the word, but not in the correct position.</p>
             </span>
             <span>
-                <div class="tutorial-hint incorrect"></div>
+                <div class="tutorial-hint" :style="{'background-color': tileColours.curr[1]}"></div>
                 <p>A grey square means one of the letters is <b>not</b> in the word.</p>
             </span>
         </div>
 
-        <p id="order" class="linebreak">
+        <p id="order" class="linebreak" :style="{'border-image-source': sm.settings.dark ? 'linear-gradient(to right, rgb(10,10,10), rgb(210,210,210), rgb(10,10,10))': 'linear-gradient(to right, white, darkslategray, white)'}">
             However, the squares are always presented in the same order: first green, then orange, then grey. 
             Therefore, the position of the squares <b>does not <i>necessarily</i> correspond</b> to the position of the letters in a guess.
         </p>
         <p class="subtitle">Controls</p>
 
-        <div id="controls" class="linebreak">
+        <div id="controls" class="linebreak" :style="{'border-image-source': sm.settings.dark ? 'linear-gradient(to right, rgb(10,10,10), rgb(210,210,210), rgb(10,10,10))': 'linear-gradient(to right, white, darkslategray, white)'}">
             <span>
                 <div class="left-align">
                     <font-awesome-icon class="caret" icon="fa-solid fa-square-caret-left" size="2x"></font-awesome-icon>
@@ -47,9 +73,9 @@ import TutorialRow from './TutorialRow.vue'
             </span>
             <span>
                 <div class="left-align">
-                    <div class="tutorial-hint rotate">H</div>
+                    <div ref="rotateRef" class="tutorial-hint rotate">H</div>
                     <div id="pointer">
-                        <font-awesome-icon class="icon" icon="fa-regular fa-border fa-hand-pointer" size="2x"/>
+                        <font-awesome-icon class="icon" :style="{'color': sm.settings.dark ? 'rgb(210,210,210)' : 'black'}" icon="fa-regular fa-border fa-hand-pointer" size="2x"/>
                     </div>
                 </div>
                 <p>Click on the tiles of your previous guesses to mark them with a colour.
@@ -70,11 +96,11 @@ import TutorialRow from './TutorialRow.vue'
             <p class="subtitle">An Example</p>
             <TutorialRow 
                 :word="'SHARE'" 
-                :code="['correct', 'near', 'near', 'incorrect', 'incorrect']" 
+                :code="[3, 2, 2, 1, 1]" 
                 :styleMap="[3, 3]"/>
             <TutorialRow 
                 :word="'SHAPE'" 
-                :code="['near', 'near', 'incorrect', 'incorrect', 'incorrect']"
+                :code="[2, 2, 1, 1, 1]"
                 :styleMap="[3, 1]"/>
             <p id="logic">
                 Since R is the only letter that has changed in the second guess, R must be in the word, and in the correct place, so it can be marked green.
@@ -106,7 +132,6 @@ import TutorialRow from './TutorialRow.vue'
         padding-bottom: 1.8rem;
         border: 1px solid;
         border-image-slice: 1;
-        border-image-source: linear-gradient(to right, white, darkslategray, white);
         border-left: 0;
         border-right: 0;
         border-top: 0;
@@ -193,7 +218,6 @@ import TutorialRow from './TutorialRow.vue'
     }
 
     .icon {
-        color: black;
         transform: rotate(350deg);
     }
 
@@ -211,21 +235,6 @@ import TutorialRow from './TutorialRow.vue'
         height: 2rem;
     }
 
-    .correct {
-        background-color: var(--tile-green);
-        border: var(--tile-green);
-    }
-
-    .near {
-        background-color: var(--tile-orange);
-        border: var(--tile-orange);
-    }
-
-    .incorrect {
-        background-color: var(--tile-lightgrey);
-        border: var(--tile-lightgrey);
-    }
-
     .rotate {
         height: 4.32rem;
         border-radius: 0.4rem;
@@ -233,35 +242,8 @@ import TutorialRow from './TutorialRow.vue'
         font-size: 2.1rem;
         font-family: 'Trebuchet MS', sans-serif;
         font-weight: bolder;
-        animation-name: rotate-color;
-        animation-duration: 8s;
-        animation-iteration-count: infinite;
     }
     
-    @keyframes rotate-color {
-        from, to {}
-        0%, 20%, 100% {
-            background-color: white;
-            color: var(--text-dark);
-            box-shadow: 0rem 0.25rem 0.25rem rgba(0, 0, 0, 0.1);
-        }
-        25%, 45% {
-            background-color: var(--tile-lightgrey);
-            color: white;
-            box-shadow: 0rem 0.25rem 0.25rem var(--tile-lightgrey-shadow);
-        }
-        50%, 70% {
-            background-color: var(--tile-orange);
-            color: white;
-            box-shadow: 0rem 0.25rem 0.25rem var(--tile-orange-shadow);
-        }
-        75%, 95% {
-            background-color: var(--tile-green);
-            color: white;
-            box-shadow: 0rem 0.25rem 0.25rem var(--tile-green-shadow);
-        }
-    }
-
     @keyframes click {
         from, to {}
         0%, 75% {

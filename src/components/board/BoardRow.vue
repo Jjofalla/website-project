@@ -48,7 +48,7 @@ function handleEnter(word) {
         <div class="placeholder">
             <Transition name="show-button">
                 <button 
-                    v-show="!getGameState().gameData.finished && showClearButton" 
+                    v-show="getGameState().gameData.status === 'IN_PROGRESS' && showClearButton" 
                     @click="handleClick(rowNumber - 1)" 
                     tabindex="-1"
                     class="button">
@@ -129,11 +129,11 @@ function handleEnter(word) {
             gap: 1rem;
         }
         .parent-row {
-            margin-left: -4rem;
+            margin-left: -3.5rem;
         }
 
         .placeholder {
-            width: 4rem;
+            width: 3.5rem;
         }
 
         .button {

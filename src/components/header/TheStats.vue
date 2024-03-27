@@ -1,20 +1,39 @@
 <script setup>
+import { getGameState } from '@/store/GameState';
 import { getStatsStore } from '@/store/UserStats';
+import { getSettingsManager } from '@/store/ManagerSettings';
+const sm = getSettingsManager();
 const userStats = getStatsStore();
 const stats = userStats.stats;
 const pixelSpan = userStats.getPixelSpan();
 let modeAssigned = false;
+
+const highlight = sm.settings.dark ? 'rgb(110,110,110)' : 'rgb(180,180,180)';
+const faded = sm.settings.dark ? 'rgb(180,180,180)' : 'rgb(110,110,110)';
+
  
 function toString(value) {
     return value ? value : '-';
 }
 
-function assignColour(n) {
-    if (!modeAssigned && n >= 84) {
-        modeAssigned = true;
-        return 'rgb(110,110,110)';
+function assignColour(n, idx) {
+    if (modeAssigned) {
+        return highlight;
     }
-    return 'rgb(180,180,180)';
+
+    if (getGameState().gameData.status === 'WON') {
+        if (idx + 1 === getGameState().gameData.rows.length) {
+            modeAssigned = true;
+            return faded;
+        }
+        return highlight;
+    }
+
+    if (n >= 84) {
+        modeAssigned = true;
+        return faded;
+    }
+    return highlight;
 }
 
 </script>
@@ -37,7 +56,7 @@ function assignColour(n) {
         <div class="bars">
             <div class="bar" v-for="(n, index) in pixelSpan" :key="index">
                 <div class="label"> {{ index + 1 }}</div>
-                <div class="tally" :style="{width: n + '%', backgroundColor: assignColour(n)}">
+                <div class="tally" :style="{width: n + '%', 'min-width': '1.5rem', backgroundColor: assignColour(n, index)}">
                     <h1 class="number">{{ Object.values(stats.guessDistribution)[index] }}</h1>
                 </div>
 
@@ -120,7 +139,7 @@ function assignColour(n) {
         color: white;
         margin-top: 0.2rem;
         margin-bottom: 0.125rem;
-        padding-right: 0.4rem;
+        padding-right: 0.45rem;
         font-size: 1rem;
     }
 
@@ -131,5 +150,5 @@ function assignColour(n) {
         text-align: right;
         color: var(--text-dark);
     }
-    
+ 
 </style>

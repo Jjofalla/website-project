@@ -1,4 +1,7 @@
 <script setup>
+import { getSettingsManager } from '@/store/ManagerSettings';
+const sm = getSettingsManager()
+
 defineProps({
     remaining: {
         type: Number,
@@ -14,7 +17,7 @@ defineProps({
         <Transition mode="out-in" name="flip">
             <div class="number" 
                 :key="remaining"
-                :style="{'text-align': remaining < 10 ? 'center' : 'right'}"
+                :style="{'text-align': remaining < 10 ? 'center' : 'right', 'color': sm.settings.dark ? 'var(--text-light)' : 'var(--text-dark)'}"
             >
             {{ remaining }}
             </div>

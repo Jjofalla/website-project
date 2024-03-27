@@ -1,6 +1,7 @@
 <script setup>
 import KeyboardRow from './KeyboardRow.vue';
 import { keyPress } from '@/store/KeyPress';
+import { tileColours } from '@/store/ManagerStyle';
 
 </script>
 
@@ -9,11 +10,16 @@ import { keyPress } from '@/store/KeyPress';
         <KeyboardRow chars="qwertyuiop" />
         <KeyboardRow chars="asdfghjkl" />
         <div class="key-row">
-            <button class="key-tile tool" readonly tabindex='-1' @click="keyPress.setChar('Backspace')">
+            <button 
+                class="key-tile tool" 
+                readonly 
+                tabindex='-1'
+                :style="tileColours.getStyle(0)"
+                @click="keyPress.setChar('Backspace')">
                 <font-awesome-icon icon="fa-solid fa-delete-left"/>
             </button>
             <KeyboardRow chars="zxcvbnm" />
-            <button class="key-tile tool enter" readonly tabindex='-1' @click="keyPress.setChar('Enter')">
+            <button class="key-tile tool enter" readonly tabindex='-1' @click="keyPress.setChar('Enter')" :style="tileColours.getStyle(0)">
                 ENTER
             </button>
         </div>
@@ -60,9 +66,6 @@ import { keyPress } from '@/store/KeyPress';
     }
 
     .tool {
-        background-color: white;
-        color: rgb(110, 110, 110);
-        box-shadow: 0rem 0.25rem 0.25rem rgb(200,200,200);
         width: 5rem;
         font-size: 1.5rem;
     }
@@ -75,11 +78,11 @@ import { keyPress } from '@/store/KeyPress';
         .key-tile {
             font-size: min(2rem, 4vw);
             width: min(4rem, calc(100vw/11.4));
-            height: 8.8vh;
+            height: 9vh;
         }
 
         .tool {
-            height: 8.8vh;
+            height: 9vh;
             width: min(8rem, calc(100vw/7));
         }
     }

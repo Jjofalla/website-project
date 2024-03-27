@@ -6,6 +6,7 @@ import TheKeyboard from '../keyboard/TheKeyboard.vue';
 import { getOverlayManager } from '@/store/ManagerOverlay';
 import { getGameState } from '@/store/GameState';
 import { getStatsStore } from '@/store/UserStats';
+import { getSettingsManager } from '@/store/ManagerSettings';
 
 const gameState = getGameState();
 const gameData = gameState.gameData;
@@ -37,16 +38,16 @@ function getRow(row) {
 
 function determineActiveRow(row) {
     // last row is active for user input
-    return !gameData.finished && row === gameState.rowsToRender;
+    return gameData.status === 'IN_PROGRESS' && row === gameState.rowsToRender;
 }
 
 function handleGameFinishEvent() {
-    gameData.finished = true;
+    getGameState().endTimer();
     setTimeout(() => {
         if (!om.overlayEnabled) {
             om.toggleOverlay('stats');
         }
-    }, 3200);
+    }, 3500);
 }
 
 if (getStatsStore().stats.totalPlayed <= 0) {
@@ -97,7 +98,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         </template>
 
         <template v-else>
-            <div ref="scrollTable" class="table mobile linebreak">
+            <div ref="scrollTable" class="table mobile linebreak" :class="{'line-dark': getSettingsManager().settings.dark}">
                 <div class="rows">
                     <TransitionGroup name="add-row">
                         <BoardRow 
@@ -147,6 +148,7 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         overscroll-behavior: contain;
         scrollbar-width: none;
         -ms-overflow-style: none;
+        box-sizing: border-box;
     }
 
     .linebreak {
@@ -157,6 +159,10 @@ if (getStatsStore().stats.totalPlayed <= 0) {
         border-right: 0;
         border-top: 0;
     }
+
+    .line-dark {
+        border-image-source: linear-gradient(to right, rgb(10,10,10), rgb(210,210,210), rgb(10,10,10));
+    }   
 
     .rows {
         display: flex;

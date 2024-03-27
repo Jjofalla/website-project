@@ -1,44 +1,35 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
+import { tileColours } from "./ManagerStyle";
 
 export const getSettingsManager = defineStore('settings', () => {
-    const TIME = 120;
     const settings = ref({
-        'mmode': [false, TIME],
+        mmode: false,
+        dark: false,
     });
 
     if (localStorage.getItem("settings")) {
         settings.value = JSON.parse(localStorage.getItem("settings"));
     }
 
-    function enableSetting(key) {
-        settings.value[key][0] = !settings.value[key][0];
+    function toggleMMode() {
+        settings.value.mmode = !settings.value.mmode;
     }
 
-    let timer;
-    let timerActive = false;
-    function startTimer() {
-        if (!timerActive) {
-            timer = setInterval(function() {
-                settings.value['mmode'][1]--;
-            }, 1000);
-            timerActive = true;
-        }
-    }
-
-    function endTimer() {
-        clearInterval(timer);
-        settings.value['mmode'][1] = TIME;
+    function toggleDarkMode() {
+        settings.value.dark = !settings.value.dark;
+        tileColours.value.setTileColours(settings.value.dark);
     }
 
     watch(settings, (newSettings) => {
         localStorage.setItem("settings", JSON.stringify(newSettings));
     }, { deep: true });
 
+    tileColours.value.setTileColours(settings.value.dark);
+
     return {
         settings,
-        enableSetting,
-        startTimer,
-        endTimer,
+        toggleMMode,
+        toggleDarkMode,
     }
 });

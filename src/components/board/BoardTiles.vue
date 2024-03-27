@@ -35,8 +35,10 @@ onMounted(() => {
     }
 });
 
-watch(() => getGameState().gameData.finished, () => {
-    tilesRef.value.blur();
+watch(() => getGameState().gameData.status, (newStatus) => {
+    if (newStatus != 'IN_PROGRESS') {
+        tilesRef.value.blur();
+    }
 });
 
 watch(() => getOverlayManager().isBeingToggled, (bool) => {
@@ -196,4 +198,3 @@ function isValidWord(word) {
         }
     }
 </style>
-@/store/ManagerOverlay@/store/ManagerAlert

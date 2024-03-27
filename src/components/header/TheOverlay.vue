@@ -3,12 +3,15 @@ import { getOverlayManager } from '@/store/ManagerOverlay';
 import TheStats from './TheStats.vue';
 import TheTutorial from './TheTutorial.vue';
 import TheSettings from './TheSettings.vue';
+import { getSettingsManager } from '@/store/ManagerSettings';
+const sm = getSettingsManager();
+
 const om = getOverlayManager();
 </script>
 
 <template>
     <div id="overlay-wrapper" @click.self="om.handleOverlayClick()">
-        <div id="overlay" :class="{'out': !om.overlayEnabled}">
+        <div id="overlay" :class="[{'out': !om.overlayEnabled}, sm.settings.dark ? 'dark' : 'light']">
             <button class="close" tabindex="-1" @click.stop="om.handleOverlayClick()">
                 <font-awesome-icon icon="fa-solid fa-x" />
             </button>
@@ -29,7 +32,7 @@ const om = getOverlayManager();
         width: 100vw;
         top: 0;
         left: 0;
-        z-index: 10;
+        z-index: 9;
         background-color: rgba(0, 0, 0, 0.2);
     }
 
@@ -40,10 +43,19 @@ const om = getOverlayManager();
         margin: auto;
         width: min(40rem, 100vw);
         cursor: default;
-        background-color: white;
         border: none;
         border-radius: 0.7rem;
         animation: scaleUp 0.3s ease-in-out;
+    }
+
+    .light {
+        background-color: white;
+        color: black;
+    }
+
+    .dark {
+        background-color: rgb(25,25,25);
+        color: rgb(210,210,210);
     }
 
     #overlay::-webkit-scrollbar {
@@ -73,8 +85,8 @@ const om = getOverlayManager();
         z-index: 1;
         margin: 2rem 1.5rem;
         right: 0;
-        background-color: white;
-        color: darkslategrey;
+        background-color: transparent;
+        color: rgb(130,130,130);
         border: none;
         opacity: 60%;
         font-size: 2rem;
@@ -83,10 +95,6 @@ const om = getOverlayManager();
     .close:hover {
         cursor: pointer;
         opacity: 100%;
-    }
-
-    .closer:active {
-        color: black;
     }
 
     @media only screen and (max-width: 450px) {
@@ -99,4 +107,4 @@ const om = getOverlayManager();
         }
     }
 
-</style>@/store/ManagerOverlay
+</style>
